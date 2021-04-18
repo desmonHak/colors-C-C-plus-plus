@@ -18,4 +18,4 @@ int main(){<br>
     POINTRED("hola mundo\n", color);<br>
 }<br>
 
- ![Alt text]("Screenshot from 2021-04-18 20-23-54.png" "Title") 
+ ![Alt text](" colors-C-C-plus-plus/Screenshot from 2021-04-18 20-23-54.png " "Title") 
