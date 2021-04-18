@@ -1,7 +1,7 @@
 # colors-C-C-
 aqui tenemos una cabzera que incluye el modulo stdio.h por defecto. esta cabezera te permite manipular color con C/C++ de una foma mas sencilla. para usarla importamos la cabezera mediante la directiva include:
 <br>
-//#include<colors.h>
+#include "colors.h"
 <br>
 y desde donde se preciso en su codigo usar el la funcion printf puede hacer uso de la siguiente manera:<br>
 <br>
