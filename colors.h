@@ -1,5 +1,8 @@
 #include <stdio.h>
 
+#if !defined(__COLORS__)
+#define __COLORS__
+
 typedef struct _color {
     const char* BLACK;
     const char* RED;
@@ -105,3 +108,5 @@ const _color color = {
     _CLEAR,
 
 };
+
+#endif
