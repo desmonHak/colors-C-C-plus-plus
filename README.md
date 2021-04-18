@@ -1,5 +1,5 @@
 # colors-C-C-
-aqui tenemos una cabzera que incluye el modulo stdio.h por defecto. esta cabezera te permite manipular color con C/C++ de una foma mas sencilla. para usarla importamos la cabezera mediante la directiva include:
+aqui tenemos una cabzera que incluye el modulo stdio.h por defecto. esta cabezera te permite manipular colores con C/C++ de una foma mas sencilla. para usarla importamos la cabezera mediante la directiva include:
 <br>
 #include "colors.h"
 <br>
