@@ -1,5 +1,3 @@
-
-
 #if !defined(__COLORS__)
 #define __COLORS__
 
@@ -7,24 +5,24 @@
 
 typedef struct _color
 {
-    const char *BLACK;
-    const char *RED;
-    const char *GREEN;
-    const char *YELLOW;
-    const char *BLUE;
-    const char *MAGENTA;
-    const char *CYAN;
-    const char *WHITE;
-    const char *RESET;
+    const char *BLACK;  //"\033[30m"
+    const char *RED;    //"\033[31m"
+    const char *GREEN;  //"\033[32m"
+    const char *YELLOW; //"\033[33m"
+    const char *BLUE;   //"\033[34m"
+    const char *MAGENTA;//"\033[35m"
+    const char *CYAN;   //"\033[36m"
+    const char *WHITE;  //"\033[37m"
+    const char *RESET;  //"\033[38m"
 
-    const char *LIGHTBLACK_EX;
-    const char *LIGHTRED_EX;
-    const char *LIGHTGREEN_EX;
-    const char *LIGHTYELLOW_EX;
-    const char *LIGHTBLUE_EX;
-    const char *LIGHTMAGENTA_EX;
-    const char *LIGHTCYAN_EX;
-    const char *LIGHTWHITE_EX;
+    const char *LIGHTBLACK_EX;  //"\033[90m"
+    const char *LIGHTRED_EX;    //"\033[91m"
+    const char *LIGHTGREEN_EX;  //"\033[92m"
+    const char *LIGHTYELLOW_EX; //"\033[93m"
+    const char *LIGHTBLUE_EX;   //"\033[94m"
+    const char *LIGHTMAGENTA_EX;//"\033[95m"
+    const char *LIGHTCYAN_EX;   //"\033[96m"
+    const char *LIGHTWHITE_EX;  //"\033[97m"
 
     void (*UP)(const char *, int);
     void (*DOWN)(const char *, int);
@@ -82,7 +80,7 @@ const _color color = {
     "\033[35m",
     "\033[36m",
     "\033[37m",
-    "\033[38m",
+    "\033[37m\033[38m",
 
     "\033[90m",
     "\033[91m",
