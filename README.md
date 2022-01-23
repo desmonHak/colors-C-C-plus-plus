@@ -18,4 +18,4 @@ int main(){<br>
     POINTRED("hola mundo\n", color);<br>
 }<br>
 
- ![Alt text](https://raw.githubusercontent.com/desmonHak/colors-C-C-plus-plus/main/Screenshot%20from%202021-04-18%2020-23-54.png) 
+ ![Alt text](https://raw.githubusercontent.com/desmonHak/colors-C-C-plus-plus/main/imagen.png) 
