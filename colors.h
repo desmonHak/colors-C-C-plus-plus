@@ -1,6 +1,6 @@
 #if !defined(__COLORS__)
 #define __COLORS__ "Desmon"
-
+#define __version 1.0
 #include <stdio.h>
 
 #define BACKGROUND_BLACK        "\e[0;40m"
