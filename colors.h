@@ -3,6 +3,8 @@
 #define __version 2.0
 
 #include <stdio.h>
+#include <stdbool.h>
+#include <stdarg.h>
 
 #ifdef _WIN32
 #include <Windows.h>
@@ -14,7 +16,7 @@ void __attribute__((constructor)) _ACTIVATE_COLORS_ANSI_WIN__();
 #define BACKGROUND_COLOR_GREEN        "\033[0;42m"
 #define BACKGROUND_COLOR_YELLOW       "\033[0;43m"
 #define BACKGROUND_COLOR_BLUE         "\033[0;44m"
-#define BACKGROUND_COLOR_PURPLE       "\033[0;45m"
+#define BACKGROUND_COLOR_MAGENTA      "\033[0;45m"
 #define BACKGROUND_COLOR_CYAN         "\033[0;46m"
 #define BACKGROUND_COLOR_WHITE        "\033[0;47m"
 #define BACKGROUND_COLOR_RESET        "\033[0m"

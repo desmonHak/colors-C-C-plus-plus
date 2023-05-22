@@ -39,12 +39,14 @@ int main(){
     printf(BACKGROUND_COLOR_GREEN    "fondo verde\n"        );
     printf(BACKGROUND_COLOR_YELLOW   "fondo amarillo\n"     );
     printf(BACKGROUND_COLOR_BLUE     "fondo azul\n"         );
-    printf(BACKGROUND_COLOR_PURPLE   "fondo magenta\n"      );
+    printf(BACKGROUND_COLOR_MAGENTA  "fondo magenta\n"      );
     printf(BACKGROUND_COLOR_CYAN     "fondo cyan\n"         );
     printf(BACKGROUND_COLOR_WHITE    "fondo blanco\n"       );
     printf(BACKGROUND_COLOR_RESET    "fondo por defecto\n"  );
 
     printf(BACKGROUND_COLOR_CUSTOM("225", "0", "225")  FOREGROUND_COLOR_CUSTOM("0", "225", "225")  "color custom" BACKGROUND_COLOR_RESET "\n");
 
+    printf_color("%{BG:green}%{FG:red}Hola: %d, %c\n", 1, 'c');    // Print "Hola: 1" in red
+    printf_color("%{BG:blue}%{FG:green}Adios: %d, %f\n", 2, 1.2f);  // Print "Adios: 2" with blue background
 
 }
