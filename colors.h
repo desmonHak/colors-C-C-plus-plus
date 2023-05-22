@@ -1,17 +1,23 @@
-#if !defined(__COLORS__)
-#define __COLORS__ "Desmon"
-#define __version 1.0
+#ifndef __COLORS_H__
+#define __COLORS_H__ "Desmon.hak.anon"
+#define __version 2.0
+
 #include <stdio.h>
 
-#define BACKGROUND_BLACK        "\e[0;40m"
-#define BACKGROUND_RED          "\e[0;41m"
-#define BACKGROUND_GREEN        "\e[0;42m"
-#define BACKGROUND_YELLOW       "\e[0;43m"
-#define BACKGROUND_BLUE         "\e[0;44m"
-#define BACKGROUND_PURPLE       "\e[0;45m"
-#define BACKGROUND_CYAN         "\e[0;46m"
-#define BACKGROUND_WHITE        "\e[0;47m"
-#define BACKGROUND_RESET        "\e[0m"
+#ifdef _WIN32
+#include <Windows.h>
+void __attribute__((constructor)) _ACTIVATE_COLORS_ANSI_WIN__();
+#endif
+
+#define BACKGROUND_COLOR_BLACK        "\033[0;40m"
+#define BACKGROUND_COLOR_RED          "\033[0;41m"
+#define BACKGROUND_COLOR_GREEN        "\033[0;42m"
+#define BACKGROUND_COLOR_YELLOW       "\033[0;43m"
+#define BACKGROUND_COLOR_BLUE         "\033[0;44m"
+#define BACKGROUND_COLOR_PURPLE       "\033[0;45m"
+#define BACKGROUND_COLOR_CYAN         "\033[0;46m"
+#define BACKGROUND_COLOR_WHITE        "\033[0;47m"
+#define BACKGROUND_COLOR_RESET        "\033[0m"
 
 #define LETTER_BLACK            "\033[30m"
 #define LETTER_RED              "\033[31m"
@@ -37,9 +43,10 @@
 #define FORWARD(data, number)           printf("\033[%dC%s", number, data);
 #define BACK(data, number)              printf("\033[%dD%s", number, data);
 #define POS(data, number1, number2)     printf("\033[%d;%dH%s", number1, number2, data);
-#define SET_TITLE(title)                printf("\033]2;%s\007", title);
+#define SET_TITLE(title)                printf("\033]2;%s\007" title);
 #define CLEAR()                         printf("\033[3J\033[H\033[2J");
-#define POINTGREEN(data)                printf("%s[%s*%s]%s %s%s", LETTER_LIGHTGREEN_EX, LETTER_BLUE, LETTER_LIGHTGREEN_EX, LETTER_LIGHTWHITE_EX, data, LETTER_RESET);
-#define POINTRED(data)                  printf("%s[%s*%s]%s %s%s", LETTER_LIGHTYELLOW_EX, LETTER_RED, LETTER_LIGHTYELLOW_EX, LETTER_LIGHTMAGENTA_EX, data, LETTER_RESET);
+#define POINTGREEN(data)                LETTER_LIGHTGREEN_EX "[" LETTER_BLUE "*"  LETTER_LIGHTGREEN_EX "]" LETTER_LIGHTWHITE_EX data LETTER_RESET
+#define POINTRED(data)                  LETTER_LIGHTYELLOW_EX "[" LETTER_BLUE "*"  LETTER_LIGHTYELLOW_EX "]" LETTER_LIGHTMAGENTA_EX data LETTER_RESET
 
+#include "colors.c"
 #endif
