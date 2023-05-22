@@ -27,7 +27,9 @@ void __attribute__((constructor)) _ACTIVATE_COLORS_ANSI_WIN__();
 #define LETTER_MAGENTA          "\033[35m"
 #define LETTER_CYAN             "\033[36m"
 #define LETTER_WHITE            "\033[37m"
+
 #define LETTER_RESET            "\033[37m\033[38m"
+
 #define LETTER_LIGHTBLACK_EX    "\033[90m"
 #define LETTER_LIGHTRED_EX      "\033[91m"
 #define LETTER_LIGHTGREEN_EX    "\033[92m"
@@ -36,6 +38,14 @@ void __attribute__((constructor)) _ACTIVATE_COLORS_ANSI_WIN__();
 #define LETTER_LIGHTMAGENTA_EX  "\033[95m"
 #define LETTER_LIGHTCYAN_EX     "\033[96m"
 #define LETTER_LIGHTWHITE_EX    "\033[97m"
+
+// stylos:
+#define STYLE_BOLDED     "\x1b[1m" // : Negrita
+#define STYLE_DARKENED   "\x1b[2m" // : Oscurecido
+#define STYLE_ITALICS    "\x1b[3m" // : Cursiva
+#define STYLE_UNDERLINED "\x1b[4m" // : Subrayado
+#define STYLE_BLIKING    "\x1b[5m" // : Parpadeo
+#define STYLE_INVERTED   "\x1b[7m" // : Inversión de colores (texto y fondo)
 
 
 #define UP(data, number)                printf("\033[%dA%s", number, data);
@@ -47,6 +57,13 @@ void __attribute__((constructor)) _ACTIVATE_COLORS_ANSI_WIN__();
 #define CLEAR()                         printf("\033[3J\033[H\033[2J");
 #define POINTGREEN(data)                LETTER_LIGHTGREEN_EX "[" LETTER_BLUE "*"  LETTER_LIGHTGREEN_EX "]" LETTER_LIGHTWHITE_EX data LETTER_RESET
 #define POINTRED(data)                  LETTER_LIGHTYELLOW_EX "[" LETTER_BLUE "*"  LETTER_LIGHTYELLOW_EX "]" LETTER_LIGHTMAGENTA_EX data LETTER_RESET
+
+// definir el color de fondo de forma personalizada
+#define BACKGROUND_COLOR_CUSTOM(red, green, blue) "\x1b[48;2;"red";"green";"blue"m"
+
+// definir el color de letra de forma personalizada
+#define FOREGROUND_COLOR_CUSTOM(red, green, blue) "\x1b[38;2;"red";"green";"blue"m"
+
 
 #include "colors.c"
 #endif

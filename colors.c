@@ -19,6 +19,7 @@ void __attribute__((constructor)) _ACTIVATE_COLORS_ANSI_WIN__()
         }
     }
 }
+
 #endif
 
 #endif

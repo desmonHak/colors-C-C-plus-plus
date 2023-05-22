@@ -25,6 +25,15 @@ int main(){
     printf(LETTER_LIGHTCYAN_EX    "cyan claro\n"      );
     printf(LETTER_LIGHTWHITE_EX   "blanco claro\n"    );
 
+    printf(LETTER_LIGHTRED_EX      "rojo claro\n"   );
+    printf(BACKGROUND_COLOR_GREEN  "fondo verde\n"  );
+    printf(STYLE_BOLDED     "negrita\n"             );
+    printf(STYLE_DARKENED   "oscurecida\n"          );
+    printf(STYLE_ITALICS    "italica o cursiva\n"   );
+    printf(STYLE_UNDERLINED "subrayado\n"           );
+    printf(STYLE_BLIKING    "parpadeo\n"            );
+    printf(STYLE_INVERTED   "colores invertidos\n"  );
+
     printf(BACKGROUND_COLOR_BLACK    "fondo negro\n"        );
     printf(BACKGROUND_COLOR_RED      "fondo rojo\n"         );
     printf(BACKGROUND_COLOR_GREEN    "fondo verde\n"        );
@@ -34,5 +43,8 @@ int main(){
     printf(BACKGROUND_COLOR_CYAN     "fondo cyan\n"         );
     printf(BACKGROUND_COLOR_WHITE    "fondo blanco\n"       );
     printf(BACKGROUND_COLOR_RESET    "fondo por defecto\n"  );
+
+    printf(BACKGROUND_COLOR_CUSTOM("225", "0", "225")  FOREGROUND_COLOR_CUSTOM("0", "225", "225")  "color custom" BACKGROUND_COLOR_RESET "\n");
+
 
 }
