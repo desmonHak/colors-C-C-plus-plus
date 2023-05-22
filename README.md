@@ -31,7 +31,10 @@ int main(){
 }
 ```
 
-![Alt text](https://raw.githubusercontent.com/desmonHak/colors-C-C-plus-plus/main/imagen.png) 
+![imagen](https://raw.githubusercontent.com/desmonHak/colors-C-C-plus-plus/main/imagen.png) 
+
+![imagen1](https://raw.githubusercontent.com/desmonHak/colors-C-C-plus-plus/main/imagen1.png) 
+
 
 ----
 
