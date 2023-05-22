@@ -1,9 +1,9 @@
-# colors-C-C-
+# colors-C-C++
 
 ----
 
-Aqui tenemos una cabzera que incluye el modulo stdio.h por defecto y Windows.h. esta cabezera te permite manipular colores con C/C++ de una foma mas sencilla en Windows y linux(Colores ANSI). Para poder usar colores ANSI en windows es necesario activar esta caracteristica, nuestro codigo se encarga de incluir una subrutina constructora que activa esta caracteristica si no lo esta cada vez que ejecutemos el programa.
-Para usarla incluiremos la cabezera mediante la directiva include:
+Aqui tenemos una cabzera que incluye el modulo stdio.h por defecto y Windows.h. esta cabezera te permite manipular colores con C/C++ de una foma mas sencilla en Windows y linux(Colores ANSI). Para poder usar colores ANSI en windows es necesario activar esta caracteristica, nuestro codigo se encarga de incluir una subrutina constructora que activa esta caracteristica si no lo esta cada vez que ejecutemos el programa. Puedes situar el archivo `example.c` con un ejemplo del uso de esta cabecera.
+Para usarla incluiremos la cabezera mediante la directiva `include`:
 
 ```C
 #include "colors.h"
