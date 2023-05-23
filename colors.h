@@ -47,8 +47,6 @@ typedef enum ConsoleColor
 } ConsoleColor;
 #endif
 
-void setConsoleColor(unsigned char foreground, unsigned char background);
-
 #define BACKGROUND_COLOR_BLACK "\033[0;40m"
 #define BACKGROUND_COLOR_RED "\033[0;41m"
 #define BACKGROUND_COLOR_GREEN "\033[0;42m"
@@ -180,12 +178,11 @@ typedef union RGB_C
     default: back_fore_color_custom_)(__VA_ARGS__)
 
 void __attribute__((destructor)) _RESET_COLOR__();
-void __attribute__((constructor)) _ACTIVATE_COLORS_ANSI_WIN__();
 
 void clear_line();
 void clear_display();
 void set_title(char *title);
-void setConsoleColor(unsigned char foreground, unsigned char background);
+void setConsoleColor(ConsoleColor foreground, ConsoleColor background);
 void resetColorTerminal();
 void pos(unsigned char x, unsigned char y, char *data);
 void back(char *data, unsigned char number);

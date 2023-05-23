@@ -1,3 +1,5 @@
+#ifndef __COLORS_C__
+#define __COLORS_C__ "Desmon.hak.anon"
 #include "colors.h"
 
 void resetColorTerminal()
@@ -241,3 +243,4 @@ static void back_fore_color_custom_(unsigned char redB, unsigned char greenB,
 {
     printf(BACK_FORE_COLOR_CUSTOM("%d", "%d", "%d", "%d", "%d", "%d"), redB, greenB, blueB, redF, greenF, blueF);
 }
+#endif
