@@ -9,18 +9,21 @@ Para usarla incluiremos la cabezera mediante la directiva `include`:
 #include "colors.h"
 ```
 
-Desde donde se preciso en su codigo usar el la funcion printf puede hacer uso de la siguiente manera:
+Desde donde es preciso en su codigo puede usar la clasica funcion `printf` o de la nueva `printf_color`, la cual es una version mejorada de la clasica `printf` que permite mostrar colores de forma directa. BG(BackGround = fondo) y FG(ForeGround = letra) para especificar los distintos colores. el formato seria `#{BG/FG:color_fondo_o_letra}`. De esta manera podemos ingresar colores sin usar macros:
 
 ```C
 #include "colors.h"
 
 int main(){
     printf_color(BLACK "negro\n");
+    printf_color("#{BG:green}#{FG:red}letra en rojo con fondo verde: %d, %c#{BG:reset}\n", 1, 'c');    
+    printf_color("#{BG:blue}#{FG:green}letra en verde con fondo azul: %d, %f#{BG:reset}\n", 2, 1.2f);  // Print "Adios: 2" with blue background
+
     return 0;
 }
 ```
 
-Si prefiere puede usar las funciones POINTGREEN() o POINTRED() para mostrar cierta informacion relevante:
+Si prefiere puede usar las funciones `POINTGREEN()` o `POINTRED()` para mostrar cierta informacion relevante:
 
 ```C
 #include "colors.h"
@@ -30,6 +33,36 @@ int main(){
     printf_color(POINTRED("hola mundo\n")   );
 }
 ```
+
+los colores disponibles con `printf_color` son los siguientes:
+
+```C
+// colores para las letras:
+"FG:reset"
+"FG:red"
+"FG:green"
+"FG:blue"
+"FG:black"
+"FG:yellow"
+"FG:purple"
+"FG:cyan"
+"FG:white"
+
+// colores para el fondo:
+"BG:reset"
+"BG:black"
+"BG:red"
+"BG:green"
+"BG:yellow"
+"BG:purple"
+"BG:cyan"
+"BG:white"
+"BG:blue"
+```
+
+Cabe mencionar que `"BG:reset"` y `"FG:reset"` tienen el mismo efecto, ambas restauran el color de la terminal por defecto.
+
+----
 
 ![imagen](https://raw.githubusercontent.com/desmonHak/colors-C-C-plus-plus/main/imagen.png) 
 
@@ -185,5 +218,78 @@ back_fore_color_custom(RGB_CREATE(40, 30, 225), my_foreground)
 ```
 
 Todas las formas anteriormente vistas son validas y hacen lo mismo pero usando macros, estructuras directar, variables...(de distintas maneras hacer lo mismo).
+
+----
+
+## Funciones adicionales:
+
+```C
+// permite borrar una linea:
+void clear_line(); 
+
+// permite limpiar la pantalla entera:
+void clear_display();
+
+// permite cambiar el titulo de la terminal:
+void set_title(char *title);
+
+// permite mover el cursor a la cordenada (x, y) y imprimir la informacion contenida en data.
+void pos(unsigned char x, unsigned char y, char *data);
+
+// permite retroceder el cursor n veces y mostrar informacion(data).
+void back(char *data, unsigned char number);
+
+// permite mover el cursor n veces a la derecha y mostrar informacion(data).
+void forward(char *data, unsigned char number);
+
+// permite mover el cursor n veces hacia abajo y mostrar informacion.
+void down(char *data, unsigned char number);
+
+// permite mover el cursor n veces hacia arriba y mostrar informacion.
+void up(char *data, unsigned char number);
+
+// version mejorada de printf:
+void printf_color(const char *format, ...);
+
+// permite cambiar el color de la terminal segun el ANSI
+void setConsoleColor(ConsoleColor foreground, ConsoleColor background);
+
+// resetea el color de la terminal al por defecto.
+void resetColorTerminal();
+```
+
+Cabe mencionar que se autoejecuta `resetColorTerminal()` al final su programa sin necesidad de que el programador llame a la misma para poder resear el color de la terminal al estado inicial.
+
+### setConsoleColor()
+
+Esta funcion permite cambiar el color de la letra y el fondo del terminal. Esta funcion recibe como primer argumento el `foreground` el cual a de ser un valor entero que forme parte de los colores `ANSI` del sistema deseado. Igual en el caso del segundo parametro `background`. Para facilitar la tarea tenemos un enum donde se definen los valores posibles que puede recibir la funcion:
+
+```C
+typedef enum ConsoleColor
+{
+    C_BLACK,
+    C_BLUE,
+    C_GREEN,
+    C_CYAN,
+    C_RED,
+    C_MAGENTA,
+    C_YELLOW,
+    C_WHITE,
+
+    C_LIGHTBLACK,
+    C_LIGHTCYAN,
+    C_LIGHTRED,
+    C_LIGHTMAGENTA,
+    C_LIGHTYELLOW,
+    C_LIGHTWHITE
+} ConsoleColor;
+```
+
+Hay que mencionar que los colores `C_LIGH` no estan disponibles para el `background` con esta funcion, por lo que solo puede usar las versiones relativamente oscuras.
+
+```C
+setConsoleColor(C_LIGHTYELLOW, C_GREEN);
+```
+La definicion anterior cambia la letra a amarillo claro y el fondo a verde
 
 ----

@@ -33,13 +33,13 @@ void __attribute__((destructor)) _RESET_COLOR__()
     resetColorTerminal();
 }
 
-void setConsoleColor(unsigned char foreground, unsigned char background)
+void setConsoleColor(ConsoleColor foreground, ConsoleColor background)
 {
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
     SetConsoleTextAttribute(hConsole, foreground | (background << 4));
 }
 #else
-void setConsoleColor(unsigned char foreground, unsigned char background)
+void setConsoleColor(ConsoleColor foreground, ConsoleColor background)
 {
     printf("\033[%dm\033[0;%dm", 30 + foreground, 40 + background);
 }

@@ -8,7 +8,7 @@
 
 #ifdef _WIN32
 #include <Windows.h>
-typedef enum foreground
+typedef enum ConsoleColor
 {
     C_BLACK,
     C_BLUE,
@@ -24,11 +24,11 @@ typedef enum foreground
     C_LIGHTMAGENTA,
     C_LIGHTYELLOW,
     C_LIGHTWHITE
-} foreground;
+} ConsoleColor;
 
 void __attribute__((constructor)) _ACTIVATE_COLORS_ANSI_WIN__();
 #else
-typedef enum foreground
+typedef enum ConsoleColor
 {
     C_BLACK = 0,
     C_BLUE = 4,
@@ -44,7 +44,7 @@ typedef enum foreground
     C_LIGHTMAGENTA = 5,
     C_LIGHTYELLOW = 3,
     C_LIGHTWHITE = 7
-} foreground;
+} ConsoleColor;
 #endif
 
 void setConsoleColor(unsigned char foreground, unsigned char background);
@@ -179,10 +179,14 @@ typedef union RGB_C
     RGB_C: back_fore_color_custom_RGB,                \
     default: back_fore_color_custom_)(__VA_ARGS__)
 
+void __attribute__((destructor)) _RESET_COLOR__();
+void __attribute__((constructor)) _ACTIVATE_COLORS_ANSI_WIN__();
 
 void clear_line();
 void clear_display();
 void set_title(char *title);
+void setConsoleColor(unsigned char foreground, unsigned char background);
+void resetColorTerminal();
 void pos(unsigned char x, unsigned char y, char *data);
 void back(char *data, unsigned char number);
 void forward(char *data, unsigned char number);
