@@ -176,9 +176,9 @@ typedef union RGB_C
     default: background_color_custom_)(__VA_ARGS__)
 
 #define back_fore_color_custom(...) _Generic((__VA_ARGS__), \
-    RGB_C,                                                   \
-    RGB_C: back_fore_color_custom_RGB,                      \
+    RGB_C: back_fore_color_custom_RGB,                \
     default: back_fore_color_custom_)(__VA_ARGS__)
+
 
 void clear_line();
 void clear_display();

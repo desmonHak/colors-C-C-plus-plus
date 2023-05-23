@@ -174,6 +174,7 @@ void vprintf_color(const char *format, va_list args)
     vsprintf(formatted_buffer, buffer, args);
     printf("%s" LETTER_RESET, formatted_buffer);
     // setConsoleColor(C_WHITE, C_BLACK);
+    resetColorTerminal();
 }
 
 void clear_line()

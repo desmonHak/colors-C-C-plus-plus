@@ -15,7 +15,7 @@ Desde donde se preciso en su codigo usar el la funcion printf puede hacer uso de
 #include "colors.h"
 
 int main(){
-    printf(BLACK "negro\n");
+    printf_color(BLACK "negro\n");
     return 0;
 }
 ```
@@ -27,7 +27,7 @@ Si prefiere puede usar las funciones POINTGREEN() o POINTRED() para mostrar cier
 
 int main(){
     printf(POINTGREEN("hola mundo\n") );
-    printf(POINTRED("hola mundo\n")   );
+    printf_color(POINTRED("hola mundo\n")   );
 }
 ```
 
@@ -98,30 +98,92 @@ Colores de fondo:
 
 Operaciones especiales:
 ```C
-// posicionar el cursor n veces
+// Mover el cursor hacia arriba:
 #define UP(data, number)        ...
 
-// bajar cursor n veces
+// Mover el cursor hacia abajo:
 #define DOWN(data, number)      ...
 
+// Mover el cursor hacia la derecha:
 #define FORWARD(data, number)   ...
 
-// cursor hacia atras:
+// Mover el cursor hacia la izquierda
 #define BACK(data, number)      ...
 
-// cursor hacia adelante
+// Mover el cursor a una posición específica
 #define POS(number1, number2)   ...
 
-// cambiar titulo a la ventana
+// cambiar titulo de la terminal:
 #define SET_TITLE(title)        ...
 
-// limpiar la ventana
-#define CLEAR()                 ...
+// limpiar pantalla:
+#define CLEAR_DISPLAY           ...
+
+// limpiar una linea:
+#define CLEAR_LINE              ...
 
 // crear un string con punto verde al inicio
 #define POINTGREEN(data)        ...
+
+// esconder cursor
+#define HIDDEN_SLIDER           ...
+
+//  mostrar cursor
+#define SHOW_SLIDER             ...
+
+// cambiar el modo del cursor
+#define SET_MODE_SLIDER         ...
+
+// cambiar el tamaño del cursor
+#define SET_SIZE_SLIDER(size)   ...
 
 // crear un string con punto roojo al inicio
 #define POINTRED(data)          ...
 
 ```
+
+----
+
+## Colores personalizados.
+
+Podemos crear colores personalizados usando el sistema `RGB`. Para la tarea podemos crear una estructura `RGB_C` donde indicar los colores, usar la macro `RGB_CREATE` que crea esta misma, o podemos poner los valores red, green, blue directamente en lugar de crear la estructura.
+
+Para crear una estructura RGB podemos hacerlo de estas maneras:
+```C
+RGB_C my_color_rgb = {100, 225, 30};
+
+RGB_C my_color_rgb = RGB_CREATE(100, 225, 30);
+
+RGB_C my_color_rgb = (RGB_C){
+    .r = 100, 
+    .g = 225, 
+    .b = 30
+};
+
+RGB_C my_color_rgb = (RGB_C){
+    .red = 100, 
+    .green = 225, 
+    .blue = 30
+};
+```
+Todas las anteriores sirven para crear la misma estrutuctura, en este caso, tenemos un `'objeto RGB_C'` donde el rojo es 100, el verde es 225 y el azul es 30, recordar que el valor que podemos color aqui va de `0-255`.
+
+Una vez realizado esto podemos usar 3 funciones para definir el color de fondo y la letra. Estas son:
+
+- `foreground_color_custom(color_letra)`: para cambiar solo el color de la letra.
+- `background_color_custom(color_fondo)`: para cambiar solo el color del fondo.
+- `back_fore_color_custom(color_fondo, color_letra)`: para cambiar el color del fondo y la letra.
+
+```C
+RGB_C my_foreground = RGB_CREATE(100, 225, 30);
+foreground_color_custom(my_foreground);
+background_color_custom(RGB_CREATE(40, 30, 225));
+
+back_fore_color_custom(RGB_CREATE(40, 30, 225), RGB_CREATE(100, 225, 30));
+back_fore_color_custom(40, 30, 225, 100, 225, 30)
+back_fore_color_custom(RGB_CREATE(40, 30, 225), my_foreground)
+```
+
+Todas las formas anteriormente vistas son validas y hacen lo mismo pero usando macros, estructuras directar, variables...(de distintas maneras hacer lo mismo).
+
+----
