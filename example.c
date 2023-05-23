@@ -3,7 +3,7 @@
 
 int main(){
     
-    CLEAR()
+    clear_display();
     printf(POINTGREEN("hola mundo\n") );
     printf(POINTRED("hola mundo\n")   );
     printf(LETTER_BLACK   "negro\n"   );
@@ -46,7 +46,21 @@ int main(){
 
     printf(BACKGROUND_COLOR_CUSTOM("225", "0", "225")  FOREGROUND_COLOR_CUSTOM("0", "225", "225")  "color custom" BACKGROUND_COLOR_RESET "\n");
 
-    printf_color("%{BG:green}%{FG:red}Hola: %d, %c\n", 1, 'c');    // Print "Hola: 1" in red
-    printf_color("%{BG:blue}%{FG:green}Adios: %d, %f\n", 2, 1.2f);  // Print "Adios: 2" with blue background
+    printf_color("#{BG:green}#{FG:red}Hola: %d, %c#{BG:reset}\n", 1, 'c');    // Print "Hola: 1" in red
+    printf_color("#{BG:blue}#{FG:green}Adios: %d, %f\n", 2, 1.2f);  // Print "Adios: 2" with blue background
+    puts(LETTER_RESET);
 
+    RGB_C my_px = RGB_CREATE(20, 30, 40);
+    printf("r:%d, g:%d, b:%d\n", my_px.red, my_px.green, my_px.blue);
+    foreground_color_custom(my_px);
+    background_color_custom(RGB_CREATE(225, 30, 40));
+    
+    puts("hola");
+    resetColorTerminal();
+    foreground_color_custom(40, 30, 20);
+    background_color_custom(RGB_CREATE(40, 30, 225));
+    puts("adios");
+    resetColorTerminal();
+
+    //setConsoleColor(C_WHITE, C_BLACK);
 }
