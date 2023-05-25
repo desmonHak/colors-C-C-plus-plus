@@ -7,6 +7,29 @@
 #include <stdarg.h>
 #include <string.h>
 
+typedef enum ANSIColors
+{
+    ANSI_BLACK = 0,
+    ANSI_RED = 1,
+    ANSI_GREEN = 2,
+    ANSI_YELLOW = 3,
+    ANSI_BLUE = 4,
+    ANSI_MAGENTA = 5,    
+    ANSI_CYAN = 6,
+    ANSI_WHITE = 7,
+} ANSIColors;
+
+#define REGULAR_COLORS_LETTER 30
+#define HIGH_INTENSTY  90
+#define REGULAR_COLORS_BACKGROUND 40
+#define HIGH_INTENSTY_BACKGROUNG 100
+#define ANSI_COLOR_FOREGROUNG(color) "\033["   color "m"
+#define ANSI_COLOR_BACKGROUNG(color) "\033[0;" color "m"
+#define ANSI_COLOR_BOLD(color)       "\033[1;" color "m"
+#define ANSI_COLOR_UNDERLINE(color)  "\033[4;" color "m"
+void ANSI_fore_color(ANSIColors color);
+void ANSI_back_color(ANSIColors color);
+
 #ifdef _WIN32
 #include <Windows.h>
 typedef enum ConsoleColor
@@ -70,23 +93,23 @@ void __attribute__((constructor)) _ACTIVATE_COLORS_ANSI_WIN__();
 #else
 typedef enum ConsoleColor
 {
-    C_BLACK = 0,
-    C_RED = 1,
-    C_GREEN = 2,
-    C_YELLOW = 3,
-    C_BLUE = 4,
-    C_MAGENTA = 5,    
-    C_CYAN = 6,
-    C_WHITE = 7,
+    C_BLACK = ANSI_BLACK,
+    C_RED = ANSI_RED,
+    C_GREEN = ANSI_GREEN,
+    C_YELLOW = ANSI_YELLOW,
+    C_BLUE = ANSI_BLUE,
+    C_MAGENTA = ANSI_MAGENTA,    
+    C_CYAN = ANSI_CYAN,
+    C_WHITE = ANSI_WHITE,
     
-    C_LIGHTBLACK = 0,
-    C_LIGHTRED = 1,
-    C_LIGHTGREEN = 2,
-    C_LIGHTYELLOW = 3,
-    C_LIGHTBLUE = 4,
-    C_LIGHTMAGENTA = 5,
-    C_LIGHTCYAN = 6,
-    C_LIGHTWHITE = 7
+    C_LIGHTBLACK = ANSI_BLACK,
+    C_LIGHTRED = ANSI_RED,
+    C_LIGHTGREEN = ANSI_GREEN,
+    C_LIGHTYELLOW = ANSI_YELLOW,
+    C_LIGHTBLUE = ANSI_BLUE,
+    C_LIGHTMAGENTA = ANSI_MAGENTA,
+    C_LIGHTCYAN = ANSI_CYAN,
+    C_LIGHTWHITE = ANSI_WHITE
 } ConsoleColor;
 #endif
 
@@ -246,17 +269,17 @@ typedef enum ConsoleColor
 // cambiar el tamaño del cursor
 #define SET_SIZE_SLIDER(size) "\033[?" size "c"
 
-#define POINTGREEN(data) LETTER_LIGHTGREEN_EX "[" LETTER_BLUE "*" LETTER_LIGHTGREEN_EX "]" LETTER_LIGHTWHITE_EX data LETTER_RESET
-#define POINTRED(data) LETTER_LIGHTYELLOW_EX "[" LETTER_BLUE "*" LETTER_LIGHTYELLOW_EX "]" LETTER_LIGHTMAGENTA_EX data LETTER_RESET
+#define POINTGREEN(data) "#{FG:green}[#{FG:blue}*#{FG:green}]#{FG:white}" data "#{FG:reset}"
+#define POINTRED(data)   "#{FG:yellow}[#{FG:blue}*#{FG:yellow}]#{FG:purple}" data "#{FG:reset}"
 
 // definir el color de fondo de forma personalizada
-#define BACKGROUND_COLOR_CUSTOM(red, green, blue) "\x1b[48;2;" red ";" green ";" blue "m"
+#define BACKGROUND_COLOR_CUSTOM(color) "\033[48;5;"color"m"
 
 // definir el color de letra de forma personalizada
-#define FOREGROUND_COLOR_CUSTOM(red, green, blue) "\x1b[38;2;" red ";" green ";" blue "m"
+#define FOREGROUND_COLOR_CUSTOM(color) "\033[38;5;"color"m"
 
 // definir colore de fondo y de letra
-#define BACK_FORE_COLOR_CUSTOM(redB, greenB, blueB, redF, greenF, blueF) BACKGROUND_COLOR_CUSTOM(redB, greenB, blueB) FOREGROUND_COLOR_CUSTOM(redF, greenF, blueF)
+#define BACK_FORE_COLOR_CUSTOM(Acolor, Bcolor) BACKGROUND_COLOR_CUSTOM(Acolor) FOREGROUND_COLOR_CUSTOM(Bcolor)
 
 #define RGB_CREATE(red, green, blue) (RGB_C) {.r = red, .g = green, .b = blue}
 typedef union RGB_C

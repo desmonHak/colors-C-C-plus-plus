@@ -167,6 +167,14 @@
     "matriz-list.h": "c",
     "stdarg.h": "c",
     "vector-list.h": "c",
-    "colors.h": "c"
+    "colors.h": "c",
+    "colors.c": "cpp",
+    "conio.h": "c",
+    "stddef.h": "c",
+    "corecrt_stdio_config.h": "c",
+    "corecrt.h": "c",
+    "crtdefs.h": "c",
+    "conio_s.h": "c",
+    "limits": "c"
   }
 }
