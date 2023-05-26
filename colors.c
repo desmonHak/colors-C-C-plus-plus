@@ -11,7 +11,7 @@ void resetColorTerminal()
     //setConsoleColor(FOREGROUND_MASK, 0);
     // SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_MASK);
 #else
-    printf(LETTER_RESET_ANSI);
+    printf(BACKGROUND_COLOR_RESET_ANSI);
 #endif
 }
 

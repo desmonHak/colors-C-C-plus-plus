@@ -125,6 +125,7 @@ int main(){
             
         } 
         printf_color(BACKGROUND_COLOR_CUSTOM("%d")" %.3d ",r, r); 
+        resetColorTerminal();
     } printf_color("\n\n");
 
     //setConsoleColor(C_WHITE, C_BLACK);
