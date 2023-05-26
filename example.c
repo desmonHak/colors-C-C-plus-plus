@@ -105,18 +105,21 @@ int main(){
     //printf("%d\n",16 + (red * 36) + (green * 5) * 6) + blue);
 
 #define LOOP_TABLE(max, init, end) \
-    for (size_t r = 0; r < max; r+=36) { \ 
-        for (size_t g = init; g <= end; g++) { \
+    for (size_t r = 0; r <= max; r+=36) { \ 
+        for (size_t g = init; g <= end && r+g <= max; g++) { \
             printf_color(BACKGROUND_COLOR_CUSTOM("%d")" %.3d ",r+g, r+g); \
         } \
         puts(""); \
-    } printf_color("\n\n");
-    
+    } printf_color("\n");
 
     printf_color("\n\n");
     LOOP_TABLE(201, 16, 21)
     LOOP_TABLE(207, 22, 27)
     LOOP_TABLE(213, 28, 33)
+
+    LOOP_TABLE(219, 34, 39)
+    LOOP_TABLE(225, 40, 45)
+    LOOP_TABLE(231, 46, 51)
 
 
     for (size_t r = 0; r < 255; r++) { \

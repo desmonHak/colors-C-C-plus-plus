@@ -6,7 +6,7 @@
 #include <stdbool.h>
 #include <stdarg.h>
 #include <string.h>
-
+#include <stdlib.h>
 typedef enum ANSIColors
 {
     ANSI_BLACK = 0,
