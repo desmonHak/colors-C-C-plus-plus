@@ -2,6 +2,50 @@
 #define __COLORS_C__ "Desmon.hak.anon"
 #include "colors.h"
 
+// genera un valor entre 0 y 255
+unsigned int jenkins_hash(
+    unsigned int value, 
+    unsigned int n1, unsigned int n2, unsigned int n3,
+    unsigned int n4, unsigned int n5, unsigned int n6
+    ) {
+    value = (value + 0x7ed55d16) + (value << n1);
+    value = (value ^ 0xc761c23c) ^ (value >> n2);
+    value = (value + 0x165667b1) + (value << n3);
+    value = (value + 0xd3a2646c) ^ (value << n4);
+    value = (value + 0xfd7046c5) + (value << n5);
+    value = (value ^ 0xb55a4f09) ^ (value >> n6);
+    return value % 256;
+}
+// combina los valores de un array
+void shuffle_array(int array[], int size) {
+    srand(time(NULL));
+
+    for (int i = size - 1; i > 0; --i) {
+        int j = rand() % (i + 1);
+        int temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
+}
+// genera tres valores aparit de 1 usando 6 desplazamientos
+void generate_three_values(
+    unsigned int x, 
+    unsigned int* value1, 
+    unsigned int* value2, 
+    unsigned int* value3,
+    unsigned int n1, unsigned int n2, unsigned int n3,
+    unsigned int n4, unsigned int n5, unsigned int n6) {
+    if (x < 0 || x > 255) {
+        printf("El número debe estar en el rango de 0 a 255.\n");
+        return;
+    }
+
+    // Aplicar la función de dispersión hash a los valores iniciales
+    *value1 = jenkins_hash(x, n1, n2, n3, n4, n5, n6);
+    *value2 = jenkins_hash(*value1, n1, n2, n3, n4, n5, n6);
+    *value3 = jenkins_hash(*value2, n1, n2, n3, n4, n5, n6);
+}
+
 void resetColorTerminal()
 {
 #ifdef _WIN32
@@ -23,8 +67,7 @@ void __attribute__((destructor)) _RESET_COLOR__()
 }
 
 #ifdef _WIN32
-void setConsoleForegroundColor(WORD foregroundColor)
-{
+void resetConsoleForegroundColor(){
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
     CONSOLE_SCREEN_BUFFER_INFO consoleInfo;
     GetConsoleScreenBufferInfo(hConsole, &consoleInfo);
@@ -32,7 +75,16 @@ void setConsoleForegroundColor(WORD foregroundColor)
     attributes &=  0xFFF0; // Eliminar el color de la letra actual
     attributes |= foregroundColor;  // Establecer el nuevo color de la letra
     SetConsoleTextAttribute(hConsole, attributes);
+}
 
+void setConsoleForegroundColor(WORD foregroundColor)
+{
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    CONSOLE_SCREEN_BUFFER_INFO consoleInfo;
+    GetConsoleScreenBufferInfo(hConsole, &consoleInfo);
+    WORD attributes = consoleInfo.wAttributes;
+    attributes &=  0xFFF0; // Eliminar el color de la letra actual
+    SetConsoleTextAttribute(hConsole, attributes);
 }
 #else
 void setConsoleForegroundColor(ConsoleColor foregroundColor)
@@ -42,6 +94,15 @@ void setConsoleForegroundColor(ConsoleColor foregroundColor)
 #endif
 
 #ifdef _WIN32
+void resetConsoleBackgroundColor(){
+HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    CONSOLE_SCREEN_BUFFER_INFO consoleInfo;
+    GetConsoleScreenBufferInfo(hConsole, &consoleInfo);
+
+    WORD attributes = consoleInfo.wAttributes;
+    attributes &= 0x000F; // Limpiar los bits de color de fondo existentes
+    SetConsoleTextAttribute(hConsole, attributes);
+}
 void setConsoleBackgroundColor(WORD backgroundColor)
 {
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -123,11 +184,26 @@ void vprintf_color(const char *format, va_list args)
                     // Cambiar a color rojo
                     LETTER_RED;
                 }
+                #ifdef _WIN32
+                else if (strcmp(color_code, "FG:reset") == 0)
+                {
+                    // Restablecer colores
+                    resetConsoleForegroundColor();
+                }
+                else if (strcmp(color_code, "BG:reset") == 0)
+                {
+                    // Restablecer colores
+                    resetColorTerminal();
+                    resetConsoleBackgroundColor();
+                }
+                #else
+
                 else if (strcmp(color_code, "FG:reset") == 0 || strcmp(color_code, "BG:reset") == 0)
                 {
                     // Restablecer colores
                     resetColorTerminal();
                 }
+                #endif
                 else if (strcmp(color_code, "FG:green") == 0)
                 {
                     // Cambiar a color verde

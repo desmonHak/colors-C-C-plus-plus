@@ -131,5 +131,16 @@ int main(){
         resetColorTerminal();
     } printf_color("\n\n");
 
-    //setConsoleColor(C_WHITE, C_BLACK);
+    unsigned int Avalue1, Avalue2, Avalue3, Bvalue1, Bvalue2, Bvalue3;
+    int values[] = {12, 19, 5, 9, 3, 16};
+    int _size = sizeof(values) / sizeof(values[0]);
+    char my_str[] = "Hola mundo\n";
+
+    for (size_t i=0;i< strlen(my_str); i++){
+        generate_three_values(my_str[i], &Avalue1, &Avalue2, &Avalue3, values[0],values[1],values[2],values[3],values[4],values[5]);
+        shuffle_array(values, _size);
+        generate_three_values(my_str[i] % 64, &Bvalue1, &Bvalue2, &Bvalue3, values[0],values[1],values[2],values[3],values[4],values[5]);
+        printf_color("#{FG:%d;%d;%d}#{BG:%d;%d;%d} %c #{BG:green}#{FG:red}#{FG:reset}", Avalue1, Avalue2, Avalue3,  Bvalue1, Bvalue2, Bvalue3, my_str[i]);
+    }
+
 }
