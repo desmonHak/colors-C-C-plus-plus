@@ -302,7 +302,7 @@ static inline void foreground_color_custom_RGB(RGB_C color)
 }
 static void foreground_color_custom_(unsigned char red, unsigned char green, unsigned char blue)
 {
-    printf(FOREGROUND_COLOR_CUSTOM("%d"), 16 + (red * 36) + (green * 6) + blue);
+    printf(FOREGROUND_COLOR_CUSTOM_RGB("%d","%d","%d"), red, green, blue);
 }
 static inline void background_color_custom_RGB(RGB_C color)
 {
@@ -310,7 +310,7 @@ static inline void background_color_custom_RGB(RGB_C color)
 }
 static void background_color_custom_(unsigned char red, unsigned char green, unsigned char blue)
 {
-    printf(BACKGROUND_COLOR_CUSTOM("%d"), 16 + ((red > 127) * 36) + ((green > 127) * 6) + (blue > 127));
+    printf(BACKGROUND_COLOR_CUSTOM_RGB("%d","%d","%d"), red, green, blue);
 }
 static inline void back_fore_color_custom_RGB(RGB_C colorBackGround, RGB_C colorForeGround)
 {

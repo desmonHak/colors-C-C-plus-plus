@@ -97,6 +97,7 @@ int main(){
     }
     printf_color("\nIntense:\t");
     for (size_t i = 0; i <= ANSI_WHITE; i++){
+        
         ANSI_back_color(i + HIGH_INTENSTY_BACKGROUNG);
         printf_color(" %.3d ", i );
     }
@@ -106,17 +107,25 @@ int main(){
 #define LOOP_TABLE(max, init, end) \
     for (size_t r = 0; r < max; r+=36) { \ 
         for (size_t g = init; g <= end; g++) { \
-            printf_color("\033[48;5;%dm %.3d ",r+g, r+g); \
+            printf_color(BACKGROUND_COLOR_CUSTOM("%d")" %.3d ",r+g, r+g); \
         } \
         puts(""); \
     } printf_color("\n\n");
-    //background_color_custom(r, 0, g);
+    
 
     printf_color("\n\n");
     LOOP_TABLE(201, 16, 21)
     LOOP_TABLE(207, 22, 27)
     LOOP_TABLE(213, 28, 33)
 
+
+    for (size_t r = 0; r < 255; r++) { \
+        if (r % 6 == 0) { 
+            puts(""); 
+            
+        } 
+        printf_color(BACKGROUND_COLOR_CUSTOM("%d")" %.3d ",r, r); 
+    } printf_color("\n\n");
 
     //setConsoleColor(C_WHITE, C_BLACK);
 }

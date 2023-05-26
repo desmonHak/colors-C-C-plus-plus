@@ -275,8 +275,13 @@ typedef enum ConsoleColor
 // definir el color de fondo de forma personalizada
 #define BACKGROUND_COLOR_CUSTOM(color) "\033[48;5;"color"m"
 
+// definir el color de fondo de forma personalizada
+#define BACKGROUND_COLOR_CUSTOM_RGB(red, green, blue) "\033[38;2;"red";"green";"blue"m"
+
 // definir el color de letra de forma personalizada
 #define FOREGROUND_COLOR_CUSTOM(color) "\033[38;5;"color"m"
+
+#define FOREGROUND_COLOR_CUSTOM_RGB(red, green, blue) "\033[48;2;"red";"green";"blue"m"
 
 // definir colore de fondo y de letra
 #define BACK_FORE_COLOR_CUSTOM(Acolor, Bcolor) BACKGROUND_COLOR_CUSTOM(Acolor) FOREGROUND_COLOR_CUSTOM(Bcolor)
