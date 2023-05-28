@@ -176,5 +176,6 @@
     "crtdefs.h": "c",
     "conio_s.h": "c",
     "limits": "c"
-  }
+  },
+  "zowe.settings.version": 2
 }

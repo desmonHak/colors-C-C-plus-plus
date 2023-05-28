@@ -128,19 +128,21 @@ int main(){
             
         } 
         printf_color(BACKGROUND_COLOR_CUSTOM("%d")" %.3d ",r, r); 
-        resetColorTerminal();
+        //resetColorTerminal();
     } printf_color("\n\n");
 
     unsigned int Avalue1, Avalue2, Avalue3, Bvalue1, Bvalue2, Bvalue3;
     int values[] = {12, 19, 5, 9, 3, 16};
     int _size = sizeof(values) / sizeof(values[0]);
-    char my_str[] = "Hola mundo\n";
+    char my_str[] = "Hola mundo";
 
     for (size_t i=0;i< strlen(my_str); i++){
         generate_three_values(my_str[i], &Avalue1, &Avalue2, &Avalue3, values[0],values[1],values[2],values[3],values[4],values[5]);
         shuffle_array(values, _size);
         generate_three_values(my_str[i] % 64, &Bvalue1, &Bvalue2, &Bvalue3, values[0],values[1],values[2],values[3],values[4],values[5]);
-        printf_color("#{FG:%d;%d;%d}#{BG:%d;%d;%d} %c #{BG:green}#{FG:red}#{FG:reset}", Avalue1, Avalue2, Avalue3,  Bvalue1, Bvalue2, Bvalue3, my_str[i]);
+        printf_color("#{FG:%d;%d;%d}#{BG:%d;%d;%d} %c #{BG:reset}", Avalue1, Avalue2, Avalue3, Bvalue1, Bvalue2, Bvalue3, my_str[i]);
     }
-
+    puts("");
+    printf_color("#{i32%d}\n", 0b11110000111100001111000011110000);
+    printf_color("#{i32:%d}\n", 0b11110000111100001111000011110000);
 }

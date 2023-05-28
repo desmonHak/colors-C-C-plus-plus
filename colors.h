@@ -7,6 +7,7 @@
 #include <stdarg.h>
 #include <string.h>
 #include <stdlib.h>
+#include <time.h>
 typedef enum ANSIColors
 {
     ANSI_BLACK = 0,
@@ -29,6 +30,13 @@ typedef enum ANSIColors
 #define ANSI_COLOR_UNDERLINE(color)  "\033[4;" color "m"
 void ANSI_fore_color(ANSIColors color);
 void ANSI_back_color(ANSIColors color);
+
+typedef union sizes_num {
+    unsigned long long i64;
+    unsigned long i32;
+    unsigned short int i16;
+    unsigned char i8;
+} sizes_num;
 
 #ifdef _WIN32
 #include <Windows.h>
@@ -341,6 +349,7 @@ static void back_fore_color_custom_(unsigned char redB, unsigned char greenB,
                                        unsigned char greenF, unsigned char blueF);
 void printf_color(const char *format, ...);
 void vprintf_color(const char *format, va_list args);
+void print_sizes_num(sizes_num byte, size_t size_word);
 
 #include "colors.c"
 #endif

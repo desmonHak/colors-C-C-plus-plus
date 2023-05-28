@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "c:/Users/Diurno/Desktop/colors-C-C-plus-plus",
-      "program": "c:/Users/Diurno/Desktop/colors-C-C-plus-plus/build/Debug/outDebug",
+      "cwd": "c:/Users/Desmon0x90/Desktop/colors-C-C-plus-plus",
+      "program": "c:/Users/Desmon0x90/Desktop/colors-C-C-plus-plus/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
