@@ -3,8 +3,7 @@
 git add .
 git config advice.addIgnoredFile false
 git add -f .gitignore
-echo >> .gitignore
-echo code.bat >> .gitignore
+echo code.bat ^>> .gitignore
 
 git add -f code.sh
 git rm --cached "./code.sh"
