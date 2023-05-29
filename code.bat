@@ -19,16 +19,7 @@ git commit -m "confirmacion"
 
 git filter-branch --index-filter "git rm --cached --ignore-unmatch code.sh" HEAD
 
-git filter-branch -f --env-filter "
-  if ""%GIT_AUTHOR_EMAIL%"" == ""%OLD_EMAIL%"" (
-    set GIT_AUTHOR_EMAIL=%NEW_EMAIL%
-    set GIT_AUTHOR_NAME=%NEW_NAME%
-  )
-  if ""%GIT_COMMITTER_EMAIL%"" == ""%OLD_EMAIL%"" (
-    set GIT_COMMITTER_EMAIL=%NEW_EMAIL%
-    set GIT_COMMITTER_NAME=%NEW_NAME%
-  )
-" -- --all
+git filter-repo --mailmap "%OLD_EMAIL% = %NEW_NAME% <%NEW_EMAIL%> %OLD_EMAIL% = %NEW_NAME% <%NEW_EMAIL%>" --force
 
 echo subiendo cambios
 git config --global credential.helper cache
