@@ -54,10 +54,21 @@ void resetColorTerminal()
 {
 #ifdef _WIN32
 
-    setConsoleBackgroundColor(BACKGROUND_BLACK);
-    setConsoleForegroundColor(FOREGROUND_WHITE);
+    /*setConsoleBackgroundColor(BACKGROUND_BLACK);
+    setConsoleForegroundColor(FOREGROUND_WHITE);*/
     // setConsoleColor(FOREGROUND_MASK, 0);
-    //  SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_MASK);
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_MASK);
+    /*HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    CONSOLE_SCREEN_BUFFER_INFO csbi;
+    GetConsoleScreenBufferInfo(hConsole, &csbi);
+
+    WORD originalAttrs = csbi.wAttributes;
+    WORD foregroundAttrs = originalAttrs & 0x0F; // Máscara para obtener solo los bits del color del texto
+    WORD backgroundAttrs = originalAttrs & 0xF0; // Máscara para obtener solo los bits del color de fondo
+
+    WORD resetAttrs = foregroundAttrs | (backgroundAttrs << 4); // Combinar los atributos de texto y fondo
+
+    SetConsoleTextAttribute(hConsole, resetAttrs);*/
 #else
     printf(BACKGROUND_COLOR_RESET_ANSI);
 #endif
@@ -78,7 +89,6 @@ void resetConsoleForegroundColor()
     GetConsoleScreenBufferInfo(hConsole, &consoleInfo);
     WORD attributes = consoleInfo.wAttributes;
     attributes &= 0xFFF0;          // Eliminar el color de la letra actual
-    attributes |= foregroundColor; // Establecer el nuevo color de la letra
     SetConsoleTextAttribute(hConsole, attributes);
 }
 
@@ -94,8 +104,12 @@ void setConsoleForegroundColor(WORD foregroundColor)
 #else
 void resetConsoleForegroundColor()
 {
-    resetColorTerminal();
-}
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    CONSOLE_SCREEN_BUFFER_INFO csbi;
+    GetConsoleScreenBufferInfo(hConsole, &csbi);
+    WORD originalAttrs = csbi.wAttributes;
+    WORD backgroundAttrs = originalAttrs & 0x0F;
+    SetConsoleTextAttribute(hConsole, backgroundAttrs);}
 void setConsoleForegroundColor(ConsoleColor foregroundColor)
 {
     printf("\033[%dm", 30 + foregroundColor);
@@ -106,12 +120,11 @@ void setConsoleForegroundColor(ConsoleColor foregroundColor)
 void resetConsoleBackgroundColor()
 {
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-    CONSOLE_SCREEN_BUFFER_INFO consoleInfo;
-    GetConsoleScreenBufferInfo(hConsole, &consoleInfo);
-
-    WORD attributes = consoleInfo.wAttributes;
-    attributes &= 0x000F; // Limpiar los bits de color de fondo existentes
-    SetConsoleTextAttribute(hConsole, attributes);
+    CONSOLE_SCREEN_BUFFER_INFO csbi;
+    GetConsoleScreenBufferInfo(hConsole, &csbi);
+    WORD originalAttrs = csbi.wAttributes;
+    WORD backgroundAttrs = originalAttrs & 0xF0;
+    SetConsoleTextAttribute(hConsole, backgroundAttrs);
 }
 void setConsoleBackgroundColor(WORD backgroundColor)
 {
