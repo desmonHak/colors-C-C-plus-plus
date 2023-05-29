@@ -20,16 +20,14 @@ git commit -m "confirmacion"
 git filter-branch --index-filter "git rm --cached --ignore-unmatch code.sh" HEAD
 
 git filter-branch -f --env-filter "
-  if test "%GIT_AUTHOR_EMAIL%" == "%OLD_EMAIL%"
-  then
-    GIT_AUTHOR_EMAIL=%NEW_EMAIL%
-    GIT_AUTHOR_NAME=%NEW_NAME%
-  fi
-  if test "%GIT_COMMITTER_EMAIL%" == "%OLD_EMAIL%"
-  then
-    GIT_COMMITTER_EMAIL=%NEW_EMAIL%
-    GIT_COMMITTER_NAME=%NEW_NAME%
-  fi
+  if ""%GIT_AUTHOR_EMAIL%"" == ""%OLD_EMAIL%"" (
+    set GIT_AUTHOR_EMAIL=%NEW_EMAIL%
+    set GIT_AUTHOR_NAME=%NEW_NAME%
+  )
+  if ""%GIT_COMMITTER_EMAIL%"" == ""%OLD_EMAIL%"" (
+    set GIT_COMMITTER_EMAIL=%NEW_EMAIL%
+    set GIT_COMMITTER_NAME=%NEW_NAME%
+  )
 " -- --all
 
 echo subiendo cambios
