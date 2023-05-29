@@ -3,7 +3,7 @@
 git add .
 git config advice.addIgnoredFile false
 git add -f .gitignore
-echo . >> .gitignore
+echo >> .gitignore
 echo code.bat >> .gitignore
 
 git add -f code.sh
@@ -21,23 +21,10 @@ git commit -m "confirmacion"
 git filter-repo --path code.sh --invert-paths
 rem git filter-branch --index-filter "git rm --cached --ignore-unmatch code.sh" HEAD
 
-git filter-branch -f --env-filter "
-  if ""%GIT_AUTHOR_EMAIL%"" == ""%OLD_EMAIL%"" (
-    set FOUND_AUTHOR_EMAIL=1
-  )
-  if ""%GIT_COMMITTER_EMAIL%"" == ""%OLD_EMAIL%"" (
-    set FOUND_COMMITTER_EMAIL=1
-  )
-
-  if defined FOUND_AUTHOR_EMAIL (
-    set GIT_AUTHOR_EMAIL=%NEW_EMAIL%
-    set GIT_AUTHOR_NAME=%NEW_NAME%
-  )
-  if defined FOUND_COMMITTER_EMAIL (
-    set GIT_COMMITTER_EMAIL=%NEW_EMAIL%
-    set GIT_COMMITTER_NAME=%NEW_NAME%
-  )
-" -- --all
+git filter-branch -f --env-filter "if ""%GIT_AUTHOR_EMAIL%"" == ""%OLD_EMAIL%"" set GIT_AUTHOR_EMAIL=%NEW_EMAIL%"
+git filter-branch -f --env-filter "if ""%GIT_AUTHOR_NAME%"" == ""%OLD_NAME%"" set GIT_AUTHOR_NAME=%NEW_NAME%"
+git filter-branch -f --env-filter "if ""%GIT_COMMITTER_EMAIL%"" == ""%OLD_EMAIL%"" set GIT_COMMITTER_EMAIL=%NEW_EMAIL%"
+git filter-branch -f --env-filter "if ""%GIT_COMMITTER_NAME%"" == ""%OLD_NAME%"" set GIT_COMMITTER_NAME=%NEW_NAME%"
 
 echo subiendo cambios
 git config --global credential.helper cache
