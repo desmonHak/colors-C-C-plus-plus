@@ -248,7 +248,7 @@ void vprintf_color(const char *format, va_list args)
                 {
                     LETTER_LIGHTBLUE_EX;
                 }
-                else if (strncmp(color_code, "FG:lmagenta", 8) == 0)
+                else if (strncmp(color_code, "FG:lpurple", 8) == 0)
                 {
                     LETTER_LIGHTMAGENTA_EX;
                 }
