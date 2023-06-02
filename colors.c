@@ -88,7 +88,7 @@ void resetConsoleForegroundColor()
     CONSOLE_SCREEN_BUFFER_INFO consoleInfo;
     GetConsoleScreenBufferInfo(hConsole, &consoleInfo);
     WORD attributes = consoleInfo.wAttributes;
-    attributes &= 0x000F;          // Eliminar el color de la letra actual
+    attributes &= 0xFFF0; // Eliminar el color de la letra actual
     attributes |= FOREGROUND_WHITE;
     SetConsoleTextAttribute(hConsole, attributes);
 }
@@ -227,6 +227,40 @@ void vprintf_color(const char *format, va_list args)
                     // Restablecer color de fondo
                     resetConsoleBackgroundColor();
                 }
+
+                else if (strncmp(color_code, "FG:lred", 8) == 0)
+                {
+                    LETTER_LIGHTRED_EX;
+                }
+                else if (strncmp(color_code, "FG:lblack", 8) == 0)
+                {
+                    LETTER_LIGHTBLACK_EX;
+                }
+                else if (strncmp(color_code, "FG:lgreen", 8) == 0)
+                {
+                    LETTER_LIGHTGREEN_EX;
+                }
+                else if (strncmp(color_code, "FG:lyellow", 8) == 0)
+                {
+                    LETTER_LIGHTYELLOW_EX;
+                }
+                else if (strncmp(color_code, "FG:lblue", 8) == 0)
+                {
+                    LETTER_LIGHTBLUE_EX;
+                }
+                else if (strncmp(color_code, "FG:lmagenta", 8) == 0)
+                {
+                    LETTER_LIGHTMAGENTA_EX;
+                }
+                else if (strncmp(color_code, "FG:lcyan", 8) == 0)
+                {
+                    LETTER_LIGHTCYAN_EX;
+                }
+                else if (strncmp(color_code, "FG:lwhite", 8) == 0)
+                {
+                    LETTER_LIGHTWHITE_EX;
+                }
+
                 else if (strncmp(color_code, "FG:green", 8) == 0)
                 {
                     // Cambiar a color verde
@@ -360,8 +394,10 @@ void vprintf_color(const char *format, va_list args)
                     {
                         print_sizes_num((sizes_num){.i8 = 0}, 8);
                     }
-                    //printf("%d\n", num.i8);
-                } else {
+                    // printf("%d\n", num.i8);
+                }
+                else
+                {
                     printf("%s: identificador invalido", color_code);
                 }
 
@@ -409,7 +445,6 @@ void vprintf_color(const char *format, va_list args)
     resetColorTerminal();
     free(formatted_buffer);
 }
-
 
 void clear_line()
 {
@@ -527,8 +562,6 @@ void print_sizes_num(sizes_num byte, size_t size_word)
         break;
     }
 }
-
-
 
 void print_bin(const void *data, size_t size)
 {
