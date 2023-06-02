@@ -88,7 +88,8 @@ void resetConsoleForegroundColor()
     CONSOLE_SCREEN_BUFFER_INFO consoleInfo;
     GetConsoleScreenBufferInfo(hConsole, &consoleInfo);
     WORD attributes = consoleInfo.wAttributes;
-    attributes &= 0xFFF0;          // Eliminar el color de la letra actual
+    attributes &= 0x000F;          // Eliminar el color de la letra actual
+    attributes |= FOREGROUND_WHITE;
     SetConsoleTextAttribute(hConsole, attributes);
 }
 
