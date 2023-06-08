@@ -33,7 +33,7 @@ void ANSI_back_color(ANSIColors color);
 
 typedef union sizes_num {
     unsigned long long i64;
-    unsigned long i32;
+    unsigned int i32;
     unsigned short int i16;
     unsigned char i8;
 } sizes_num;
@@ -323,7 +323,7 @@ void __attribute__((destructor)) _RESET_COLOR__();
 
 void clear_line();
 void clear_display();
-void set_title(char *title);
+void set_title(const char *title);
 #ifdef _WIN32
 void setConsoleForegroundColor(WORD foregroundColor);
 void setConsoleBackgroundColor(WORD backgroundColor);
@@ -334,19 +334,31 @@ void setConsoleBackgroundColor(ConsoleColor backgroundColor);
 void setConsoleColor(ConsoleColor foreground, ConsoleColor background);
 #endif
 void resetColorTerminal();
-void pos(unsigned char x, unsigned char y, char *data);
-void back(char *data, unsigned char number);
-void forward(char *data, unsigned char number);
-void down(char *data, unsigned char number);
-void up(char *data, unsigned char number);
+void pos(const unsigned char x, const unsigned char y, const char *data);
+void back(const char *data, const unsigned char number);
+void forward(const char *data, const unsigned char number);
+void down(const char *data, const unsigned char number);
+void up(const char *data, const unsigned char number);
 static inline void foreground_color_custom_RGB(RGB_C color);
-static void foreground_color_custom_(unsigned char red, unsigned char green, unsigned char blue);
+static void foreground_color_custom_(const unsigned char red, const unsigned char green, const unsigned char blue);
 static inline void background_color_custom_RGB(RGB_C color);
-static void background_color_custom_(unsigned char red, unsigned char green, unsigned char blue);
+static void background_color_custom_(const unsigned char red, const unsigned char green, const unsigned char blue);
 static inline void back_fore_color_custom_RGB(RGB_C colorBackGround, RGB_C colorForeGround);
 static void back_fore_color_custom_(unsigned char redB, unsigned char greenB,
                                        unsigned char blueB, unsigned char redF,
                                        unsigned char greenF, unsigned char blueF);
+unsigned int jenkins_hash(
+    unsigned int value,
+    unsigned int n1, unsigned int n2, unsigned int n3,
+    unsigned int n4, unsigned int n5, unsigned int n6);
+void shuffle_array(int array[], int size);
+void generate_three_values(
+    unsigned int x,
+    unsigned int *value1,
+    unsigned int *value2,
+    unsigned int *value3,
+    unsigned int n1, unsigned int n2, unsigned int n3,
+    unsigned int n4, unsigned int n5, unsigned int n6);
 void printf_color(const char *format, ...);
 void vprintf_color(const char *format, va_list args);
 void print_sizes_num(sizes_num byte, size_t size_word);
