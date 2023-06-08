@@ -88,28 +88,27 @@ void resetConsoleForegroundColor()
     CONSOLE_SCREEN_BUFFER_INFO consoleInfo;
     GetConsoleScreenBufferInfo(hConsole, &consoleInfo);
     WORD attributes = consoleInfo.wAttributes;
-    attributes &= 0xFFF0;          // Eliminar el color de la letra actual
+    attributes &= 0xFFF0; // Eliminar el color de la letra actual
+    attributes |= FOREGROUND_WHITE;
     SetConsoleTextAttribute(hConsole, attributes);
 }
 
 void setConsoleForegroundColor(WORD foregroundColor)
 {
+
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
     CONSOLE_SCREEN_BUFFER_INFO consoleInfo;
     GetConsoleScreenBufferInfo(hConsole, &consoleInfo);
     WORD attributes = consoleInfo.wAttributes;
     attributes &= 0xFFF0; // Eliminar el color de la letra actual
+    attributes |= foregroundColor;
     SetConsoleTextAttribute(hConsole, attributes);
 }
 #else
 void resetConsoleForegroundColor()
 {
-    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-    CONSOLE_SCREEN_BUFFER_INFO csbi;
-    GetConsoleScreenBufferInfo(hConsole, &csbi);
-    WORD originalAttrs = csbi.wAttributes;
-    WORD backgroundAttrs = originalAttrs & 0x0F;
-    SetConsoleTextAttribute(hConsole, backgroundAttrs);}
+    resetColorTerminal();
+}
 void setConsoleForegroundColor(ConsoleColor foregroundColor)
 {
     printf("\033[%dm", 30 + foregroundColor);
@@ -196,7 +195,7 @@ void vprintf_color(const char *format, va_list args)
     va_copy(args_copy, args);
     size_t size = (vsnprintf(NULL, 0, format, args_copy) + 1) * sizeof(char);
     va_end(args_copy);
-    unsigned char *formatted_buffer = (unsigned char *)malloc(size);
+    char *formatted_buffer = (char *)malloc(size);
     vsprintf(formatted_buffer, format, args);
 
     const char *p = formatted_buffer;
@@ -228,6 +227,40 @@ void vprintf_color(const char *format, va_list args)
                     // Restablecer color de fondo
                     resetConsoleBackgroundColor();
                 }
+
+                else if (strncmp(color_code, "FG:lred", 8) == 0)
+                {
+                    LETTER_LIGHTRED_EX;
+                }
+                else if (strncmp(color_code, "FG:lblack", 8) == 0)
+                {
+                    LETTER_LIGHTBLACK_EX;
+                }
+                else if (strncmp(color_code, "FG:lgreen", 8) == 0)
+                {
+                    LETTER_LIGHTGREEN_EX;
+                }
+                else if (strncmp(color_code, "FG:lyellow", 8) == 0)
+                {
+                    LETTER_LIGHTYELLOW_EX;
+                }
+                else if (strncmp(color_code, "FG:lblue", 8) == 0)
+                {
+                    LETTER_LIGHTBLUE_EX;
+                }
+                else if (strncmp(color_code, "FG:lpurple", 8) == 0)
+                {
+                    LETTER_LIGHTMAGENTA_EX;
+                }
+                else if (strncmp(color_code, "FG:lcyan", 8) == 0)
+                {
+                    LETTER_LIGHTCYAN_EX;
+                }
+                else if (strncmp(color_code, "FG:lwhite", 8) == 0)
+                {
+                    LETTER_LIGHTWHITE_EX;
+                }
+
                 else if (strncmp(color_code, "FG:green", 8) == 0)
                 {
                     // Cambiar a color verde
@@ -310,7 +343,7 @@ void vprintf_color(const char *format, va_list args)
                     if (sscanf(color_code, "FG:%hhu;%hhu;%hhu", &red, &green, &blue) == 3)
                     {
                         // Cambiar a color personalizado
-                        foreground_color_custom(red, green, blue);
+                        foreground_color_custom_(red, green, blue);
                     }
                 }
                 else if (strncmp(color_code, "BG:", 3) == 0)
@@ -320,7 +353,7 @@ void vprintf_color(const char *format, va_list args)
                     if (sscanf(color_code, "BG:%hhu;%hhu;%hhu", &red, &green, &blue) == 3)
                     {
                         // Cambiar a color personalizado
-                        background_color_custom(red, green, blue);
+                        background_color_custom_(red, green, blue);
                     }
                 }
                 else if (strncmp(color_code, "i64:", 4) == 0)
@@ -361,8 +394,10 @@ void vprintf_color(const char *format, va_list args)
                     {
                         print_sizes_num((sizes_num){.i8 = 0}, 8);
                     }
-                    //printf("%d\n", num.i8);
-                } else {
+                    // printf("%d\n", num.i8);
+                }
+                else
+                {
                     printf("%s: identificador invalido", color_code);
                 }
 
@@ -411,7 +446,6 @@ void vprintf_color(const char *format, va_list args)
     free(formatted_buffer);
 }
 
-
 void clear_line()
 {
     printf(CLEAR_LINE);
@@ -420,35 +454,35 @@ void clear_display()
 {
     printf(CLEAR_DISPLAY);
 }
-void set_title(char *title)
+void set_title(const char *title)
 {
-    printf(SET_TITLE("%d"), title);
+    printf(SET_TITLE("%s"), title);
 }
-void pos(unsigned char x, unsigned char y, char *data)
+void pos(const unsigned char x, const unsigned char y, const char *data)
 {
-    printf(POS("%d", "%d", "%s"), x, y, data);
+    printf(POS("%s", "%d", "%d"), x, y, data);
 }
-void back(char *data, unsigned char number)
+void back(const char *data, const unsigned char number)
 {
-    printf(BACK("%s", "%d"), data, number);
+    printf(BACK("%s", "%d"), number, data);
 }
-void forward(char *data, unsigned char number)
+void forward(const char *data, const unsigned char number)
 {
-    printf(FORWARD("%s", "%d"), data, number);
+    printf(FORWARD("%s", "%d"), number, data);
 }
-void down(char *data, unsigned char number)
+void down(const char *data, const unsigned char number)
 {
-    printf(DOWN("%s", "%d"), data, number);
+    printf(DOWN("%s", "%d"), number, data);
 }
-void up(char *data, unsigned char number)
+void up(const char *data, const unsigned char number)
 {
-    printf(UP("%s", "%d"), data, number);
+    printf(UP("%s", "%d"), number, data);
 }
 static inline void foreground_color_custom_RGB(RGB_C color)
 {
     foreground_color_custom_(color.r, color.g, color.b);
 }
-static void foreground_color_custom_(unsigned char red, unsigned char green, unsigned char blue)
+static void foreground_color_custom_(const unsigned char red, const unsigned char green, const unsigned char blue)
 {
     printf(FOREGROUND_COLOR_CUSTOM_RGB("%d", "%d", "%d"), red, green, blue);
 }
@@ -456,7 +490,7 @@ static inline void background_color_custom_RGB(RGB_C color)
 {
     background_color_custom_(color.red, color.green, color.blue);
 }
-static void background_color_custom_(unsigned char red, unsigned char green, unsigned char blue)
+static void background_color_custom_(const unsigned char red, const unsigned char green, const unsigned char blue)
 {
     printf(BACKGROUND_COLOR_CUSTOM_RGB("%d", "%d", "%d"), red, green, blue);
 }
@@ -474,8 +508,8 @@ static void back_fore_color_custom_(unsigned char redB, unsigned char greenB,
                                     unsigned char blueB, unsigned char redF,
                                     unsigned char greenF, unsigned char blueF)
 {
-    foreground_color_custom(redF, greenF, blueF);
-    background_color_custom(redB, greenB, blueB);
+    foreground_color_custom_(redF, greenF, blueF);
+    background_color_custom_(redB, greenB, blueB);
 }
 
 void ANSI_fore_color(ANSIColors color)
@@ -528,8 +562,6 @@ void print_sizes_num(sizes_num byte, size_t size_word)
         break;
     }
 }
-
-
 
 void print_bin(const void *data, size_t size)
 {
