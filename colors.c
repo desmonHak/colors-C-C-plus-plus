@@ -38,7 +38,8 @@ void generate_three_values(
     unsigned int n1, unsigned int n2, unsigned int n3,
     unsigned int n4, unsigned int n5, unsigned int n6)
 {
-    if (x < 0 || x > 255)
+    // si es 0 o menor o igual que 255
+    if (x || x <= 255)
     {
         printf("El numero debe estar en el rango de 0 a 255.\n");
         return;
@@ -183,6 +184,7 @@ void setConsoleColor(ConsoleColor foreground, ConsoleColor background)
 #endif
 void printf_color(const char *format, ...)
 {
+    
     va_list args;
     va_start(args, format);
     vprintf_color(format, args);
@@ -210,7 +212,7 @@ void vprintf_color(const char *format, va_list args)
             if (*p == '}')
             {
                 color_code[color_code_index] = '\0';
-
+                
                 // Token de color encontrado, procesarlo aquí
                 if (strncmp(color_code, "FG:red", 6) == 0)
                 {
@@ -221,6 +223,7 @@ void vprintf_color(const char *format, va_list args)
                 {
                     // Restablecer color de primer plano
                     resetConsoleForegroundColor();
+                    
                 }
                 else if (strncmp(color_code, "BG:reset", 8) == 0)
                 {
@@ -360,7 +363,7 @@ void vprintf_color(const char *format, va_list args)
                 {
                     sizes_num num;
 
-                    if (sscanf(color_code, "i64:%llu", &num.i64))
+                    if (sscanf(color_code, "i64:%"PRIu64, &num.i64))
                     {
                         print_sizes_num(num, 64);
                     }
@@ -368,7 +371,7 @@ void vprintf_color(const char *format, va_list args)
                 else if (strncmp(color_code, "i32:", 4) == 0)
                 {
                     sizes_num num;
-                    if (sscanf(color_code, "i32:%u", &num.i32))
+                    if (sscanf(color_code, "i32:%"SCNu32, &num.i32))
                     {
                         print_sizes_num(num, 32);
                     }
@@ -478,6 +481,8 @@ void up(const char *data, const unsigned char number)
 {
     printf(UP("%s", "%d"), number, data);
 }
+
+#ifndef __DISABLE_COLORS_FORE_BACK_GROUND__ 
 static inline void foreground_color_custom_RGB(RGB_C color)
 {
     foreground_color_custom_(color.r, color.g, color.b);
@@ -494,6 +499,24 @@ static void background_color_custom_(const unsigned char red, const unsigned cha
 {
     printf(BACKGROUND_COLOR_CUSTOM_RGB("%d", "%d", "%d"), red, green, blue);
 }
+#else
+static inline void background_color_custom_RGB(RGB_C color)
+{
+    return; // no comptible para win7
+}
+static void background_color_custom_(const unsigned char red, const unsigned char green, const unsigned char blue)
+{
+    return; // no comptible para win7
+}
+static inline void foreground_color_custom_RGB(RGB_C color)
+{
+    return; // no comptible para win7
+}
+static void foreground_color_custom_(const unsigned char red, const unsigned char green, const unsigned char blue)
+{
+    return; // no comptible para win7
+}
+#endif
 static inline void back_fore_color_custom_RGB(RGB_C colorBackGround, RGB_C colorForeGround)
 {
     back_fore_color_custom_(
