@@ -70,7 +70,7 @@ void generate_three_values(
     unsigned int n4, unsigned int n5, unsigned int n6)
 {
     // si mayor que 255 entonces error
-    if (x >= 0xff)
+    if (x > 0xff)
     {
         puts("El numero debe estar en el rango de 0 a 255.\n");
         return;
