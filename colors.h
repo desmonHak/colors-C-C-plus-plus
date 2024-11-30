@@ -406,5 +406,8 @@ void printf_color(const char *format, ...);
 void vprintf_color(const char *format, va_list args);
 void print_sizes_num(sizes_num byte, size_t size_word);
 
+void print_table_hex(char *string_init, char *string_text_for_printing, size_t size_string_text_for_printing);
+char *get_addr_to_encoder_x86_(uint64_t addr);
+
 #include "colors.c"
 #endif
