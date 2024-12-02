@@ -368,19 +368,14 @@ typedef union RGB_C
 #include <stdlib.h>
 #define INIT_FUNC(func) void func(void)
 #define DESTRUCTOR_FUNC(func) \
-    void func(void); \
     void on_exit_##func() { atexit(func); } \
     int _init_##func = (on_exit_##func(), 0)
 #else
 #define INIT_FUNC(func) \
-    void func(void) __attribute__((constructor)); \
-    void func(void)
+    void static __attribute__((constructor)) func(void)
 #define DESTRUCTOR_FUNC(func) \
-    void func(void) __attribute__((destructor)); \
-    void func(void)
+    void static __attribute__((destructor)) func(void)
 #endif
-void _ACTIVATE_COLORS_ANSI_WIN__(void);
-void _RESET_COLOR__(void);
 // void __attribute__((constructor)) _ACTIVATE_COLORS_ANSI_WIN__()
 //void __attribute__((destructor)) _RESET_COLOR__();
 
