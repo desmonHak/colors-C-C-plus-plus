@@ -362,22 +362,13 @@ typedef union RGB_C
     RGB_C: back_fore_color_custom_RGB,                \
     default: back_fore_color_custom_)(__VA_ARGS__)
 
-//void __attribute__((destructor)) _RESET_COLOR__();
-
 #ifdef _MSC_VER
-#include <stdlib.h>
-#define INIT_FUNC(func) void func(void)
-#define DESTRUCTOR_FUNC(func) \
-    void on_exit_##func() { atexit(func); } \
-    int _init_##func = (on_exit_##func(), 0)
+void _ACTIVATE_COLORS_ANSI_WIN__();
+void _RESET_COLOR__();
 #else
-#define INIT_FUNC(func) \
-    void static __attribute__((constructor)) func(void)
-#define DESTRUCTOR_FUNC(func) \
-    void static __attribute__((destructor)) func(void)
+void __attribute__((constructor)) _ACTIVATE_COLORS_ANSI_WIN__();
+void static __attribute__((destructor)) _RESET_COLOR__();
 #endif
-// void __attribute__((constructor)) _ACTIVATE_COLORS_ANSI_WIN__()
-//void __attribute__((destructor)) _RESET_COLOR__();
 
 void inline clear_line();
 void inline clear_display();
