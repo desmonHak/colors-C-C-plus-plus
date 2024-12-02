@@ -132,7 +132,7 @@ typedef enum ConsoleColor
 #define BACKGROUND_CYAN BACKGROUND_GREEN | BACKGROUND_BLUE
 #endif
 
-void __attribute__((constructor)) _ACTIVATE_COLORS_ANSI_WIN__();
+//void __attribute__((constructor)) _ACTIVATE_COLORS_ANSI_WIN__();
 #else
 typedef enum ConsoleColor
 {
@@ -362,7 +362,27 @@ typedef union RGB_C
     RGB_C: back_fore_color_custom_RGB,                \
     default: back_fore_color_custom_)(__VA_ARGS__)
 
-void __attribute__((destructor)) _RESET_COLOR__();
+//void __attribute__((destructor)) _RESET_COLOR__();
+
+#ifdef _MSC_VER
+#include <stdlib.h>
+#define INIT_FUNC(func) void func(void)
+#define DESTRUCTOR_FUNC(func) \
+    void func(void); \
+    void on_exit_##func() { atexit(func); } \
+    int _init_##func = (on_exit_##func(), 0)
+#else
+#define INIT_FUNC(func) \
+    void func(void) __attribute__((constructor)); \
+    void func(void)
+#define DESTRUCTOR_FUNC(func) \
+    void func(void) __attribute__((destructor)); \
+    void func(void)
+#endif
+void _ACTIVATE_COLORS_ANSI_WIN__(void);
+void _RESET_COLOR__(void);
+// void __attribute__((constructor)) _ACTIVATE_COLORS_ANSI_WIN__()
+//void __attribute__((destructor)) _RESET_COLOR__();
 
 void inline clear_line();
 void inline clear_display();
