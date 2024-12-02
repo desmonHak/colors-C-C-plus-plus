@@ -106,8 +106,7 @@ void resetColorTerminal()
 #endif
 }
 
-//void __attribute__((destructor)) _RESET_COLOR__()
-DESTRUCTOR(_RESET_COLOR__)
+void __attribute__((destructor)) _RESET_COLOR__()
 {
     // setConsoleColor(C_WHITE, C_BLACK);
     // SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
@@ -181,10 +180,8 @@ void setConsoleBackgroundColor(ConsoleColor backgroundColor)
 }
 #endif
 
-
 #ifdef _WIN32
-//void __attribute__((constructor)) _ACTIVATE_COLORS_ANSI_WIN__()
-INIT_FUNC(_ACTIVATE_COLORS_ANSI_WIN__)
+void __attribute__((constructor)) _ACTIVATE_COLORS_ANSI_WIN__()
 {
     // Habilitar el soporte de colores ANSI en la consola de Windows
     HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -227,6 +224,27 @@ void printf_color(const char *format, ...)
 
 void vprintf_color(const char *format, va_list args)
 {
+    #ifdef MUTEX_NAME
+    // agregando mutex para multiproceso y multihilo en windows
+    HANDLE hMutex = OpenMutex(MUTEX_ALL_ACCESS, FALSE, MUTEX_NAME);
+    if (hMutex == NULL) {
+        // El mutex no existe, crear uno nuevo
+        hMutex = CreateMutex(NULL, FALSE, MUTEX_NAME);
+        if (hMutex == NULL) {
+            printf("CreateMutex failed (%d).\n", GetLastError());
+            return;
+        }
+    }
+
+    // Esperar a que el mutex esté disponible
+    WaitForSingleObject(hMutex, INFINITE);
+
+    printf("\rpid: ");
+    LETTER_LIGHTGREEN_EX;
+    printf("%06d", GetCurrentProcessId());
+    resetConsoleForegroundColor();
+    printf(") ");
+    #endif
     va_list args_copy;
     va_copy(args_copy, args);
     size_t size = (vsnprintf(NULL, 0, format, args_copy) + 1) * sizeof(char);
@@ -481,37 +499,44 @@ void vprintf_color(const char *format, va_list args)
     // Restablecer colores
     resetColorTerminal();
     free(formatted_buffer);
+    #ifdef MUTEX_NAME
+    // Liberar el mutex
+    ReleaseMutex(hMutex);
+
+    // Cerrar el handle del mutex
+    CloseHandle(hMutex);
+    #endif
 }
 
-void clear_line()
+void inline clear_line()
 {
     printf(CLEAR_LINE);
 }
-void clear_display()
+void inline clear_display()
 {
     printf(CLEAR_DISPLAY);
 }
-void set_title(const char *title)
+void inline set_title(const char *title)
 {
     printf(SET_TITLE("%s"), title);
 }
-void pos(const unsigned char x, const unsigned char y, const char *data)
+void inline pos(const unsigned char x, const unsigned char y, const char *data)
 {
     printf(POS("%s", "%d", "%d"), x, y, data);
 }
-void back(const char *data, const unsigned char number)
+void inline back(const char *data, const unsigned char number)
 {
     printf(BACK("%s", "%d"), number, data);
 }
-void forward(const char *data, const unsigned char number)
+void inline forward(const char *data, const unsigned char number)
 {
     printf(FORWARD("%s", "%d"), number, data);
 }
-void down(const char *data, const unsigned char number)
+void inline down(const char *data, const unsigned char number)
 {
     printf(DOWN("%s", "%d"), number, data);
 }
-void up(const char *data, const unsigned char number)
+void inline up(const char *data, const unsigned char number)
 {
     printf(UP("%s", "%d"), number, data);
 }
@@ -529,7 +554,7 @@ static inline void background_color_custom_RGB(RGB_C color)
 {
     background_color_custom_(color.red, color.green, color.blue);
 }
-static void background_color_custom_(const unsigned char red, const unsigned char green, const unsigned char blue)
+static inline void background_color_custom_(const unsigned char red, const unsigned char green, const unsigned char blue)
 {
     printf(BACKGROUND_COLOR_CUSTOM_RGB("%d", "%d", "%d"), red, green, blue);
 }
@@ -538,7 +563,7 @@ static inline void background_color_custom_RGB(RGB_C color)
 {
     return; // no comptible para win7
 }
-static void background_color_custom_(const unsigned char red, const unsigned char green, const unsigned char blue)
+static inline void background_color_custom_(const unsigned char red, const unsigned char green, const unsigned char blue)
 {
     return; // no comptible para win7
 }
@@ -546,7 +571,7 @@ static inline void foreground_color_custom_RGB(RGB_C color)
 {
     return; // no comptible para win7
 }
-static void foreground_color_custom_(const unsigned char red, const unsigned char green, const unsigned char blue)
+static inline void foreground_color_custom_(const unsigned char red, const unsigned char green, const unsigned char blue)
 {
     return; // no comptible para win7
 }
@@ -569,11 +594,11 @@ static void back_fore_color_custom_(unsigned char redB, unsigned char greenB,
     background_color_custom_(redB, greenB, blueB);
 }
 
-void ANSI_fore_color(ANSIColors color)
+void inline ANSI_fore_color(ANSIColors color)
 {
     printf(ANSI_COLOR_FOREGROUNG("%d"), color);
 }
-void ANSI_back_color(ANSIColors color)
+void inline ANSI_back_color(ANSIColors color)
 {
     printf(ANSI_COLOR_BACKGROUNG("%d"), color);
 }

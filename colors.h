@@ -63,8 +63,8 @@ typedef enum ANSIColors
 #define ANSI_COLOR_BACKGROUNG(color) "\033[0;" color "m"
 #define ANSI_COLOR_BOLD(color)       "\033[1;" color "m"
 #define ANSI_COLOR_UNDERLINE(color)  "\033[4;" color "m"
-void ANSI_fore_color(ANSIColors color);
-void ANSI_back_color(ANSIColors color);
+void inline ANSI_fore_color(ANSIColors color);
+void inline ANSI_back_color(ANSIColors color);
 
 typedef union sizes_num {
     unsigned long long i64;
@@ -132,8 +132,7 @@ typedef enum ConsoleColor
 #define BACKGROUND_CYAN BACKGROUND_GREEN | BACKGROUND_BLUE
 #endif
 
-
-
+void __attribute__((constructor)) _ACTIVATE_COLORS_ANSI_WIN__();
 #else
 typedef enum ConsoleColor
 {
@@ -363,28 +362,11 @@ typedef union RGB_C
     RGB_C: back_fore_color_custom_RGB,                \
     default: back_fore_color_custom_)(__VA_ARGS__)
 
+void __attribute__((destructor)) _RESET_COLOR__();
 
-#ifdef _MSC_VER
-#include <stdlib.h>
-#define INIT_FUNC(func) static void func(void)
-#define DESTRUCTOR_FUNC(func) \
-    static void func(void); \
-    static void on_exit_##func() { atexit(func); } \
-    static int _init_##func = (on_exit_##func(), 0)
-#else
-#define INIT_FUNC(func) \
-    static void func(void) __attribute__((constructor)); \
-    static void func(void)
-#define DESTRUCTOR_FUNC(func) \
-    static void func(void) __attribute__((destructor)); \
-    static void func(void)
-#endif
-// void __attribute__((constructor)) _ACTIVATE_COLORS_ANSI_WIN__()
-//void __attribute__((destructor)) _RESET_COLOR__();
-
-void clear_line();
-void clear_display();
-void set_title(const char *title);
+void inline clear_line();
+void inline clear_display();
+void inline set_title(const char *title);
 #ifdef _WIN32
 void setConsoleForegroundColor(WORD foregroundColor);
 void setConsoleBackgroundColor(WORD backgroundColor);
@@ -395,15 +377,15 @@ void setConsoleBackgroundColor(ConsoleColor backgroundColor);
 void setConsoleColor(ConsoleColor foreground, ConsoleColor background);
 #endif
 void resetColorTerminal();
-void pos(const unsigned char x, const unsigned char y, const char *data);
-void back(const char *data, const unsigned char number);
-void forward(const char *data, const unsigned char number);
-void down(const char *data, const unsigned char number);
-void up(const char *data, const unsigned char number);
+void inline pos(const unsigned char x, const unsigned char y, const char *data);
+void inline back(const char *data, const unsigned char number);
+void inline forward(const char *data, const unsigned char number);
+void inline down(const char *data, const unsigned char number);
+void inline up(const char *data, const unsigned char number);
 static inline void foreground_color_custom_RGB(RGB_C color);
 static void foreground_color_custom_(const unsigned char red, const unsigned char green, const unsigned char blue);
 static inline void background_color_custom_RGB(RGB_C color);
-static void background_color_custom_(const unsigned char red, const unsigned char green, const unsigned char blue);
+static void inline background_color_custom_(const unsigned char red, const unsigned char green, const unsigned char blue);
 static inline void back_fore_color_custom_RGB(RGB_C colorBackGround, RGB_C colorForeGround);
 static void back_fore_color_custom_(unsigned char redB, unsigned char greenB,
                                        unsigned char blueB, unsigned char redF,
