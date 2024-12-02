@@ -107,11 +107,12 @@ void resetColorTerminal()
 }
 
 //void __attribute__((destructor)) _RESET_COLOR__()
-DESTRUCTOR(_RESET_COLOR__)
+DESTRUCTOR_FUNC(_RESET_COLOR__)
 {
     // setConsoleColor(C_WHITE, C_BLACK);
     // SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
     resetColorTerminal();
+    exit(0);
 }
 
 #ifdef _WIN32
