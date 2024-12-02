@@ -106,7 +106,8 @@ void resetColorTerminal()
 #endif
 }
 
-void __attribute__((destructor)) _RESET_COLOR__()
+//void __attribute__((destructor)) _RESET_COLOR__()
+DESTRUCTOR(_RESET_COLOR__)
 {
     // setConsoleColor(C_WHITE, C_BLACK);
     // SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
@@ -180,8 +181,10 @@ void setConsoleBackgroundColor(ConsoleColor backgroundColor)
 }
 #endif
 
+
 #ifdef _WIN32
-void __attribute__((constructor)) _ACTIVATE_COLORS_ANSI_WIN__()
+//void __attribute__((constructor)) _ACTIVATE_COLORS_ANSI_WIN__()
+INIT_FUNC(_ACTIVATE_COLORS_ANSI_WIN__)
 {
     // Habilitar el soporte de colores ANSI en la consola de Windows
     HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
