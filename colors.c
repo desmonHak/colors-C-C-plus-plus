@@ -671,6 +671,8 @@ void print_bin(const void *data, size_t size)
     }
 }
 
+
+
 char *get_addr_to_encoder_x86_(uint64_t addr) {
     /*
      *  
@@ -695,6 +697,41 @@ char *get_addr_to_encoder_x86_(uint64_t addr) {
     sprintf(buffer_Position_memory, "%p", (size_t)addr);
     return buffer_Position_memory;
 }
+
+void resize_terminal(int rows, int cols) {
+    #ifdef _WIN32
+        // Obtener el identificador de la consola estándar
+        HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+        
+        // Crear una estructura de tamaño de búfer
+        COORD newSize;
+        newSize.X = cols;  // Número de columnas
+        newSize.Y = rows;  // Número de filas
+        
+        // Establecer el tamaño del búfer
+        SetConsoleScreenBufferSize(hConsole, newSize);
+        
+        // Cambiar el tamaño de la ventana
+        SMALL_RECT rect;
+        rect.Left = 0;
+        rect.Top = 0;
+        rect.Right = cols - 1;
+        rect.Bottom = rows - 1;
+
+        SetConsoleWindowInfo(hConsole, TRUE, &rect);
+    #else
+
+
+
+        struct winsize w;
+        w.ws_row = rows;
+        w.ws_col = cols;
+        ioctl(STDOUT_FILENO, TIOCSWINSZ, &w);
+    //*/
+    //printf_color("\033[8;%d;%dt", rows, cols);
+    #endif
+}
+
 
 void print_table_hex(char *string_init, char *string_text_for_printing, size_t size_string_text_for_printing) {
     /*

@@ -249,6 +249,11 @@ typedef enum ConsoleColor
 #define LETTER_LIGHTCYAN_EX     setConsoleForegroundColor(FOREGROUND_CYAN    | FOREGROUND_INTENSITY)
 #define LETTER_LIGHTWHITE_EX    setConsoleForegroundColor(FOREGROUND_WHITE   | FOREGROUND_INTENSITY)
 #else
+#include <stdio.h>
+#include <sys/ioctl.h>
+#include <unistd.h>
+#include <termios.h>
+
 #define LETTER_GREEN             setConsoleForegroundColor(C_GREEN)
 #define LETTER_YELLOW            setConsoleForegroundColor(C_YELLOW)
 #define LETTER_BLUE              setConsoleForegroundColor(C_BLUE)
@@ -370,6 +375,7 @@ void __attribute__((constructor)) _ACTIVATE_COLORS_ANSI_WIN__();
 void static __attribute__((destructor)) _RESET_COLOR__();
 #endif
 
+void resize_terminal(int rows, int cols);
 void inline clear_line();
 void inline clear_display();
 void inline set_title(const char *title);
