@@ -235,7 +235,7 @@ void printf_color(const char *format, ...)
 
 void vprintf_color(const char *format, va_list args)
 {
-    #ifdef MUTEX_NAME
+    #if defined(MUTEX_NAME) && defined(_WIN32)
     // agregando mutex para multiproceso y multihilo en windows
     HANDLE hMutex = OpenMutex(MUTEX_ALL_ACCESS, FALSE, MUTEX_NAME);
     if (hMutex == NULL) {
@@ -510,7 +510,7 @@ void vprintf_color(const char *format, va_list args)
     // Restablecer colores
     resetColorTerminal();
     free(formatted_buffer);
-    #ifdef MUTEX_NAME
+    #if defined(MUTEX_NAME) && defined(_WIN32)
     // Liberar el mutex
     ReleaseMutex(hMutex);
 
