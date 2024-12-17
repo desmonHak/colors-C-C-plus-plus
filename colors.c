@@ -495,10 +495,26 @@ void vprintf_color(const char *format, va_list args)
             }
             else
             {
-                if (*p == '\n')
-                {
-                    resetColorTerminal();
-                }
+                /* esta parte de aqui no era optima, por cada salto de linea, se reseteaba el color.
+                    time   seconds   seconds    calls  Ts/call  Ts/call  name    
+                    0.00      0.00     0.00       21     0.00     0.00  resetColorTerminal
+                    0.00      0.00     0.00       10     0.00     0.00  printf_color
+                    0.00      0.00     0.00       10     0.00     0.00  setConsoleForegroundColor
+                    0.00      0.00     0.00       10     0.00     0.00  vprintf_color
+                    0.00      0.00     0.00        1     0.00     0.00  clear_display
+                    0.00      0.00     0.00        1     0.00     0.00  debug_set_level
+                    0.00      0.00     0.00        1     0.00     0.00  resize_terminal
+                    0.00      0.00     0.00        1     0.00     0.00  set_title
+                    en un codigo simple donde se llama 10 veces a printf_color, se llama 10 veces a resetColorTerminal,
+                    1 por finalizacion de la funcion mas 10 veces adicionales, por añadirse un \n, lo que añadio una llamada
+                    adicional a resetColorTerminal, por cada llamada a printf_color, lo que duplica la cantidad de llamadas
+                    a resetColorTerminal, por printf_color. 
+                    Eliminado esta seccion se reduce las llamadas inecesarias a la mitad.
+                 */
+                //if (*p == '\n')
+                //{
+                //    resetColorTerminal();
+                //}
                 putchar(*p);
                 fflush(stdout);
             }
@@ -519,41 +535,41 @@ void vprintf_color(const char *format, va_list args)
     #endif
 }
 
-void inline clear_line()
+void clear_line()
 {
     printf(CLEAR_LINE);
 }
-void inline clear_display()
+void clear_display()
 {
     printf(CLEAR_DISPLAY);
 }
-void inline set_title(const char *title)
+void set_title(const char *title)
 {
     printf(SET_TITLE("%s"), title);
 }
-void inline pos(const unsigned char x, const unsigned char y, const char *data)
+void pos(const unsigned char x, const unsigned char y, const char *data)
 {
     printf(POS("%s", "%d", "%d"), x, y, data);
 }
-void inline back(const char *data, const unsigned char number)
+void back(const char *data, const unsigned char number)
 {
     printf(BACK("%s", "%d"), number, data);
 }
-void inline forward(const char *data, const unsigned char number)
+void forward(const char *data, const unsigned char number)
 {
     printf(FORWARD("%s", "%d"), number, data);
 }
-void inline down(const char *data, const unsigned char number)
+void down(const char *data, const unsigned char number)
 {
     printf(DOWN("%s", "%d"), number, data);
 }
-void inline up(const char *data, const unsigned char number)
+void up(const char *data, const unsigned char number)
 {
     printf(UP("%s", "%d"), number, data);
 }
 
 #ifndef __DISABLE_COLORS_FORE_BACK_GROUND__ 
-static inline void foreground_color_custom_RGB(RGB_C color)
+static void foreground_color_custom_RGB(RGB_C color)
 {
     foreground_color_custom_(color.r, color.g, color.b);
 }
@@ -561,33 +577,33 @@ static void foreground_color_custom_(const unsigned char red, const unsigned cha
 {
     printf(FOREGROUND_COLOR_CUSTOM_RGB("%d", "%d", "%d"), red, green, blue);
 }
-static inline void background_color_custom_RGB(RGB_C color)
+static void background_color_custom_RGB(RGB_C color)
 {
     background_color_custom_(color.red, color.green, color.blue);
 }
-static inline void background_color_custom_(const unsigned char red, const unsigned char green, const unsigned char blue)
+static void background_color_custom_(const unsigned char red, const unsigned char green, const unsigned char blue)
 {
     printf(BACKGROUND_COLOR_CUSTOM_RGB("%d", "%d", "%d"), red, green, blue);
 }
 #else
-static inline void background_color_custom_RGB(RGB_C color)
+static void background_color_custom_RGB(RGB_C color)
 {
     return; // no comptible para win7
 }
-static inline void background_color_custom_(const unsigned char red, const unsigned char green, const unsigned char blue)
+static void background_color_custom_(const unsigned char red, const unsigned char green, const unsigned char blue)
 {
     return; // no comptible para win7
 }
-static inline void foreground_color_custom_RGB(RGB_C color)
+static void foreground_color_custom_RGB(RGB_C color)
 {
     return; // no comptible para win7
 }
-static inline void foreground_color_custom_(const unsigned char red, const unsigned char green, const unsigned char blue)
+static void foreground_color_custom_(const unsigned char red, const unsigned char green, const unsigned char blue)
 {
     return; // no comptible para win7
 }
 #endif
-static inline void back_fore_color_custom_RGB(RGB_C colorBackGround, RGB_C colorForeGround)
+static void back_fore_color_custom_RGB(RGB_C colorBackGround, RGB_C colorForeGround)
 {
     back_fore_color_custom_(
         colorBackGround.r,
@@ -605,11 +621,11 @@ static void back_fore_color_custom_(unsigned char redB, unsigned char greenB,
     background_color_custom_(redB, greenB, blueB);
 }
 
-void inline ANSI_fore_color(ANSIColors color)
+void ANSI_fore_color(ANSIColors color)
 {
     printf(ANSI_COLOR_FOREGROUNG("%d"), color);
 }
-void inline ANSI_back_color(ANSIColors color)
+void ANSI_back_color(ANSIColors color)
 {
     printf(ANSI_COLOR_BACKGROUNG("%d"), color);
 }
