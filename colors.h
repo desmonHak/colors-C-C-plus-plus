@@ -1,3 +1,20 @@
+/**
+ * @file colors.h
+ * @brief Archivo de definición de colores para terminales con soporte para ANSI y Windows.
+ *
+ * Este archivo contiene definiciones y macros para manipular los colores de texto y fondo
+ * en terminales compatibles con ANSI y en sistemas Windows, así como diversas funciones
+ * para trabajar con la terminal, como mover el cursor, cambiar colores y manipular textos
+ * con estilos.
+ * 
+ * @license Apache License, Version 2.0 con Modificación.
+ * Copyright 2023 Desmon (David)
+ *
+ * Se concede permiso a cualquier persona que obtenga una copia de este software para tratar
+ * el software sin restricciones bajo los términos de la licencia Apache 2.0 con modificaciones.
+ */
+
+
 /*
  *	Licencia Apache, Version 2.0 con Modificacion
  *	
@@ -40,16 +57,28 @@
 #include <stdlib.h>
 #include <time.h>
 #include <inttypes.h>
-typedef enum ANSIColors
-{
-    ANSI_BLACK = 0,
-    ANSI_RED = 1,
-    ANSI_GREEN = 2,
-    ANSI_YELLOW = 3,
-    ANSI_BLUE = 4,
-    ANSI_MAGENTA = 5,    
-    ANSI_CYAN = 6,
-    ANSI_WHITE = 7,
+
+/**
+ * @defgroup color_definitions Definiciones de colores
+ * @{
+ */
+
+/**
+ * @enum ANSIColors
+ * @brief Colores ANSI estándar para terminales.
+ *
+ * Esta enumeración define los colores estándar en ANSI que se pueden usar para cambiar
+ * el color del texto en terminales compatibles con ANSI.
+ */
+typedef enum ANSIColors {
+    ANSI_BLACK = 0,      /**< Color negro */
+    ANSI_RED = 1,        /**< Color rojo */
+    ANSI_GREEN = 2,      /**< Color verde */
+    ANSI_YELLOW = 3,     /**< Color amarillo */
+    ANSI_BLUE = 4,       /**< Color azul */
+    ANSI_MAGENTA = 5,    /**< Color magenta */
+    ANSI_CYAN = 6,       /**< Color cian */
+    ANSI_WHITE = 7,      /**< Color blanco */
 } ANSIColors;
 
 // macros que se definen para cada version windows:
@@ -59,75 +88,188 @@ typedef enum ANSIColors
 #define HIGH_INTENSTY  90
 #define REGULAR_COLORS_BACKGROUND 40
 #define HIGH_INTENSTY_BACKGROUNG 100
+
+/**
+ * @brief Macro para establecer el color de primer plano (texto) en terminales ANSI.
+ * 
+ * @param color El color a aplicar (en formato ANSI).
+ */
 #define ANSI_COLOR_FOREGROUNG(color) "\033["   color "m"
+
+
+/**
+ * @brief Macro para establecer el color de fondo en terminales ANSI.
+ * 
+ * @param color El color de fondo a aplicar (en formato ANSI).
+ */
 #define ANSI_COLOR_BACKGROUNG(color) "\033[0;" color "m"
+
+/**
+ * @brief Macro para hacer el texto en negrita en terminales ANSI.
+ * 
+ * @param color El color a aplicar (en formato ANSI).
+ */
 #define ANSI_COLOR_BOLD(color)       "\033[1;" color "m"
+
+/**
+ * @brief Macro para subrayar el texto en terminales ANSI.
+ * 
+ * @param color El color a aplicar (en formato ANSI).
+ */
 #define ANSI_COLOR_UNDERLINE(color)  "\033[4;" color "m"
+
+/**
+ * @brief Función para establecer el color de primer plano en la terminal utilizando ANSI.
+ * 
+ * @param color Color a aplicar.
+ */
 void ANSI_fore_color(ANSIColors color);
+
+/**
+ * @brief Función para establecer el color de fondo en la terminal utilizando ANSI.
+ * 
+ * @param color Color a aplicar.
+ */
 void ANSI_back_color(ANSIColors color);
 
+
+/**
+ * @union sizes_num
+ * @brief Unión para manejar diferentes tamaños de datos.
+ *
+ * Esta unión se usa para representar números de diferentes tamaños (64 bits, 32 bits, etc.)
+ * en una variable, permitiendo convertir entre diferentes representaciones de enteros.
+ */
 typedef union sizes_num {
-    unsigned long long i64;
-    unsigned int i32;
-    unsigned short int i16;
-    unsigned char i8;
+    unsigned long long i64;  /**< Entero de 64 bits */
+    unsigned int i32;        /**< Entero de 32 bits */
+    unsigned short int i16;  /**< Entero de 16 bits */
+    unsigned char i8;        /**< Entero de 8 bits */
 } sizes_num;
 
 #ifdef _WIN32
 #include <Windows.h>
-typedef enum ConsoleColor
-{
-    C_BLACK,
-    C_BLUE,
-    C_GREEN,
-    C_CYAN,
-    C_RED,
-    C_MAGENTA,
-    C_YELLOW,
-    C_WHITE,
-    C_LIGHTBLACK,
-    C_LIGHTCYAN,
-    C_LIGHTRED,
-    C_LIGHTMAGENTA,
-    C_LIGHTYELLOW,
-    C_LIGHTWHITE
+
+
+/**
+ * @enum ConsoleColor
+ * @brief Colores para consola en sistemas Windows.
+ *
+ * Esta enumeración define los colores disponibles en las consolas de Windows. Los valores
+ * se corresponden con códigos de colores que se pueden usar con las funciones de consola
+ * específicas de Windows.
+ */
+typedef enum ConsoleColor {
+    C_BLACK,       /**< Color negro */
+    C_BLUE,        /**< Color azul */
+    C_GREEN,       /**< Color verde */
+    C_CYAN,        /**< Color cian */
+    C_RED,         /**< Color rojo */
+    C_MAGENTA,     /**< Color magenta */
+    C_YELLOW,      /**< Color amarillo */
+    C_WHITE,       /**< Color blanco */
+    C_LIGHTBLACK,  /**< Color negro claro */
+    C_LIGHTCYAN,   /**< Color cian claro */
+    C_LIGHTRED,    /**< Color rojo claro */
+    C_LIGHTMAGENTA,/**< Color magenta claro */
+    C_LIGHTYELLOW, /**< Color amarillo claro */
+    C_LIGHTWHITE,  /**< Color blanco claro */
 } ConsoleColor;
 
+/** 
+ * @def FOREGROUND_BLACK
+ * @brief Define el color de primer plano como negro.
+ */
 #ifndef FOREGROUND_BLACK
 #define FOREGROUND_BLACK 0
 #endif
+
+
+/** 
+ * @def FOREGROUND_WHITE
+ * @brief Define el color de primer plano como blanco, combinando rojo, verde y azul.
+ */
 #ifndef FOREGROUND_WHITE
 #define FOREGROUND_WHITE FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE
 //#define FOREGROUND_WHITE  0xf
 #endif
+
+/** 
+ * @def FOREGROUND_MASK
+ * @brief Define la máscara de color de primer plano, combinando rojo, verde y azul.
+ */
 #ifndef FOREGROUND_MASK
 #define FOREGROUND_MASK (FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_RED)
 #endif
+
+/** 
+ * @def FOREGROUND_RESET
+ * @brief Restablece el color de primer plano a su valor predeterminado (combinando rojo, verde y azul).
+ */
 #ifndef FOREGROUND_RESET
 #define FOREGROUND_RESET FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE
 #endif
+
+/** 
+ * @def FOREGROUND_YELLOW
+ * @brief Define el color de primer plano como amarillo (rojo + verde).
+ */
 #ifndef FOREGROUND_YELLOW
 #define FOREGROUND_YELLOW FOREGROUND_RED | FOREGROUND_GREEN 
 #endif
+
+/** 
+ * @def FOREGROUND_MAGENTA
+ * @brief Define el color de primer plano como magenta (rojo + azul).
+ */
 #ifndef FOREGROUND_MAGENTA
 #define FOREGROUND_MAGENTA FOREGROUND_RED | FOREGROUND_BLUE 
 #endif
+
+/** 
+ * @def FOREGROUND_CYAN
+ * @brief Define el color de primer plano como cian (verde + azul).
+ */
 #ifndef FOREGROUND_CYAN
 #define FOREGROUND_CYAN FOREGROUND_GREEN | FOREGROUND_BLUE 
 #endif
 
+/** 
+ * @def BACKGROUND_BLACK
+ * @brief Define el color de fondo como negro.
+ */
 #ifndef BACKGROUND_BLACK
 #define BACKGROUND_BLACK 0
 #endif
+
+/** 
+ * @def BACKGROUND_WHITE
+ * @brief Define el color de fondo como blanco (0xf0).
+ */
 #ifndef BACKGROUND_WHITE
 #define BACKGROUND_WHITE 0xf0
 #endif
+
+/** 
+ * @def BACKGROUND_YELLOW
+ * @brief Define el color de fondo como amarillo (rojo + verde).
+ */
 #ifndef BACKGROUND_YELLOW
 #define BACKGROUND_YELLOW BACKGROUND_RED | BACKGROUND_GREEN
 #endif
+
+/** 
+ * @def BACKGROUND_MAGENTA
+ * @brief Define el color de fondo como magenta (rojo + azul).
+ */
 #ifndef BACKGROUND_MAGENTA
 #define BACKGROUND_MAGENTA BACKGROUND_RED | BACKGROUND_BLUE
 #endif
+
+/** 
+ * @def BACKGROUND_CYAN
+ * @brief Define el color de fondo como cian (verde + azul).
+ */
 #ifndef BACKGROUND_CYAN
 #define BACKGROUND_CYAN BACKGROUND_GREEN | BACKGROUND_BLUE
 #endif
@@ -156,78 +298,251 @@ typedef enum ConsoleColor
 } ConsoleColor;
 #endif
 
+/** 
+ * @def BACKGROUND_COLOR_BLACK_ANSI
+ * @brief Define la secuencia ANSI para establecer el color de fondo como negro.
+ */
 #define BACKGROUND_COLOR_BLACK_ANSI   "\033[0;40m"
+
+/** 
+ * @def BACKGROUND_COLOR_RED_ANSI
+ * @brief Define la secuencia ANSI para establecer el color de fondo como rojo.
+ */
 #define BACKGROUND_COLOR_RED_ANSI     "\033[0;41m"
+
+/** 
+ * @def BACKGROUND_COLOR_GREEN_ANSI
+ * @brief Define la secuencia ANSI para establecer el color de fondo como verde.
+ */
 #define BACKGROUND_COLOR_GREEN_ANSI   "\033[0;42m"
+
+/** 
+ * @def BACKGROUND_COLOR_YELLOW_ANSI
+ * @brief Define la secuencia ANSI para establecer el color de fondo como amarillo.
+ */
 #define BACKGROUND_COLOR_YELLOW_ANSI  "\033[0;43m"
+
+/** 
+ * @def BACKGROUND_COLOR_BLUE_ANSI
+ * @brief Define la secuencia ANSI para establecer el color de fondo como azul.
+ */
 #define BACKGROUND_COLOR_BLUE_ANSI    "\033[0;44m"
+
+/** 
+ * @def BACKGROUND_COLOR_MAGENTA_ANSI
+ * @brief Define la secuencia ANSI para establecer el color de fondo como magenta.
+ */
 #define BACKGROUND_COLOR_MAGENTA_ANSI "\033[0;45m"
 
+/** 
+ * @def BACKGROUND_COLOR_CYAN_ANSI
+ * @brief Define la secuencia ANSI para establecer el color de fondo como cian.
+ */
 #define BACKGROUND_COLOR_CYAN_ANSI    "\033[0;46m"
+
+/** 
+ * @def BACKGROUND_COLOR_WHITE_ANSI
+ * @brief Define la secuencia ANSI para establecer el color de fondo como blanco.
+ */
 #define BACKGROUND_COLOR_WHITE_ANSI   "\033[0;47m"
+
+/** 
+ * @def BACKGROUND_COLOR_RESET_ANSI
+ * @brief Restablece el color de fondo a su valor predeterminado.
+ */
 #define BACKGROUND_COLOR_RESET_ANSI   "\033[0m"
 
+
+/** 
+ * @def BACKGROUND_COLOR_GREEN
+ * @brief Establece el color de fondo en verde (solo en Windows).
+ */
 #ifdef _WIN32
 #define BACKGROUND_COLOR_GREEN       setConsoleBackgroundColor(BACKGROUND_GREEN)
-#define BACKGROUND_COLOR_YELLOW      setConsoleBackgroundColor(BACKGROUND_YELLOW)
-#define BACKGROUND_COLOR_BLUE        setConsoleBackgroundColor(BACKGROUND_BLUE)
-#define BACKGROUND_COLOR_RED         setConsoleBackgroundColor(BACKGROUND_RED)
-#define BACKGROUND_COLOR_BLACK       setConsoleBackgroundColor(BACKGROUND_BLACK)
-#define BACKGROUND_COLOR_MAGENTA     setConsoleBackgroundColor(BACKGROUND_MAGENTA)
-#define BACKGROUND_COLOR_CYAN        setConsoleBackgroundColor(BACKGROUND_CYAN)
-#define BACKGROUND_COLOR_WHITE       setConsoleBackgroundColor(BACKGROUND_WHITE)
 #else
 #define BACKGROUND_COLOR_GREEN       setConsoleBackgroundColor(C_GREEN)
+#endif 
+
+/** 
+ * @def BACKGROUND_COLOR_YELLOW
+ * @brief Establece el color de fondo en amarillo (solo en Windows).
+ */
+#ifdef _WIN32
+#define BACKGROUND_COLOR_YELLOW      setConsoleBackgroundColor(BACKGROUND_YELLOW)
+#else
 #define BACKGROUND_COLOR_YELLOW      setConsoleBackgroundColor(C_YELLOW)
+#endif 
+
+/** 
+ * @def BACKGROUND_COLOR_BLUE
+ * @brief Establece el color de fondo en azul (solo en Windows).
+ */
+#ifdef _WIN32
+#define BACKGROUND_COLOR_BLUE        setConsoleBackgroundColor(BACKGROUND_BLUE)
+#else
 #define BACKGROUND_COLOR_BLUE        setConsoleBackgroundColor(C_BLUE)
+#endif 
+
+/** 
+ * @def BACKGROUND_COLOR_RED
+ * @brief Establece el color de fondo en rojo (solo en Windows).
+ */
+#ifdef _WIN32
+#define BACKGROUND_COLOR_RED         setConsoleBackgroundColor(BACKGROUND_RED)
+#else
 #define BACKGROUND_COLOR_RED         setConsoleBackgroundColor(C_RED)
+#endif 
+
+/** 
+ * @def BACKGROUND_COLOR_BLACK
+ * @brief Establece el color de fondo en negro (solo en Windows).
+ */
+#ifdef _WIN32
+#define BACKGROUND_COLOR_BLACK       setConsoleBackgroundColor(BACKGROUND_BLACK)
+#else
 #define BACKGROUND_COLOR_BLACK       setConsoleBackgroundColor(C_BLACK)
+#endif 
+
+/** 
+ * @def BACKGROUND_COLOR_MAGENTA
+ * @brief Establece el color de fondo en magenta (solo en Windows).
+ */
+#ifdef _WIN32
+#define BACKGROUND_COLOR_MAGENTA     setConsoleBackgroundColor(BACKGROUND_MAGENTA)
+#else
 #define BACKGROUND_COLOR_MAGENTA     setConsoleBackgroundColor(C_MAGENTA)
+#endif 
+
+/** 
+ * @def BACKGROUND_COLOR_CYAN
+ * @brief Establece el color de fondo en cian (solo en Windows).
+ */
+#ifdef _WIN32
+#define BACKGROUND_COLOR_CYAN        setConsoleBackgroundColor(BACKGROUND_CYAN)
+#else
 #define BACKGROUND_COLOR_CYAN        setConsoleBackgroundColor(C_CYAN)
+#endif 
+
+/** 
+ * @def BACKGROUND_COLOR_WHITE
+ * @brief Establece el color de fondo en blanco (solo en Windows).
+ */
+#ifdef _WIN32
+#define BACKGROUND_COLOR_WHITE       setConsoleBackgroundColor(BACKGROUND_WHITE)
+#else
 #define BACKGROUND_COLOR_WHITE       setConsoleBackgroundColor(C_WHITE)
 #endif 
+
+/** 
+ * @def BACKGROUND_COLOR_RESET
+ * @brief Restablece el color de fondo al predeterminado.
+ */
 #define BACKGROUND_COLOR_RESET       resetColorTerminal()
 
 
 
 
-// letra negro oscuro
+/** 
+ * @def LETTER_BLACK_ANSI
+ * @brief Define la secuencia ANSI para el color de letra negro.
+ */
 #define LETTER_BLACK_ANSI   "\033[30m"
 
-// letra rojo ocuro
+/** 
+ * @def LETTER_RED_ANSI
+ * @brief Define la secuencia ANSI para el color de letra rojo.
+ */
 #define LETTER_RED_ANSI     "\033[31m"
 
-// letra verde ocuro
+/** 
+ * @def LETTER_GREEN_ANSI
+ * @brief Define la secuencia ANSI para el color de letra verde.
+ */
 #define LETTER_GREEN_ANSI   "\033[32m"
 
-// letra amarillo oscuro
+/** 
+ * @def LETTER_YELLOW_ANSI
+ * @brief Define la secuencia ANSI para el color de letra amarillo.
+ */
 #define LETTER_YELLOW_ANSI  "\033[33m"
 
-// letra azul oscuro
+/** 
+ * @def LETTER_BLUE_ANSI
+ * @brief Define la secuencia ANSI para el color de letra azul.
+ */
 #define LETTER_BLUE_ANSI    "\033[34m"
 
-// letra magenta oscuro
+/** 
+ * @def LETTER_MAGENTA_ANSI
+ * @brief Define la secuencia ANSI para el color de letra magenta.
+ */
 #define LETTER_MAGENTA_ANSI "\033[35m"
 
-// letra cyan ocuro:
+/** 
+ * @def LETTER_CYAN_ANSI
+ * @brief Define la secuencia ANSI para el color de letra cian.
+ */
 #define LETTER_CYAN_ANSI    "\033[36m"
 
-// letra blanco oscuro(gris claro)
+/** 
+ * @def LETTER_WHITE_ANSI
+ * @brief Define la secuencia ANSI para el color de letra blanca.
+ */
 #define LETTER_WHITE_ANSI   "\033[37m"
 
-// resetear el color de la letra a la por defecto
+/** 
+ * @def LETTER_RESET_ANSI
+ * @brief Restablece el color de letra al predeterminado.
+ */
 #define LETTER_RESET_ANSI   "\033[38m"
 
-// versiones claras de los colores de letra:
 
-// fondo negro:
-#define LETTER_LIGHTBLACK_EX_ANSI "\033[90m" // o gris
+/**
+ * @def LETTER_LIGHTBLACK_EX_ANSI
+ * @brief Color gris claro para la letra (ANSI).
+ */
+#define LETTER_LIGHTBLACK_EX_ANSI "\033[90m"
+
+/**
+ * @def LETTER_LIGHTRED_EX_ANSI
+ * @brief Color rojo claro para la letra (ANSI).
+ */
 #define LETTER_LIGHTRED_EX_ANSI "\033[91m"
+
+/**
+ * @def LETTER_LIGHTGREEN_EX_ANSI
+ * @brief Color verde claro para la letra (ANSI).
+ */
 #define LETTER_LIGHTGREEN_EX_ANSI "\033[92m"
+
+/**
+ * @def LETTER_LIGHTYELLOW_EX_ANSI
+ * @brief Color amarillo claro para la letra (ANSI).
+ */
 #define LETTER_LIGHTYELLOW_EX_ANSI "\033[93m"
+
+/**
+ * @def LETTER_LIGHTBLUE_EX_ANSI
+ * @brief Color azul claro para la letra (ANSI).
+ */
 #define LETTER_LIGHTBLUE_EX_ANSI "\033[94m"
+
+/**
+ * @def LETTER_LIGHTMAGENTA_EX_ANSI
+ * @brief Color magenta claro para la letra (ANSI).
+ */
 #define LETTER_LIGHTMAGENTA_EX_ANSI "\033[95m"
+
+/**
+ * @def LETTER_LIGHTCYAN_EX_ANSI
+ * @brief Color cian claro para la letra (ANSI).
+ */
 #define LETTER_LIGHTCYAN_EX_ANSI "\033[96m"
+
+/**
+ * @def LETTER_LIGHTWHITE_EX_ANSI
+ * @brief Color blanco claro para la letra (ANSI).
+ */
 #define LETTER_LIGHTWHITE_EX_ANSI "\033[97m"
 
 
@@ -273,61 +588,166 @@ typedef enum ConsoleColor
 #endif 
 #define LETTER_RESET       resetColorTerminal()
 
-// stylos:
-#define STYLE_BOLDED "\033[1m"     // : Negrita
-#define STYLE_DARKENED "\033[2m"   // : Oscurecido
-#define STYLE_ITALICS "\033[3m"    // : Cursiva
-#define STYLE_UNDERLINED "\033[4m" // : Subrayado
-#define STYLE_BLIKING "\033[5m"    // : Parpadeo
-#define STYLE_INVERTED "\033[7m"   // : Inversión de colores (texto y fondo)
 
-// Mover el cursor hacia arriba:
+/**
+ * @def STYLE_BOLDED
+ * @brief Aplica estilo de texto en negrita.
+ */
+#define STYLE_BOLDED "\033[1m"
+
+/**
+ * @def STYLE_DARKENED
+ * @brief Aplica estilo de texto oscurecido.
+ */
+#define STYLE_DARKENED "\033[2m"
+
+/**
+ * @def STYLE_ITALICS
+ * @brief Aplica estilo de texto en cursiva.
+ */
+#define STYLE_ITALICS "\033[3m"
+
+/**
+ * @def STYLE_UNDERLINED
+ * @brief Aplica estilo de texto subrayado.
+ */
+#define STYLE_UNDERLINED "\033[4m"
+
+/**
+ * @def STYLE_BLIKING
+ * @brief Aplica estilo de texto parpadeante.
+ */
+#define STYLE_BLIKING "\033[5m"
+
+/**
+ * @def STYLE_INVERTED
+ * @brief Invierte los colores de fondo y texto.
+ */
+#define STYLE_INVERTED "\033[7m"
+
+/**
+ * @def UP
+ * @brief Mueve el cursor hacia arriba.
+ * @param data Contenido que será renderizado.
+ * @param number Número de líneas a mover hacia arriba.
+ */
 #define UP(data, number) "\033[" number "A" data
 
-// Mover el cursor hacia abajo:
+/**
+ * @def DOWN
+ * @brief Mueve el cursor hacia abajo.
+ * @param data Contenido que será renderizado.
+ * @param number Número de líneas a mover hacia abajo.
+ */
 #define DOWN(data, number) "\033[" number "B" data
 
-// Mover el cursor hacia la derecha:
+/**
+ * @def FORWARD
+ * @brief Mueve el cursor hacia la derecha.
+ * @param data Contenido que será renderizado.
+ * @param number Número de espacios a mover hacia la derecha.
+ */
 #define FORWARD(data, number) "\033[" number "C" data
 
-// Mover el cursor hacia la izquierda
+/**
+ * @def BACK
+ * @brief Mueve el cursor hacia la izquierda.
+ * @param data Contenido que será renderizado.
+ * @param number Número de espacios a mover hacia la izquierda.
+ */
 #define BACK(data, number) "\033[" number "D" data
 
-// Mover el cursor a una posición específica
+/**
+ * @def POS
+ * @brief Mueve el cursor a una posición específica.
+ * @param data Contenido que será renderizado.
+ * @param number1 Línea a la que mover el cursor.
+ * @param number2 Columna a la que mover el cursor.
+ */
+
 #define POS(data, number1, number2) "\033[" number1 ";" number2 "H" data
 
-// cambiar titulo de la terminal:
+/**
+ * @def SET_TITLE
+ * @brief Cambia el título de la ventana de la terminal.
+ * @param title Nuevo título para la ventana.
+ */
 #define SET_TITLE(title) "\033]2;" title "\007"
 
-// limpiar pantalla:
+/**
+ * @def CLEAR_DISPLAY
+ * @brief Limpia completamente la pantalla de la terminal.
+ */
 #define CLEAR_DISPLAY "\033[3J\033[H\033[2J"
 
-// limpiar una linea:
+/**
+ * @def CLEAR_LINE
+ * @brief Limpia la línea actual del cursor.
+ */
 #define CLEAR_LINE "\033[K"
 
-// esconder cursor
+/**
+ * @def HIDDEN_SLIDER
+ * @brief Esconde el cursor en la terminal.
+ */
 #define HIDDEN_SLIDER "\033[?25l"
 
-//  mostrar cursor
+/**
+ * @def SHOW_SLIDER
+ * @brief Muestra el cursor en la terminal.
+ */
 #define SHOW_SLIDER "\033[?25h"
 
-// cambiar el modo del cursor
+/**
+ * @def SET_MODE_SLIDER
+ * @brief Cambia el modo del cursor.
+ */
 #define SET_MODE_SLIDER "\033[?12l"
 
-// cambiar el tamaño del cursor
+/**
+ * @def SET_SIZE_SLIDER
+ * @brief Cambia el tamaño del cursor.
+ * @param size Tamaño deseado para el cursor.
+ */
 #define SET_SIZE_SLIDER(size) "\033[?" size "c"
 
+/**
+ * @def POINTGREEN
+ * @brief Formato predefinido para mensajes con texto en verde, con un símbolo indicador en azul.
+ * @param data Contenido del mensaje.
+ */
 #define POINTGREEN(data) "#{FG:green}[#{FG:blue}*#{FG:green}]#{FG:white}" data "#{FG:reset}"
+
+/**
+ * @def POINTRED
+ * @brief Formato predefinido para mensajes con texto en púrpura, con un símbolo indicador en azul.
+ * @param data Contenido del mensaje.
+ */
 #define POINTRED(data)   "#{FG:yellow}[#{FG:blue}*#{FG:yellow}]#{FG:purple}" data "#{FG:reset}"
 
 #ifndef __DISABLE_COLORS_FORE_BACK_GROUND__ 
-// definir el color de fondo de forma personalizada
+
+/**
+ * @def BACKGROUND_COLOR_CUSTOM
+ * @brief Define un color de fondo personalizado utilizando códigos ANSI.
+ * @param color Código del color en formato ANSI (0-255).
+ */
 #define BACKGROUND_COLOR_CUSTOM(color) "\033[48;5;"color"m"
 
-// definir el color de fondo de forma personalizada
+/**
+ * @def BACKGROUND_COLOR_CUSTOM_RGB
+ * @brief Define un color de fondo personalizado utilizando valores RGB.
+ * @param red Componente de rojo (0-255).
+ * @param green Componente de verde (0-255).
+ * @param blue Componente de azul (0-255).
+ */
 #define BACKGROUND_COLOR_CUSTOM_RGB(red, green, blue) "\033[38;2;"red";"green";"blue"m"
 
-// definir el color de letra de forma personalizada
+/**
+ * @def FOREGROUND_COLOR_CUSTOM
+ * @brief Define un color de letra personalizado utilizando códigos ANSI.
+ * @param color Código del color en formato ANSI (0-255).
+ */
 #define FOREGROUND_COLOR_CUSTOM(color) "\033[38;5;"color"m"
 
 #else  // no comptible para win7
@@ -337,76 +757,311 @@ typedef enum ConsoleColor
 #define FOREGROUND_COLOR_CUSTOM(color) color
 #endif
 
+/**
+ * @def FOREGROUND_COLOR_CUSTOM_RGB
+ * @brief Define un color de letra personalizado utilizando valores RGB.
+ * @param red Componente de rojo (0-255).
+ * @param green Componente de verde (0-255).
+ * @param blue Componente de azul (0-255).
+ */
 #define FOREGROUND_COLOR_CUSTOM_RGB(red, green, blue) "\033[48;2;"red";"green";"blue"m"
 
-// definir colore de fondo y de letra
+/**
+ * @def BACK_FORE_COLOR_CUSTOM
+ * @brief Define simultáneamente el color de fondo y el de letra.
+ * @param Acolor Código del color de fondo en formato ANSI.
+ * @param Bcolor Código del color de letra en formato ANSI.
+ */
 #define BACK_FORE_COLOR_CUSTOM(Acolor, Bcolor) BACKGROUND_COLOR_CUSTOM(Acolor) FOREGROUND_COLOR_CUSTOM(Bcolor)
 
+/**
+ * @def RGB_CREATE
+ * @brief Crea una estructura RGB_C con valores específicos de rojo, verde y azul.
+ * @param red Valor del componente rojo (0-255).
+ * @param green Valor del componente verde (0-255).
+ * @param blue Valor del componente azul (0-255).
+ */
 #define RGB_CREATE(red, green, blue) (RGB_C) {.r = red, .g = green, .b = blue}
+
+/**
+ * @typedef RGB_C
+ * @brief Estructura para representar colores en formato RGB.
+ */
 typedef union RGB_C
 {
     struct
     {
-        unsigned char red, green, blue;
+        unsigned char red;  /**< Valor de rojo. */
+        unsigned char green;/**< Valor de verde. */
+        unsigned char blue; /**< Valor de azul. */
     };
     struct
     {
-        unsigned char r, g, b;
+        unsigned char r; /**< Alias para rojo. */
+        unsigned char g; /**< Alias para verde. */
+        unsigned char b; /**< Alias para azul. */
     };
 } RGB_C;
 
+/**
+ * @def foreground_color_custom
+ * @brief Define un color de letra utilizando argumentos genéricos (puede ser RGB_C o código ANSI).
+ * @param ... Valores que determinan el color (pueden ser RGB_C o un código ANSI).
+ */
 #define foreground_color_custom(...) _Generic((__VA_ARGS__), \
     RGB_C: foreground_color_custom_RGB,                      \
     default: foreground_color_custom_)(__VA_ARGS__)
 
+
+/**
+ * @def background_color_custom
+ * @brief Define un color de fondo utilizando argumentos genéricos (puede ser RGB_C o código ANSI).
+ * @param ... Valores que determinan el color (pueden ser RGB_C o un código ANSI).
+ */
 #define background_color_custom(...) _Generic((__VA_ARGS__), \
     RGB_C: background_color_custom_RGB,                      \
     default: background_color_custom_)(__VA_ARGS__)
 
+/**
+ * @def back_fore_color_custom
+ * @brief Define simultáneamente el color de fondo y el de letra utilizando argumentos genéricos.
+ * @param ... Valores que determinan los colores (pueden ser RGB_C o códigos ANSI).
+ */
 #define back_fore_color_custom(...) _Generic((__VA_ARGS__), \
     RGB_C: back_fore_color_custom_RGB,                \
     default: back_fore_color_custom_)(__VA_ARGS__)
 
 #ifdef _MSC_VER
+
+/**
+ * 
+ * @brief Función que se llama al iniciar el programa para activar los colores ANSI en Windows.
+ */
 void _ACTIVATE_COLORS_ANSI_WIN__();
+
+/**
+ * @brief Función que se llama al salir del programa para restablecer los colores ANSI en Windows.
+ */
 void _RESET_COLOR__();
+
 #else
+
+/**
+ * @brief Función que se llama al iniciar el programa para activar los colores ANSI en Windows.
+ */
 void __attribute__((constructor)) _ACTIVATE_COLORS_ANSI_WIN__();
+
+/**
+ * @brief Función que se llama al salir del programa para restablecer los colores ANSI en Windows.
+ */
 void static __attribute__((destructor)) _RESET_COLOR__();
 #endif
 
 void resize_terminal(int rows, int cols);
 void clear_line();
 void clear_display();
+
+/**
+ * @brief Función para cambiar el título de la terminal.
+ * 
+ * @param title El título que se desea establecer.
+ */
 void set_title(const char *title);
+
 #ifdef _WIN32
+
+/**
+ * @brief Establece el color de primer plano en la consola para Windows.
+ * 
+ * @param foregroundColor El color de primer plano.
+ */
 void setConsoleForegroundColor(WORD foregroundColor);
+
+
+/**
+ * @brief Establece el color de fondo en la consola para Windows.
+ * 
+ * @param backgroundColor El color de fondo.
+ */
 void setConsoleBackgroundColor(WORD backgroundColor);
+
+/**
+ * @brief Establece ambos colores de primer plano y fondo en la consola de Windows.
+ * 
+ * @param foreground El color de primer plano.
+ * @param background El color de fondo.
+ */
 void setConsoleColor(WORD foreground, WORD background);
 #else
+
+/**
+ * @brief Establece el color de primer plano en la consola para Windows.
+ * 
+ * @param foregroundColor El color de primer plano.
+ */
 void setConsoleForegroundColor(ConsoleColor foregroundColor);
+
+
+/**
+ * @brief Establece el color de fondo en la consola para Windows.
+ * 
+ * @param backgroundColor El color de fondo.
+ */
 void setConsoleBackgroundColor(ConsoleColor backgroundColor);
+
+/**
+ * @brief Establece ambos colores de primer plano y fondo en la consola de Windows.
+ * 
+ * @param foreground El color de primer plano.
+ * @param background El color de fondo.
+ */
 void setConsoleColor(ConsoleColor foreground, ConsoleColor background);
 #endif
+
+/**
+ * @brief Restablece los colores de la terminal a los valores predeterminados.
+ */
 void resetColorTerminal();
+
+/**
+ * @brief Mueve el cursor a una posición específica en la terminal.
+ * 
+ * @param x Coordenada X de la posición.
+ * @param y Coordenada Y de la posición.
+ * @param data El texto a mostrar en esa posición.
+ */
 void pos(const unsigned char x, const unsigned char y, const char *data);
+
+/**
+ * @brief Mueve el cursor hacia atrás en la terminal.
+ * 
+ * @param data El texto a mostrar al mover el cursor.
+ * @param number Número de posiciones a mover.
+ */
 void back(const char *data, const unsigned char number);
+
+/**
+ * @brief Mueve el cursor hacia adelante en la terminal.
+ * 
+ * @param data El texto a mostrar al mover el cursor.
+ * @param number Número de posiciones a mover.
+ */
 void forward(const char *data, const unsigned char number);
+
+/**
+ * @brief Mueve el cursor hacia abajo en la terminal.
+ * 
+ * @param data El texto a mostrar al mover el cursor.
+ * @param number Número de posiciones a mover.
+ */
 void down(const char *data, const unsigned char number);
+
+/**
+ * @brief Mueve el cursor hacia arriba en la terminal.
+ * 
+ * @param data El texto a mostrar al mover el cursor.
+ * @param number Número de posiciones a mover.
+ */
 void up(const char *data, const unsigned char number);
+
+/**
+ * @brief Cambia el color de primer plano utilizando valores RGB.
+ * 
+ * Esta función cambia el color del texto en la terminal a un color especificado por los valores RGB.
+ * 
+ * @param color Estructura RGB_C que contiene los valores de color (rojo, verde, azul).
+ */
 static void foreground_color_custom_RGB(RGB_C color);
+
+/**
+ * @brief Cambia el color de primer plano utilizando valores RGB proporcionados como enteros.
+ * 
+ * Esta función cambia el color del texto en la terminal a un color especificado por los valores RGB
+ * proporcionados como parámetros individuales.
+ * 
+ * @param red Componente rojo del color (0-255).
+ * @param green Componente verde del color (0-255).
+ * @param blue Componente azul del color (0-255).
+ */
 static void foreground_color_custom_(const unsigned char red, const unsigned char green, const unsigned char blue);
+
+/**
+ * @brief Cambia el color de fondo utilizando valores RGB.
+ * 
+ * Esta función cambia el color de fondo en la terminal a un color especificado por los valores RGB.
+ * 
+ * @param color Estructura RGB_C que contiene los valores de color (rojo, verde, azul).
+ */
 static void background_color_custom_RGB(RGB_C color);
+
+/**
+ * @brief Cambia el color de fondo utilizando valores RGB proporcionados como enteros.
+ * 
+ * Esta función cambia el color de fondo en la terminal a un color especificado por los valores RGB
+ * proporcionados como parámetros individuales.
+ * 
+ * @param red Componente rojo del color (0-255).
+ * @param green Componente verde del color (0-255).
+ * @param blue Componente azul del color (0-255).
+ */
 static void background_color_custom_(const unsigned char red, const unsigned char green, const unsigned char blue);
+
+/**
+ * @brief Cambia los colores de fondo y primer plano utilizando valores RGB para ambos.
+ * 
+ * Esta función cambia tanto el color de fondo como el color del texto en la terminal, utilizando
+ * los valores RGB para el fondo y para el primer plano.
+ * 
+ * @param colorBackGround Estructura RGB_C que contiene los valores de color para el fondo.
+ * @param colorForeGround Estructura RGB_C que contiene los valores de color para el texto (primer plano).
+ */
 static void back_fore_color_custom_RGB(RGB_C colorBackGround, RGB_C colorForeGround);
+
+/**
+ * @brief Cambia los colores de fondo y primer plano utilizando valores RGB proporcionados como enteros.
+ * 
+ * Esta función cambia tanto el color de fondo como el color del texto en la terminal, utilizando
+ * los valores RGB proporcionados como parámetros individuales para el fondo y el primer plano.
+ * 
+ * @param redB Componente rojo del color de fondo (0-255).
+ * @param greenB Componente verde del color de fondo (0-255).
+ * @param blueB Componente azul del color de fondo (0-255).
+ * @param redF Componente rojo del color del texto (0-255).
+ * @param greenF Componente verde del color del texto (0-255).
+ * @param blueF Componente azul del color del texto (0-255).
+ */
 static void back_fore_color_custom_(unsigned char redB, unsigned char greenB,
-                                       unsigned char blueB, unsigned char redF,
-                                       unsigned char greenF, unsigned char blueF);
+                                        unsigned char blueB, unsigned char redF,
+                                        unsigned char greenF, unsigned char blueF);
+
+/**
+ * @brief Función que calcula un hash de Jenkins para un conjunto de valores.
+ * 
+ * @param value El valor base.
+ * @param n1 a n6 Los valores adicionales para el hash.
+ * 
+ * @return El valor de hash resultante.
+ */
 unsigned int jenkins_hash(
     unsigned int value,
     unsigned int n1, unsigned int n2, unsigned int n3,
     unsigned int n4, unsigned int n5, unsigned int n6);
+
+/**
+ * @brief Función que mezcla un array de enteros.
+ * 
+ * @param array El array a mezclar.
+ * @param size El tamaño del array.
+ */
 void shuffle_array(int array[], int size);
+
+/**
+ * @brief Función que genera tres valores a partir de una semilla.
+ * 
+ * @param x La semilla.
+ * @param value1, value2, value3 Los valores generados.
+ * @param n1 a n6 Los valores adicionales para la generación.
+ */
 void generate_three_values(
     unsigned int x,
     unsigned int *value1,
@@ -414,12 +1069,49 @@ void generate_three_values(
     unsigned int *value3,
     unsigned int n1, unsigned int n2, unsigned int n3,
     unsigned int n4, unsigned int n5, unsigned int n6);
+
+/**
+ * @brief Función que imprime un mensaje de texto con colores en formato de texto.
+ * 
+ * @param format El formato del texto con los colores.
+ */
 void printf_color(const char *format, ...);
+
+/**
+ * @brief Función similar a printf_color, pero acepta una lista de argumentos variable.
+ * 
+ * @param format El formato del texto con los colores.
+ * @param args La lista de argumentos.
+ */
 void vprintf_color(const char *format, va_list args);
+
+/**
+ * @brief Función que imprime tamaños de variables de diferentes tipos de datos.
+ * 
+ * @param byte El valor a imprimir.
+ * @param size_word El tamaño de los datos.
+ */
 void print_sizes_num(sizes_num byte, size_t size_word);
 
+/**
+ * @brief Función que imprime una tabla de valores en formato hexadecimal.
+ * 
+ * @param string_init El valor inicial.
+ * @param string_text_for_printing El texto a imprimir.
+ * @param size_string_text_for_printing El tamaño del texto.
+ */
 void print_table_hex(char *string_init, char *string_text_for_printing, size_t size_string_text_for_printing);
+
+/**
+ * @brief Función que obtiene la dirección de memoria para un codificador x86.
+ * 
+ * @param addr La dirección a obtener.
+ * 
+ * @return La dirección formateada como string.
+ */
 char *get_addr_to_encoder_x86_(uint64_t addr);
+
+/** @} */
 
 #include "colors.c"
 #endif
