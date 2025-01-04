@@ -1,7 +1,8 @@
 #include "colors.h"
 #include <stdio.h>
 
-int main(void){
+int main(){
+    
     clear_display();
     printf_color(POINTGREEN("hola mundo\n") );
     printf_color(POINTRED("hola mundo\n")   );
@@ -96,7 +97,7 @@ int main(void){
     }
     printf_color("\nIntense:\t");
     for (size_t i = 0; i <= ANSI_WHITE; i++){
-
+        
         ANSI_back_color(i + HIGH_INTENSTY_BACKGROUNG);
         printf_color(" %.3d ", i );
     }
@@ -104,7 +105,7 @@ int main(void){
     //printf("%d\n",16 + (red * 36) + (green * 5) * 6) + blue);
 
 #define LOOP_TABLE(max, init, end) \
-    for (size_t r = 0; r <= max; r+=36) { \
+    for (size_t r = 0; r <= max; r+=36) { \ 
         for (size_t g = init; g <= end && r+g <= max; g++) { \
             printf_color(BACKGROUND_COLOR_CUSTOM("%d")" %.3d ",r+g, r+g); \
         } \
@@ -122,11 +123,11 @@ int main(void){
 
 
     for (size_t r = 0; r < 255; r++) { \
-        if (r % 6 == 0) {
-            puts("");
-
-        }
-        printf_color(BACKGROUND_COLOR_CUSTOM("%d")" %.3d ",r, r);
+        if (r % 6 == 0) { 
+            puts(""); 
+            
+        } 
+        printf_color(BACKGROUND_COLOR_CUSTOM("%d")" %.3d ",r, r); 
         //resetColorTerminal();
     } printf_color("\n\n");
 
@@ -142,6 +143,6 @@ int main(void){
         printf_color("#{FG:%d;%d;%d}#{BG:%d;%d;%d} %c #{BG:reset}", Avalue1, Avalue2, Avalue3, Bvalue1, Bvalue2, Bvalue3, my_str[i]);
     }
     puts("");
-    printf_color("#{i32%d}\n", 0xf0f0f0f0);
-    printf_color("#{i32:%d}\n", 0xf0f0f0f0);
+    printf_color("#{i32%d}\n", 0b11110000111100001111000011110000);
+    printf_color("#{i32:%d}\n", 0b11110000111100001111000011110000);
 }

@@ -89,6 +89,19 @@ typedef enum ConsoleColor
 
 
 /**
+ * @defgroup Macros definidas para cada version de windows
+ *
+ * @see https://learn.microsoft.com/es-es/windows/win32/winprog/using-the-windows-headers?redirectedfrom=MSDN#setting_winver_or__win32_winnt
+ * @{
+ */
+#define HIGH_INTENSTY              90
+#define REGULAR_COLORS_LETTER      30
+#define HIGH_INTENSTY_BACKGROUNG  100
+#define REGULAR_COLORS_BACKGROUND  40
+/** @} */
+
+
+/**
  * @typedef RGB_C
  * @brief Estructura para representar colores en formato RGB.
  *
@@ -123,20 +136,6 @@ typedef union RGB_C
 #ifdef _WIN32
 
 #include <Windows.h>
-
-/**
- * @defgroup Macros definidas para cada version de windows
- *
- * @see https://learn.microsoft.com/es-es/windows/win32/winprog/using-the-windows-headers?redirectedfrom=MSDN#setting_winver_or__win32_winnt
- * @{
- */
-
-#define HIGH_INTENSTY              90
-#define REGULAR_COLORS_LETTER      30
-#define HIGH_INTENSTY_BACKGROUNG  100
-#define REGULAR_COLORS_BACKGROUND  40
-
-/** @} */
 
 /**
  * @def FOREGROUND_BLACK
@@ -253,32 +252,32 @@ typedef union RGB_C
  * Los que inician con SET_FG es para el foreground (el texto)
  * @{
  */
-#define SET_BACKGROUND_COLOR_GREEN       setConsoleBackgroundColor(BACKGROUND_GREEN  )
-#define SET_BACKGROUND_COLOR_YELLOW      setConsoleBackgroundColor(BACKGROUND_YELLOW )
-#define SET_BACKGROUND_COLOR_BLUE        setConsoleBackgroundColor(BACKGROUND_BLUE   )
-#define SET_BACKGROUND_COLOR_RED         setConsoleBackgroundColor(BACKGROUND_RED    )
-#define SET_BACKGROUND_COLOR_BLACK       setConsoleBackgroundColor(BACKGROUND_BLACK  )
-#define SET_BACKGROUND_COLOR_MAGENTA     setConsoleBackgroundColor(BACKGROUND_MAGENTA)
-#define SET_BACKGROUND_COLOR_CYAN        setConsoleBackgroundColor(BACKGROUND_CYAN   )
-#define SET_BACKGROUND_COLOR_WHITE       setConsoleBackgroundColor(BACKGROUND_WHITE  )
+#define SET_BG_COLOR_GREEN       setConsoleBackgroundColor(BACKGROUND_GREEN  )
+#define SET_BG_COLOR_YELLOW      setConsoleBackgroundColor(BACKGROUND_YELLOW )
+#define SET_BG_COLOR_BLUE        setConsoleBackgroundColor(BACKGROUND_BLUE   )
+#define SET_BG_COLOR_RED         setConsoleBackgroundColor(BACKGROUND_RED    )
+#define SET_BG_COLOR_BLACK       setConsoleBackgroundColor(BACKGROUND_BLACK  )
+#define SET_BG_COLOR_MAGENTA     setConsoleBackgroundColor(BACKGROUND_MAGENTA)
+#define SET_BG_COLOR_CYAN        setConsoleBackgroundColor(BACKGROUND_CYAN   )
+#define SET_BG_COLOR_WHITE       setConsoleBackgroundColor(BACKGROUND_WHITE  )
 
-#define SET_LETTER_GREEN            setConsoleForegroundColor(FOREGROUND_GREEN  )
-#define SET_LETTER_YELLOW           setConsoleForegroundColor(FOREGROUND_YELLOW )
-#define SET_LETTER_BLUE             setConsoleForegroundColor(FOREGROUND_BLUE   )
-#define SET_LETTER_RED              setConsoleForegroundColor(FOREGROUND_RED    )
-#define SET_LETTER_BLACK            setConsoleForegroundColor(FOREGROUND_BLACK  )
-#define SET_LETTER_MAGENTA          setConsoleForegroundColor(FOREGROUND_MAGENTA)
-#define SET_LETTER_CYAN             setConsoleForegroundColor(FOREGROUND_CYAN   )
-#define SET_LETTER_WHITE            setConsoleForegroundColor(FOREGROUND_WHITE  )
+#define SET_FG_GREEN            setConsoleForegroundColor(FOREGROUND_GREEN  )
+#define SET_FG_YELLOW           setConsoleForegroundColor(FOREGROUND_YELLOW )
+#define SET_FG_BLUE             setConsoleForegroundColor(FOREGROUND_BLUE   )
+#define SET_FG_RED              setConsoleForegroundColor(FOREGROUND_RED    )
+#define SET_FG_BLACK            setConsoleForegroundColor(FOREGROUND_BLACK  )
+#define SET_FG_MAGENTA          setConsoleForegroundColor(FOREGROUND_MAGENTA)
+#define SET_FG_CYAN             setConsoleForegroundColor(FOREGROUND_CYAN   )
+#define SET_FG_WHITE            setConsoleForegroundColor(FOREGROUND_WHITE  )
 
-#define SET_LETTER_LIGHTBLACK    setConsoleForegroundColor(FOREGROUND_BLACK   | FOREGROUND_INTENSITY)
-#define SET_LETTER_LIGHTRED      setConsoleForegroundColor(FOREGROUND_RED     | FOREGROUND_INTENSITY)
-#define SET_LETTER_LIGHTGREEN    setConsoleForegroundColor(FOREGROUND_GREEN   | FOREGROUND_INTENSITY)
-#define SET_LETTER_LIGHTYELLOW   setConsoleForegroundColor(FOREGROUND_YELLOW  | FOREGROUND_INTENSITY)
-#define SET_LETTER_LIGHTBLUE     setConsoleForegroundColor(FOREGROUND_BLUE    | FOREGROUND_INTENSITY)
-#define SET_LETTER_LIGHTMAGENTA  setConsoleForegroundColor(FOREGROUND_MAGENTA | FOREGROUND_INTENSITY)
-#define SET_LETTER_LIGHTCYAN     setConsoleForegroundColor(FOREGROUND_CYAN    | FOREGROUND_INTENSITY)
-#define SET_LETTER_LIGHTWHITE    setConsoleForegroundColor(FOREGROUND_WHITE   | FOREGROUND_INTENSITY)
+#define SET_FG_LIGHTBLACK    setConsoleForegroundColor(FOREGROUND_BLACK   | FOREGROUND_INTENSITY)
+#define SET_FG_LIGHTRED      setConsoleForegroundColor(FOREGROUND_RED     | FOREGROUND_INTENSITY)
+#define SET_FG_LIGHTGREEN    setConsoleForegroundColor(FOREGROUND_GREEN   | FOREGROUND_INTENSITY)
+#define SET_FG_LIGHTYELLOW   setConsoleForegroundColor(FOREGROUND_YELLOW  | FOREGROUND_INTENSITY)
+#define SET_FG_LIGHTBLUE     setConsoleForegroundColor(FOREGROUND_BLUE    | FOREGROUND_INTENSITY)
+#define SET_FG_LIGHTMAGENTA  setConsoleForegroundColor(FOREGROUND_MAGENTA | FOREGROUND_INTENSITY)
+#define SET_FG_LIGHTCYAN     setConsoleForegroundColor(FOREGROUND_CYAN    | FOREGROUND_INTENSITY)
+#define SET_FG_LIGHTWHITE    setConsoleForegroundColor(FOREGROUND_WHITE   | FOREGROUND_INTENSITY)
 /* @} */
 
 /* ACTIVATE ANSI COLORS IN WINDOWS */
@@ -362,7 +361,6 @@ void setConsoleBackgroundColor( ConsoleColor backgroundColor );
  *  ====================================================================
  */
 
-#define BACKGROUND_COLOR_RESET resetColorTerminal()
 #define LETTER_RESET           resetColorTerminal()
 
 /**
@@ -547,10 +545,10 @@ void printf_color(const char *format, ...);
 
 
 /**
- * @def BG_COLOR_RESET
+ * @def CONSOLE_COLOR_RESET
  * @brief Restablece el color de fondo al predeterminado.
  */
-#define BG_COLOR_RESET       resetColorTerminal()
+#define CONSOLE_COLOR_RESET resetColorTerminal()
 
 
 /**
@@ -670,6 +668,14 @@ void printf_color(const char *format, ...);
  * @brief Color blanco claro para la letra (ANSI).
  */
 #define FG_LIGHTWHITE_ANSI "\033[97m"
+
+
+/**
+ * @def BACKGROUND_COLOR_CUSTOM
+ * @brief Define un color de fondo personalizado utilizando códigos ANSI.
+ * @param color Código del color en formato ANSI (0-255).
+ */
+#define BACKGROUND_COLOR_CUSTOM(color) "\033[48;5;" color "m"
 
 
 /**
