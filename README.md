@@ -8,6 +8,9 @@ La cabecera incluye por defecto el modulo `<stdio.h>` y `<Windows.h>` para poder
 
 La cabecera `<colors.h>` permite activar la caracteriztica para usar secuencias de escape ANSI en Windows y lo hace automaticamente. Pero si usas MSVC tienes que activarlo manualmente llamando a `_ACTIVATE_COLORS_ANSI_WIN__()`.
 
+> [!IMPORTANT]
+> Así como `_ACTIVATE_COLORS_ANSI_WIN__()` se activa solo (a menos que use MSVC donde se tiene que activar manualmente), ocurre lo mismo con `resetColorTerminal()`, esta se llama automaticamente al finalizar el programa (a menos que use MSVC);
+
 ---
 
 ## USOS
@@ -290,14 +293,6 @@ Todas las formas anteriormente vistas son validas y hacen lo mismo pero usando m
 
 ----
 
-## Funciones adicionales:
-
-```C
-
-```
-
-Cabe mencionar que se autoejecuta `resetColorTerminal()` al final su programa sin necesidad de que el programador llame a la misma para poder resear el color de la terminal al estado inicial.
-
 ### setConsoleColor()
 
 Esta funcion permite cambiar el color de la letra y el fondo del terminal. Esta funcion recibe como primer argumento el `foreground` el cual a de ser un valor entero que forme parte de los colores `ANSI` del sistema deseado. Igual en el caso del segundo parametro `background`. Para facilitar la tarea tenemos un enum donde se definen los valores posibles que puede recibir la funcion:
@@ -305,28 +300,28 @@ Esta funcion permite cambiar el color de la letra y el fondo del terminal. Esta 
 ```C
 typedef enum ConsoleColor
 {
-    C_BLACK,
-    C_BLUE,
-    C_GREEN,
-    C_CYAN,
-    C_RED,
-    C_MAGENTA,
-    C_YELLOW,
-    C_WHITE,
+    COLOR_BLACK,
+    COLOR_BLUE,
+    COLOR_GREEN,
+    COLOR_CYAN,
+    COLOR_RED,
+    COLOR_MAGENTA,
+    COLOR_YELLOW,
+    COLOR_WHITE,
 
-    C_LIGHTBLACK,
-    C_LIGHTCYAN,
-    C_LIGHTRED,
-    C_LIGHTMAGENTA,
-    C_LIGHTYELLOW,
-    C_LIGHTWHITE
+    COLOR_LIGHTBLACK,
+    COLOR_LIGHTCYAN,
+    COLOR_LIGHTRED,
+    COLOR_LIGHTMAGENTA,
+    COLOR_LIGHTYELLOW,
+    COLOR_LIGHTWHITE
 } ConsoleColor;
 ```
 
-Hay que mencionar que los colores `C_LIGH` no estan disponibles para el `background` con esta funcion, por lo que solo puede usar las versiones relativamente oscuras.
+Hay que mencionar que los colores `COLOR_LIGH` no estan disponibles para el `background` con esta funcion, por lo que solo puede usar las versiones relativamente oscuras.
 
 ```C
-setConsoleColor(C_LIGHTYELLOW, C_GREEN);
+setConsoleColor(COLOR_LIGHTYELLOW, COLOR_GREEN);
 ```
 La definicion anterior cambia la letra a amarillo claro y el fondo a verde
 
