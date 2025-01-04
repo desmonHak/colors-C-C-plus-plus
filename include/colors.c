@@ -170,21 +170,25 @@ void vprintf_color(const char* format, va_list args)
             } else if (strncmp(color_code, "BG:blue", 7) == 0)
                 SET_BG_COLOR_BLUE;
             else if (strncmp(color_code, "FG:", 3) == 0) {
-                // Comprobar si es un color personalizado FG:r;g;b
+
                 uint8_t red, green, blue;
+
+                /* Comprobar si es un color personalizado FG:r;g;b */
                 if (sscanf(color_code, "FG:%hhu;%hhu;%hhu", &red, &green, &blue) == 3)
-                    // Cambiar a color personalizado
+                    /* Cambiar a color personalizado */
                     foreground_color_custom(red, green, blue);
             }
-/*
+
             else if (strncmp(color_code, "BG:", 3) == 0) {
                 // Comprobar si es un color personalizado FG:r;g;b
                 uint8_t red, green, blue;
                 if (sscanf(color_code, "BG:%hhu;%hhu;%hhu", &red, &green, &blue) == 3) {
                     // Cambiar a color personalizado
-                    background_color_custom_(red, green, blue);
+                    background_color_custom(red, green, blue);
                 }
-            } else if (strncmp(color_code, "i64:", 4) == 0) {
+            }
+/*
+            else if (strncmp(color_code, "i64:", 4) == 0) {
                 sizes_num num;
 
                 if (sscanf(color_code, "i64:%" PRIu64, &num.i64)) {
@@ -321,6 +325,16 @@ void setConsoleBackgroundColor(ConsoleColor backgroundColor)
 static void foreground_color_custom(const uint8_t red, const uint8_t green, const uint8_t blue)
 {
     printf(FOREGROUND_COLOR_CUSTOM_RGB("%d", "%d", "%d"), red, green, blue);
+}
+
+static void background_color_custom_RGB(RGB_C color)
+{
+    background_color_custom(color.red, color.green, color.blue);
+}
+
+static void background_color_custom(const uint8_t red, const uint8_t green, const uint8_t blue)
+{
+    printf(BACKGROUND_COLOR_CUSTOM_RGB("%d", "%d", "%d"), red, green, blue);
 }
 
 #endif // END __COLORS_C__

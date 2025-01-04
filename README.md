@@ -4,7 +4,7 @@ Una librería para Windows y Linux que permite manipular colores con C/C++.
 
 ---
 
-La cabecera incluye por defecto el modulo `<stdio.h>` y `<Windows.h>` para poder manipular los colores de una forma mas sencilla.
+Todo lo necesario esta en el directorio `include`, la cabecera inicial (`<colors.h>`) incluye por defecto el modulo `<stdio.h>` y `<Windows.h>` para poder manipular los colores de una forma mas sencilla.
 
 La cabecera `<colors.h>` permite activar la caracteriztica para usar secuencias de escape ANSI en Windows y lo hace automaticamente. Pero si usas MSVC tienes que activarlo manualmente llamando a `_ACTIVATE_COLORS_ANSI_WIN__()`.
 

@@ -58,7 +58,7 @@
 
 /**
  * @def ConsoleColor
- *
+ * @brief Codigo de colores estandar
  * @brief enumeracion de colores basicos
  */
 typedef enum ConsoleColor
@@ -86,6 +86,33 @@ typedef enum ConsoleColor
     COLOR_LIGHTCYAN   ,
     COLOR_LIGHTWHITE  ,
 } ConsoleColor;
+
+
+/**
+ * @typedef RGB_C
+ * @brief Estructura para representar colores en formato RGB.
+ * 
+ * La estructura principal consta de 3 valores R (red) G (green) B (blue)
+ * La segunda solo es un alias para poder usar {.red=..., .green=...} y {.r=...}
+ * siendo ambas la misma expresión
+ */
+typedef union RGB_C
+{
+    struct
+    {
+        uint8_t red;
+        uint8_t green;
+        uint8_t blue;
+    };
+
+    struct
+    {
+        uint8_t r;
+        uint8_t g;
+        uint8_t b;
+    };
+} RGB_C;
+
 
 /*
  *  ▒█  ▒█ ▀█▀ ▒█▄ ▒█   ▒█▀▀█ ▒█    █▀▀▄ ▀▀█▀▀ ▒█▀▀▀ ▒█▀▀▀█ ▒█▀▀▄ ▒█▀▄▀█
@@ -119,6 +146,7 @@ typedef enum ConsoleColor
 #   define FOREGROUND_BLACK 0
 #endif
 
+
 /**
  * @def FOREGROUND_WHITE
  * @brief Define el color de primer plano como blanco, combinando rojo, verde y azul.
@@ -128,6 +156,7 @@ typedef enum ConsoleColor
 //#define FOREGROUND_WHITE  0xf
 #endif
 
+
 /**
  * @def FOREGROUND_MASK
  * @brief Define la máscara de color de primer plano, combinando rojo, verde y azul.
@@ -135,6 +164,7 @@ typedef enum ConsoleColor
 #ifndef FOREGROUND_MASK
 #   define FOREGROUND_MASK (FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_RED)
 #endif
+
 
 /**
  * @def FOREGROUND_RESET
@@ -144,6 +174,7 @@ typedef enum ConsoleColor
 #   define FOREGROUND_RESET (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE)
 #endif
 
+
 /**
  * @def FOREGROUND_YELLOW
  * @brief Define el color de primer plano como amarillo (rojo + verde).
@@ -151,6 +182,7 @@ typedef enum ConsoleColor
 #ifndef FOREGROUND_YELLOW
 #   define FOREGROUND_YELLOW (FOREGROUND_RED | FOREGROUND_GREEN)
 #endif
+
 
 /**
  * @def FOREGROUND_MAGENTA
@@ -160,6 +192,7 @@ typedef enum ConsoleColor
 #   define FOREGROUND_MAGENTA (FOREGROUND_RED | FOREGROUND_BLUE)
 #endif
 
+
 /**
  * @def FOREGROUND_CYAN
  * @brief Define el color de primer plano como cian (verde + azul).
@@ -167,6 +200,7 @@ typedef enum ConsoleColor
 #ifndef FOREGROUND_CYAN
 #   define FOREGROUND_CYAN (FOREGROUND_GREEN | FOREGROUND_BLUE)
 #endif
+
 
 /**
  * @def BACKGROUND_BLACK
@@ -176,6 +210,7 @@ typedef enum ConsoleColor
 #   define BACKGROUND_BLACK 0
 #endif
 
+
 /**
  * @def BACKGROUND_WHITE
  * @brief Define el color de fondo como blanco (0xf0).
@@ -183,6 +218,7 @@ typedef enum ConsoleColor
 #ifndef BACKGROUND_WHITE
 #   define BACKGROUND_WHITE 0xf0
 #endif
+
 
 /**
  * @def BACKGROUND_YELLOW
@@ -192,6 +228,7 @@ typedef enum ConsoleColor
 #   define BACKGROUND_YELLOW (BACKGROUND_RED | BACKGROUND_GREEN)
 #endif
 
+
 /**
  * @def BACKGROUND_MAGENTA
  * @brief Define el color de fondo como magenta (rojo + azul).
@@ -199,6 +236,7 @@ typedef enum ConsoleColor
 #ifndef BACKGROUND_MAGENTA
 #   define BACKGROUND_MAGENTA (BACKGROUND_RED | BACKGROUND_BLUE)
 #endif
+
 
 /**
  * @def BACKGROUND_CYAN
@@ -208,6 +246,13 @@ typedef enum ConsoleColor
 #   define BACKGROUND_CYAN (BACKGROUND_GREEN | BACKGROUND_BLUE)
 #endif
 
+
+/**
+ * @defgroup Alias para establecer un color al texto o al fondo de este
+ * Los que inician con SET_BG es para el background (el fondo del texto)
+ * Los que inician con SET_FG es para el foreground (el texto)
+ * @{
+ */
 #define SET_BACKGROUND_COLOR_GREEN       setConsoleBackgroundColor(BACKGROUND_GREEN  )
 #define SET_BACKGROUND_COLOR_YELLOW      setConsoleBackgroundColor(BACKGROUND_YELLOW )
 #define SET_BACKGROUND_COLOR_BLUE        setConsoleBackgroundColor(BACKGROUND_BLUE   )
@@ -234,6 +279,7 @@ typedef enum ConsoleColor
 #define SET_LETTER_LIGHTMAGENTA  setConsoleForegroundColor(FOREGROUND_MAGENTA | FOREGROUND_INTENSITY)
 #define SET_LETTER_LIGHTCYAN     setConsoleForegroundColor(FOREGROUND_CYAN    | FOREGROUND_INTENSITY)
 #define SET_LETTER_LIGHTWHITE    setConsoleForegroundColor(FOREGROUND_WHITE   | FOREGROUND_INTENSITY)
+/* @} */
 
 /* ACTIVATE ANSI COLORS IN WINDOWS */
 
@@ -269,32 +315,39 @@ void setConsoleBackgroundColor( WORD backgroundColor );
  *  ====================================================================
  */
 
-#define SET_BG_COLOR_GREEN       setConsoleBackgroundColor(COLOR_GREEN  )
-#define SET_BG_COLOR_YELLOW      setConsoleBackgroundColor(COLOR_YELLOW )
-#define SET_BG_COLOR_BLUE        setConsoleBackgroundColor(COLOR_BLUE   )
-#define SET_BG_COLOR_RED         setConsoleBackgroundColor(COLOR_RED    )
-#define SET_BG_COLOR_BLACK       setConsoleBackgroundColor(COLOR_BLACK  )
-#define SET_BG_COLOR_MAGENTA     setConsoleBackgroundColor(COLOR_MAGENTA)
-#define SET_BG_COLOR_CYAN        setConsoleBackgroundColor(COLOR_CYAN   )
-#define SET_BG_COLOR_WHITE       setConsoleBackgroundColor(COLOR_WHITE  )
+/**
+ * @defgroup Alias para establecer un color al texto o al fondo de este
+ * Los que inician con SET_BG es para el background (el fondo del texto)
+ * Los que inician con SET_FG es para el foreground (el texto)
+ * @{
+ */
+#define SET_BG_COLOR_GREEN       setConsoleBackgroundColor( COLOR_GREEN   )
+#define SET_BG_COLOR_YELLOW      setConsoleBackgroundColor( COLOR_YELLOW  )
+#define SET_BG_COLOR_BLUE        setConsoleBackgroundColor( COLOR_BLUE    )
+#define SET_BG_COLOR_RED         setConsoleBackgroundColor( COLOR_RED     )
+#define SET_BG_COLOR_BLACK       setConsoleBackgroundColor( COLOR_BLACK   )
+#define SET_BG_COLOR_MAGENTA     setConsoleBackgroundColor( COLOR_MAGENTA )
+#define SET_BG_COLOR_CYAN        setConsoleBackgroundColor( COLOR_CYAN    )
+#define SET_BG_COLOR_WHITE       setConsoleBackgroundColor( COLOR_WHITE   )
 
-#define SET_FG_GREEN             setConsoleForegroundColor(COLOR_GREEN  )
-#define SET_FG_YELLOW            setConsoleForegroundColor(COLOR_YELLOW )
-#define SET_FG_BLUE              setConsoleForegroundColor(COLOR_BLUE   )
-#define SET_FG_RED               setConsoleForegroundColor(COLOR_RED    )
-#define SET_FG_BLACK             setConsoleForegroundColor(COLOR_BLACK  )
-#define SET_FG_MAGENTA           setConsoleForegroundColor(COLOR_MAGENTA)
-#define SET_FG_CYAN              setConsoleForegroundColor(COLOR_CYAN   )
-#define SET_FG_WHITE             setConsoleForegroundColor(COLOR_WHITE  )
+#define SET_FG_GREEN             setConsoleForegroundColor( COLOR_GREEN   )
+#define SET_FG_YELLOW            setConsoleForegroundColor( COLOR_YELLOW  )
+#define SET_FG_BLUE              setConsoleForegroundColor( COLOR_BLUE    )
+#define SET_FG_RED               setConsoleForegroundColor( COLOR_RED     )
+#define SET_FG_BLACK             setConsoleForegroundColor( COLOR_BLACK   )
+#define SET_FG_MAGENTA           setConsoleForegroundColor( COLOR_MAGENTA )
+#define SET_FG_CYAN              setConsoleForegroundColor( COLOR_CYAN    )
+#define SET_FG_WHITE             setConsoleForegroundColor( COLOR_WHITE   )
 
-#define SET_FG_LIGHTBLACK     setConsoleForegroundColor(COLOR_LIGHTBLACK  )
-#define SET_FG_LIGHTRED       setConsoleForegroundColor(COLOR_LIGHTRED    )
-#define SET_FG_LIGHTGREEN     setConsoleForegroundColor(COLOR_LIGHTGREEN  )
-#define SET_FG_LIGHTYELLOW    setConsoleForegroundColor(COLOR_LIGHTYELLOW )
-#define SET_FG_LIGHTBLUE      setConsoleForegroundColor(COLOR_LIGHTBLUE   )
-#define SET_FG_LIGHTMAGENTA   setConsoleForegroundColor(COLOR_LIGHTMAGENTA)
-#define SET_FG_LIGHTCYAN      setConsoleForegroundColor(COLOR_LIGHTCYAN   )
-#define SET_FG_LIGHTWHITE     setConsoleForegroundColor(COLOR_LIGHTWHITE  )
+#define SET_FG_LIGHTBLACK        setConsoleForegroundColor(COLOR_LIGHTBLACK  )
+#define SET_FG_LIGHTRED          setConsoleForegroundColor(COLOR_LIGHTRED    )
+#define SET_FG_LIGHTGREEN        setConsoleForegroundColor(COLOR_LIGHTGREEN  )
+#define SET_FG_LIGHTYELLOW       setConsoleForegroundColor(COLOR_LIGHTYELLOW )
+#define SET_FG_LIGHTBLUE         setConsoleForegroundColor(COLOR_LIGHTBLUE   )
+#define SET_FG_LIGHTMAGENTA      setConsoleForegroundColor(COLOR_LIGHTMAGENTA)
+#define SET_FG_LIGHTCYAN         setConsoleForegroundColor(COLOR_LIGHTCYAN   )
+#define SET_FG_LIGHTWHITE        setConsoleForegroundColor(COLOR_LIGHTWHITE  )
+/* @} */
 
 void setConsoleForegroundColor( ConsoleColor foregroundColor );
 void setConsoleBackgroundColor( ConsoleColor backgroundColor );
@@ -337,10 +390,10 @@ typedef union sizes_num {
 
 /**
  * @brief Función que calcula un hash de Jenkins para un conjunto de valores.
- * 
+ *
  * @param value El valor base.
  * @param n1 a n6 Los valores adicionales para el hash.
- * 
+ *
  * @return El valor de hash resultante.
  * @see https://en.wikipedia.org/wiki/Jenkins_hash_function
  */
@@ -357,7 +410,7 @@ void resetColorTerminal(void);
 
 /**
  * @brief Función similar a printf_color, pero acepta una lista de argumentos variable.
- * 
+ *
  * @param format El formato del texto con los colores.
  * @param args La lista de argumentos.
  */
@@ -368,10 +421,36 @@ static void foreground_color_custom(
     const uint8_t green,
     const uint8_t blue);
 
+/**
+ * @defgroup Funciones para restablecer el color del texto y del fondo a los predeterminados por el terminal
+ * @{
+ */
 void resetColorTerminal    (void);
 void resetConsoleForeground(void);
 void resetConsoleBackground(void);
 
+/* @} */
+
+
+/**
+ * @brief Cambia el color de fondo utilizando valores RGB proporcionados como enteros.
+ *
+ * Esta función cambia el color de fondo en la terminal a un color especificado por los valores RGB
+ * proporcionados como parámetros individuales.
+ *
+ * @param red   Componente rojo  del color (0-255).
+ * @param green Componente verde del color (0-255).
+ * @param blue  Componente azul  del color (0-255).
+ */
+static void background_color_custom(const uint8_t red, const uint8_t green, const uint8_t blue);
+
+
+/** 
+ * @brief Restablece el color al por defecto tanto del texto como del fondo de este mismo
+ * 
+ * La funcion se activa automaticamente al finalizar el programa
+ * Si se usa MSVC entonces se tiene que activar al final manualmente
+*/
 #ifdef _MSC_VER
 void static _RESET_COLOR__(void)
 #else
@@ -382,12 +461,14 @@ void static __attribute__((destructor)) _RESET_COLOR__(void)
     exit(0);
 }
 
+
 /**
  * @brief Función que imprime un mensaje de texto con colores en formato de texto.
- * 
+ *
  * @param format El formato del texto con los colores.
  */
 void printf_color(const char *format, ...);
+
 
 /**
  * @brief Macro para definir el color del texto en terminales ANSI
@@ -455,65 +536,76 @@ void printf_color(const char *format, ...);
  */
 #define ANSI_RESET_MODES "\033[0;0m"
 
-/** 
+
+/**
  * @def BG_COLOR_RESET
  * @brief Restablece el color de fondo al predeterminado.
  */
 #define BG_COLOR_RESET       resetColorTerminal()
 
-/** 
+
+/**
  * @def FG_BLACK_ANSI
  * @brief Define la secuencia ANSI para el color de letra negro.
  */
 #define FG_BLACK_ANSI   "\033[30m"
 
-/** 
+
+/**
  * @def FG_RED_ANSI
  * @brief Define la secuencia ANSI para el color de letra rojo.
  */
 #define FG_RED_ANSI     "\033[31m"
 
-/** 
+
+/**
  * @def FG_GREEN_ANSI
  * @brief Define la secuencia ANSI para el color de letra verde.
  */
 #define FG_GREEN_ANSI   "\033[32m"
 
-/** 
+
+/**
  * @def FG_YELLOW_ANSI
  * @brief Define la secuencia ANSI para el color de letra amarillo.
  */
 #define FG_YELLOW_ANSI  "\033[33m"
 
-/** 
+
+/**
  * @def FG_BLUE_ANSI
  * @brief Define la secuencia ANSI para el color de letra azul.
  */
 #define FG_BLUE_ANSI    "\033[34m"
 
-/** 
+
+/**
  * @def FG_MAGENTA_ANSI
  * @brief Define la secuencia ANSI para el color de letra magenta.
  */
 #define FG_MAGENTA_ANSI "\033[35m"
 
-/** 
+
+/**
  * @def FG_CYAN_ANSI
  * @brief Define la secuencia ANSI para el color de letra cian.
  */
 #define FG_CYAN_ANSI    "\033[36m"
 
-/** 
+
+/**
  * @def FG_WHITE_ANSI
  * @brief Define la secuencia ANSI para el color de letra blanca.
  */
 #define FG_WHITE_ANSI   "\033[37m"
 
-/** 
+
+/**
  * @def FG_RESET_ANSI
  * @brief Restablece el color de letra al predeterminado.
  */
 #define FG_RESET_ANSI   "\033[0;0m"
+
 
 /**
  * @def FG_LIGHTBLACK_ANSI
@@ -521,11 +613,13 @@ void printf_color(const char *format, ...);
  */
 #define FG_LIGHTBLACK_ANSI "\033[90m"
 
+
 /**
  * @def FG_LIGHTRED_ANSI
  * @brief Color rojo claro para la letra (ANSI).
  */
 #define FG_LIGHTRED_ANSI "\033[91m"
+
 
 /**
  * @def FG_LIGHTGREEN_ANSI
@@ -533,11 +627,13 @@ void printf_color(const char *format, ...);
  */
 #define FG_LIGHTGREEN_ANSI "\033[92m"
 
+
 /**
  * @def FG_LIGHTYELLOW_ANSI
  * @brief Color amarillo claro para la letra (ANSI).
  */
 #define FG_LIGHTYELLOW_ANSI "\033[93m"
+
 
 /**
  * @def FG_LIGHTBLUE_ANSI
@@ -545,11 +641,13 @@ void printf_color(const char *format, ...);
  */
 #define FG_LIGHTBLUE_ANSI "\033[94m"
 
+
 /**
  * @def FG_LIGHTMAGENTA_ANSI
  * @brief Color magenta claro para la letra (ANSI).
  */
 #define FG_LIGHTMAGENTA_ANSI "\033[95m"
+
 
 /**
  * @def FG_LIGHTCYAN_ANSI
@@ -557,11 +655,22 @@ void printf_color(const char *format, ...);
  */
 #define FG_LIGHTCYAN_ANSI "\033[96m"
 
+
 /**
  * @def FG_LIGHTWHITE_ANSI
  * @brief Color blanco claro para la letra (ANSI).
  */
 #define FG_LIGHTWHITE_ANSI "\033[97m"
+
+
+/**
+ * @def BACKGROUND_COLOR_CUSTOM_RGB
+ * @brief Define un color de fondo personalizado utilizando valores RGB.
+ * @param red Componente de rojo (0-255).
+ * @param green Componente de verde (0-255).
+ * @param blue Componente de azul (0-255).
+ */
+#define BACKGROUND_COLOR_CUSTOM_RGB(red, green, blue) "\033[38;2;" red ";" green ";" blue "m"
 
 #include "colors.c"
 
