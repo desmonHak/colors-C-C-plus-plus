@@ -247,6 +247,26 @@ void resetColorTerminal();
 
 ```
 
+Otro formato a mencionar es sobre imprimir valores el binario.
+
+```C
+#include "colors.h"
+
+int main(void)
+{
+    printf_color("El numero 12 en binario es: #{i8:12}\n");
+    // => El numero 12 en binario es: 00001100
+
+    printf_color("El numero 999 en binario es: #{i16:999}\n");
+    // => El numero 999 en binario es: 0000001111100111
+
+    return 0;
+}
+
+```
+
+El valor maximo es de 64 bits (`i64`), pero estan disponibles: `i8`, `i16`, `i32` e `i64`.
+
 ----
 
 ## COLORES RGB

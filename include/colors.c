@@ -18,7 +18,7 @@ uint32_t jenkins_hash(
 }
 
 void printf_color(const char *format, ...)
-{   
+{
     va_list args;
     va_start(args, format);
 
@@ -56,9 +56,12 @@ void vprintf_color(const char* format, va_list args)
     size_t length_formated = (vsnprintf(NULL, 0, format, args) + 1) * sizeof(char);
     char  *buffer_formated = (char*)malloc(length_formated);
 
-    if (length_formated < 3)
+    if (length_formated < 5)
     {
-        puts(buffer_formated);
+        for (uint8_t i =0 ; i < (uint8_t)length_formated; i++) {
+            putchar(buffer_formated[i]);
+        }
+
         free(buffer_formated);
         return;
     }
@@ -167,54 +170,48 @@ void vprintf_color(const char* format, va_list args)
             } else if (strncmp(color_code, "BG:white", 8) == 0){
                 SET_BG_COLOR_WHITE;
 
-            } else if (strncmp(color_code, "BG:blue", 7) == 0)
+            } else if (strncmp(color_code, "BG:blue", 7) == 0) {
                 SET_BG_COLOR_BLUE;
-            else if (strncmp(color_code, "FG:", 3) == 0) {
+
+            } else if (strncmp(color_code, "FG:", 3) == 0) {
 
                 uint8_t red, green, blue;
-
-                /* Comprobar si es un color personalizado FG:r;g;b */
                 if (sscanf(color_code, "FG:%hhu;%hhu;%hhu", &red, &green, &blue) == 3)
-                    /* Cambiar a color personalizado */
                     foreground_color_custom(red, green, blue);
-            }
 
-            else if (strncmp(color_code, "BG:", 3) == 0) {
-                // Comprobar si es un color personalizado FG:r;g;b
+            } else if (strncmp(color_code, "BG:", 3) == 0) {
+
                 uint8_t red, green, blue;
-                if (sscanf(color_code, "BG:%hhu;%hhu;%hhu", &red, &green, &blue) == 3) {
-                    // Cambiar a color personalizado
+                if (sscanf(color_code, "BG:%hhu;%hhu;%hhu", &red, &green, &blue) == 3)
                     background_color_custom(red, green, blue);
-                }
-            }
-/*
-            else if (strncmp(color_code, "i64:", 4) == 0) {
-                sizes_num num;
 
-                if (sscanf(color_code, "i64:%" PRIu64, &num.i64)) {
-                    print_sizes_num(num, 64);
-                }
+            } else if (strncmp(color_code, "i64:", 4) == 0) {
+
+                sizes_num num;
+                if (sscanf(color_code, "i64:%" PRIu64, &num.i64))
+                    print_binary(num, 64);
+
             } else if (strncmp(color_code, "i32:", 4) == 0) {
-                sizes_num num;
-                if (sscanf(color_code, "i32:%" SCNu32, &num.i32)) {
-                    print_sizes_num(num, 32);
-                }
-            } else if (strncmp(color_code, "i16:", 4) == 0) {
-                sizes_num num;
-                if (sscanf(color_code, "i16:%hu", &num.i16)) {
-                    print_sizes_num(num, 16);
-                }
-            } else if (strncmp(color_code, "i8:", 3) == 0) {
-                sizes_num num;
 
-                if (sscanf(color_code, "i8:%hhu", &num.i8)) {
-                    print_sizes_num(num, 8);
-                    printf("-%d-\n", num.i8);
-                } else {
-                    print_sizes_num((sizes_num) { .i8 = 0 }, 8);
-                } */
-                // printf("%d\n", num.i8);
-            else {
+                sizes_num num;
+                if (sscanf(color_code, "i32:%" SCNu32, &num.i32))
+                    print_binary(num, 32);
+
+            } else if (strncmp(color_code, "i16:", 4) == 0) {
+
+                sizes_num num;
+                if (sscanf(color_code, "i16:%hu", &num.i16))
+                    print_binary(num, 16);
+
+            } else if (strncmp(color_code, "i8:", 3) == 0) {
+
+                sizes_num num;
+                if (sscanf(color_code, "i8:%hhu", &num.i8))
+                    print_binary(num, 8);
+                else
+                    print_binary((sizes_num) { .i8 = 0 }, 8);
+
+            } else {
                 printf("%s: identificador invalido\n", color_code);
             }
         }
@@ -292,49 +289,85 @@ void setConsoleBackgroundColor(WORD backgroundColor)
 
 #else
 
-void resetConsoleForeground(void)
-{
+void resetConsoleForeground(void) {
     resetColorTerminal();
 }
 
 
-void resetConsoleBackground(void)
-{
+void resetConsoleBackground(void) {
     resetColorTerminal();
 }
 
 
-void setConsoleForegroundColor( ConsoleColor foregroundColor )
-{
+void setConsoleForegroundColor( ConsoleColor foregroundColor ) {
     printf("\033[%dm", 30 + foregroundColor);
 }
 
-void resetColorTerminal(void)
-{
+void resetColorTerminal(void) {
     printf("\033[0;0m");
 }
 
 
-void setConsoleBackgroundColor(ConsoleColor backgroundColor)
-{
+void setConsoleBackgroundColor(ConsoleColor backgroundColor) {
     printf("\033[0;%dm", 40 + backgroundColor);
 }
 
 #endif
 
-static void foreground_color_custom(const uint8_t red, const uint8_t green, const uint8_t blue)
-{
+
+static void foreground_color_custom(const uint8_t red, const uint8_t green, const uint8_t blue) {
     printf(FOREGROUND_COLOR_CUSTOM_RGB("%d", "%d", "%d"), red, green, blue);
 }
 
-static void background_color_custom_RGB(RGB_C color)
-{
+
+static void background_color_custom_RGB(RGB_C color) {
     background_color_custom(color.red, color.green, color.blue);
 }
 
-static void background_color_custom(const uint8_t red, const uint8_t green, const uint8_t blue)
-{
+
+static void background_color_custom(const uint8_t red, const uint8_t green, const uint8_t blue) {
     printf(BACKGROUND_COLOR_CUSTOM_RGB("%d", "%d", "%d"), red, green, blue);
+}
+
+
+void print_binary(sizes_num num, uint8_t size_word) {
+    switch (size_word) {
+    case 8: {
+
+        uint8_t mask = (uint8_t)1 << 7;
+        for (uint8_t i = 0; i < 8; i++, num.i8 <<= 1) 
+            putchar(num.i8 & mask ? '1' : '0');
+
+    } break;
+
+    case 16: {
+
+        uint16_t mask = (uint16_t)1 << 15;
+        for (uint8_t i = 0; i < 16; i++, num.i16 <<= 1) 
+            putchar(num.i16 & mask ? '1' : '0');        
+
+    } break;
+
+    case 32: {
+
+        uint32_t mask = (uint32_t)1 << 31;
+        for (uint8_t i = 0; i < 32; i++, num.i32 <<= 1) 
+            putchar(num.i32 & mask ? '1' : '0');
+
+    } break;
+
+    case 64: {
+
+        uint64_t mask = (uint64_t)1 << 63;
+        for (uint8_t i = 0; i < 64; i++, num.i64 <<= 1) 
+            putchar(num.i64 & mask ? '1' : '0');
+
+    } break;
+
+    default:
+        puts("print_binary: size_word desconocido");
+        break;
+    }
 }
 
 #endif // END __COLORS_C__
