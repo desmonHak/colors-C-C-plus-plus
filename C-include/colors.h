@@ -563,7 +563,6 @@ void printf_color(const char *format, ...);
  */
 #define FG_LIGHTWHITE_ANSI "\033[97m"
 
-
 #include "colors.c"
 
 #endif
