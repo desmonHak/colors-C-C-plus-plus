@@ -91,7 +91,7 @@ typedef enum ConsoleColor
 /**
  * @typedef RGB_C
  * @brief Estructura para representar colores en formato RGB.
- * 
+ *
  * La estructura principal consta de 3 valores R (red) G (green) B (blue)
  * La segunda solo es un alias para poder usar {.red=..., .green=...} y {.r=...}
  * siendo ambas la misma expresión
@@ -445,9 +445,9 @@ void resetConsoleBackground(void);
 static void background_color_custom(const uint8_t red, const uint8_t green, const uint8_t blue);
 
 
-/** 
+/**
  * @brief Restablece el color al por defecto tanto del texto como del fondo de este mismo
- * 
+ *
  * La funcion se activa automaticamente al finalizar el programa
  * Si se usa MSVC entonces se tiene que activar al final manualmente
 */
@@ -460,6 +460,15 @@ void static __attribute__((destructor)) _RESET_COLOR__(void)
     resetColorTerminal();
     exit(0);
 }
+
+
+/**
+ * @brief Imprimite el numero en binario
+ *
+ * @param byte El valor a imprimir.
+ * @param size_word El tamaño de los datos.
+ */
+void print_binary(sizes_num byte, uint8_t size_word);
 
 
 /**
@@ -671,6 +680,37 @@ void printf_color(const char *format, ...);
  * @param blue Componente de azul (0-255).
  */
 #define BACKGROUND_COLOR_CUSTOM_RGB(red, green, blue) "\033[38;2;" red ";" green ";" blue "m"
+
+
+/**
+ * @def foreground_color_custom
+ * @brief Define un color de letra utilizando argumentos genéricos (puede ser RGB_C o código ANSI).
+ * @param ... Valores que determinan el color (pueden ser RGB_C o un código ANSI).
+ */
+#define foreground_color_custom_(...) _Generic((__VA_ARGS__), \
+    RGB_C: foreground_color_custom_RGB,                      \
+    default: foreground_color_custom_)(__VA_ARGS__)
+
+
+/**
+ * @def background_color_custom
+ * @brief Define un color de fondo utilizando argumentos genéricos (puede ser RGB_C o código ANSI).
+ * @param ... Valores que determinan el color (pueden ser RGB_C o un código ANSI).
+ */
+#define background_color_custom_(...) _Generic((__VA_ARGS__), \
+    RGB_C: background_color_custom_RGB,                      \
+    default: background_color_custom_)(__VA_ARGS__)
+
+
+/**
+ * @def back_fore_color_custom
+ * @brief Define simultáneamente el color de fondo y el de letra utilizando argumentos genéricos.
+ * @param ... Valores que determinan los colores (pueden ser RGB_C o códigos ANSI).
+ */
+#define back_fore_color_custom_(...) _Generic((__VA_ARGS__), \
+    RGB_C: back_fore_color_custom_RGB,                \
+    default: back_fore_color_custom_)(__VA_ARGS__)
+
 
 #include "colors.c"
 
