@@ -17,6 +17,7 @@ uint32_t jenkins_hash(
     return value % 256;
 }
 
+
 void printf_color(const char *format, ...)
 {
     va_list args;
@@ -53,8 +54,15 @@ void vprintf_color(const char* format, va_list args)
     printf(") ");
 #endif
 
-    size_t length_formated = (vsnprintf(NULL, 0, format, args) + 1) * sizeof(char);
+    va_list args_copy;
+    va_copy(args_copy, args);
+
+    size_t length_formated = (vsnprintf(NULL, 0, format, args_copy) + 1) * sizeof(char);
     char  *buffer_formated = (char*)malloc(length_formated);
+
+    va_end(args_copy);
+
+    vsprintf(buffer_formated, format, args);
 
     if (length_formated < 5)
     {
@@ -66,37 +74,37 @@ void vprintf_color(const char* format, va_list args)
         return;
     }
 
-    vsprintf(buffer_formated, format, args);
+    const char *c = buffer_formated;
 
-    const char *p = buffer_formated;
-    uint8_t possible_color_code = 0;
+    char color_code[30] = {0};
 
-    char    color_code[30] = {0};
-    uint8_t color_code_idx =  0 ;
+    do {
+        uint8_t possible_color_code = 0;
+        uint8_t color_code_idx      = 0;
 
-    while ( *p != '\0' )
-    {
-        if (*p == '#' && *(p+1) == '{') {
-            color_code_idx = 0;
+        if (*c == '#' && *(c+1) && *(c+1) == '{') {
 
-            p += 2;
-            for (uint8_t idx = 0; idx < 30 && *p ; idx++, p++) {
-                color_code[color_code_idx] = *p;
+            c += 2;
+            for (; color_code_idx < 30 && *c ; c++) {
+                color_code[color_code_idx] = *c;
                 color_code_idx++;
 
-                if ( *p == '}' ) {
+                if ( *c == '}' ) {
                     possible_color_code = 1;
                     break;
                 }
             }
 
             color_code[color_code_idx-1] = '\0';
+
         } else {
-            putchar(*p);
+            putchar(*c);
         }
 
         if ( possible_color_code ) {
-            possible_color_code = 0;
+
+            uint8_t red, green, blue;
+            sizes_num num;
 
             if (strncmp(color_code, "reset", 8) == 0) {
                 resetConsoleForeground();
@@ -173,51 +181,31 @@ void vprintf_color(const char* format, va_list args)
             } else if (strncmp(color_code, "BG:blue", 7) == 0) {
                 SET_BG_COLOR_BLUE;
 
-            } else if (strncmp(color_code, "FG:", 3) == 0) {
-
-                uint8_t red, green, blue;
-                if (sscanf(color_code, "FG:%hhu;%hhu;%hhu", &red, &green, &blue) == 3)
+            } else if (sscanf(color_code, "FG:%hhu;%hhu;%hhu", &red, &green, &blue) == 3) {
                     foreground_color_custom(red, green, blue);
 
-            } else if (strncmp(color_code, "BG:", 3) == 0) {
-
-                uint8_t red, green, blue;
-                if (sscanf(color_code, "BG:%hhu;%hhu;%hhu", &red, &green, &blue) == 3)
+            } else if (sscanf(color_code, "BG:%hhu;%hhu;%hhu", &red, &green, &blue) == 3) {
                     background_color_custom(red, green, blue);
 
-            } else if (strncmp(color_code, "i64:", 4) == 0) {
-
-                sizes_num num;
-                if (sscanf(color_code, "i64:%" PRIu64, &num.i64))
+            } else if (sscanf(color_code, "i64:%" PRIu64, &num.i64)) {
                     print_binary(num, 64);
 
-            } else if (strncmp(color_code, "i32:", 4) == 0) {
-
-                sizes_num num;
-                if (sscanf(color_code, "i32:%" SCNu32, &num.i32))
+            } else if (sscanf(color_code, "i32:%" SCNu32, &num.i32)) {
                     print_binary(num, 32);
 
-            } else if (strncmp(color_code, "i16:", 4) == 0) {
-
-                sizes_num num;
-                if (sscanf(color_code, "i16:%hu", &num.i16))
+            } else if (sscanf(color_code, "i16:%hu", &num.i16)) {
                     print_binary(num, 16);
 
-            } else if (strncmp(color_code, "i8:", 3) == 0) {
-
-                sizes_num num;
-                if (sscanf(color_code, "i8:%hhu", &num.i8))
+            } else if (sscanf(color_code, "i8:%hhu", &num.i8)) {
                     print_binary(num, 8);
-                else
-                    print_binary((sizes_num) { .i8 = 0 }, 8);
 
             } else {
-                printf("%s: identificador invalido\n", color_code);
+                printf("\n%s: identificador invalido\n", color_code);
             }
         }
 
-        p++;
-    }
+        c++;
+    } while ( *c != '\0' );
 
     fflush(stdout);
     free(buffer_formated);

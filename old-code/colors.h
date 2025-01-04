@@ -141,10 +141,10 @@ void ANSI_back_color(ANSIColors color);
  * en una variable, permitiendo convertir entre diferentes representaciones de enteros.
  */
 typedef union sizes_num {
-    uint64_t i64;  /**< Entero de 64 bits */
-    uint32_t i32;  /**< Entero de 32 bits */
-    uint16_t i16;  /**< Entero de 16 bits */
-    uint8_t   i8;  /**< Entero de  8 bits */
+    unsigned long long i64;  /**< Entero de 64 bits */
+    unsigned int i32;        /**< Entero de 32 bits */
+    unsigned short int i16;  /**< Entero de 16 bits */
+    unsigned char i8;        /**< Entero de 8 bits */
 } sizes_num;
 
 #ifdef _WIN32
@@ -159,6 +159,22 @@ typedef union sizes_num {
  * se corresponden con códigos de colores que se pueden usar con las funciones de consola
  * específicas de Windows.
  */
+typedef enum ConsoleColor {
+    C_BLACK,       /**< Color negro */
+    C_BLUE,        /**< Color azul */
+    C_GREEN,       /**< Color verde */
+    C_CYAN,        /**< Color cian */
+    C_RED,         /**< Color rojo */
+    C_MAGENTA,     /**< Color magenta */
+    C_YELLOW,      /**< Color amarillo */
+    C_WHITE,       /**< Color blanco */
+    C_LIGHTBLACK,  /**< Color negro claro */
+    C_LIGHTCYAN,   /**< Color cian claro */
+    C_LIGHTRED,    /**< Color rojo claro */
+    C_LIGHTMAGENTA,/**< Color magenta claro */
+    C_LIGHTYELLOW, /**< Color amarillo claro */
+    C_LIGHTWHITE,  /**< Color blanco claro */
+} ConsoleColor;
 
 /** 
  * @def FOREGROUND_BLACK
@@ -337,32 +353,93 @@ typedef enum ConsoleColor
 #define BACKGROUND_COLOR_RESET_ANSI   "\033[0m"
 
 
+/** 
+ * @def BACKGROUND_COLOR_GREEN
+ * @brief Establece el color de fondo en verde (solo en Windows).
+ */
 #ifdef _WIN32
-#   define BACKGROUND_COLOR_GREEN       setConsoleBackgroundColor(BACKGROUND_GREEN  )
-#   define BACKGROUND_COLOR_YELLOW      setConsoleBackgroundColor(BACKGROUND_YELLOW )
-#   define BACKGROUND_COLOR_BLUE        setConsoleBackgroundColor(BACKGROUND_BLUE   )
-#   define BACKGROUND_COLOR_RED         setConsoleBackgroundColor(BACKGROUND_RED    )
-#   define BACKGROUND_COLOR_BLACK       setConsoleBackgroundColor(BACKGROUND_BLACK  )
-#   define BACKGROUND_COLOR_MAGENTA     setConsoleBackgroundColor(BACKGROUND_MAGENTA)
-#   define BACKGROUND_COLOR_CYAN        setConsoleBackgroundColor(BACKGROUND_CYAN   )
-#   define BACKGROUND_COLOR_WHITE       setConsoleBackgroundColor(BACKGROUND_WHITE  )
+#define BACKGROUND_COLOR_GREEN       setConsoleBackgroundColor(BACKGROUND_GREEN)
 #else
-#   define BACKGROUND_COLOR_GREEN       setConsoleBackgroundColor(C_GREEN  )
-#   define BACKGROUND_COLOR_YELLOW      setConsoleBackgroundColor(C_YELLOW )
-#   define BACKGROUND_COLOR_BLUE        setConsoleBackgroundColor(C_BLUE   )
-#   define BACKGROUND_COLOR_RED         setConsoleBackgroundColor(C_RED    )
-#   define BACKGROUND_COLOR_BLACK       setConsoleBackgroundColor(C_BLACK  )
-#   define BACKGROUND_COLOR_MAGENTA     setConsoleBackgroundColor(C_MAGENTA)
-#   define BACKGROUND_COLOR_CYAN        setConsoleBackgroundColor(C_CYAN   )
-#   define BACKGROUND_COLOR_WHITE       setConsoleBackgroundColor(C_WHITE  )
-#endif
+#define BACKGROUND_COLOR_GREEN       setConsoleBackgroundColor(C_GREEN)
+#endif 
 
+/** 
+ * @def BACKGROUND_COLOR_YELLOW
+ * @brief Establece el color de fondo en amarillo (solo en Windows).
+ */
+#ifdef _WIN32
+#define BACKGROUND_COLOR_YELLOW      setConsoleBackgroundColor(BACKGROUND_YELLOW)
+#else
+#define BACKGROUND_COLOR_YELLOW      setConsoleBackgroundColor(C_YELLOW)
+#endif 
+
+/** 
+ * @def BACKGROUND_COLOR_BLUE
+ * @brief Establece el color de fondo en azul (solo en Windows).
+ */
+#ifdef _WIN32
+#define BACKGROUND_COLOR_BLUE        setConsoleBackgroundColor(BACKGROUND_BLUE)
+#else
+#define BACKGROUND_COLOR_BLUE        setConsoleBackgroundColor(C_BLUE)
+#endif 
+
+/** 
+ * @def BACKGROUND_COLOR_RED
+ * @brief Establece el color de fondo en rojo (solo en Windows).
+ */
+#ifdef _WIN32
+#define BACKGROUND_COLOR_RED         setConsoleBackgroundColor(BACKGROUND_RED)
+#else
+#define BACKGROUND_COLOR_RED         setConsoleBackgroundColor(C_RED)
+#endif 
+
+/** 
+ * @def BACKGROUND_COLOR_BLACK
+ * @brief Establece el color de fondo en negro (solo en Windows).
+ */
+#ifdef _WIN32
+#define BACKGROUND_COLOR_BLACK       setConsoleBackgroundColor(BACKGROUND_BLACK)
+#else
+#define BACKGROUND_COLOR_BLACK       setConsoleBackgroundColor(C_BLACK)
+#endif 
+
+/** 
+ * @def BACKGROUND_COLOR_MAGENTA
+ * @brief Establece el color de fondo en magenta (solo en Windows).
+ */
+#ifdef _WIN32
+#define BACKGROUND_COLOR_MAGENTA     setConsoleBackgroundColor(BACKGROUND_MAGENTA)
+#else
+#define BACKGROUND_COLOR_MAGENTA     setConsoleBackgroundColor(C_MAGENTA)
+#endif 
+
+/** 
+ * @def BACKGROUND_COLOR_CYAN
+ * @brief Establece el color de fondo en cian (solo en Windows).
+ */
+#ifdef _WIN32
+#define BACKGROUND_COLOR_CYAN        setConsoleBackgroundColor(BACKGROUND_CYAN)
+#else
+#define BACKGROUND_COLOR_CYAN        setConsoleBackgroundColor(C_CYAN)
+#endif 
+
+/** 
+ * @def BACKGROUND_COLOR_WHITE
+ * @brief Establece el color de fondo en blanco (solo en Windows).
+ */
+#ifdef _WIN32
+#define BACKGROUND_COLOR_WHITE       setConsoleBackgroundColor(BACKGROUND_WHITE)
+#else
+#define BACKGROUND_COLOR_WHITE       setConsoleBackgroundColor(C_WHITE)
+#endif 
 
 /** 
  * @def BACKGROUND_COLOR_RESET
  * @brief Restablece el color de fondo al predeterminado.
  */
 #define BACKGROUND_COLOR_RESET       resetColorTerminal()
+
+
 
 
 /** 
@@ -655,7 +732,7 @@ typedef enum ConsoleColor
  * @brief Define un color de fondo personalizado utilizando códigos ANSI.
  * @param color Código del color en formato ANSI (0-255).
  */
-#define BACKGROUND_COLOR_CUSTOM(color) "\033[48;5;" color "m"
+#define BACKGROUND_COLOR_CUSTOM(color) "\033[48;5;"color"m"
 
 /**
  * @def BACKGROUND_COLOR_CUSTOM_RGB
@@ -664,14 +741,14 @@ typedef enum ConsoleColor
  * @param green Componente de verde (0-255).
  * @param blue Componente de azul (0-255).
  */
-#define BACKGROUND_COLOR_CUSTOM_RGB(red, green, blue) "\033[38;2;" red ";" green ";" blue "m"
+#define BACKGROUND_COLOR_CUSTOM_RGB(red, green, blue) "\033[38;2;"red";"green";"blue"m"
 
 /**
  * @def FOREGROUND_COLOR_CUSTOM
  * @brief Define un color de letra personalizado utilizando códigos ANSI.
  * @param color Código del color en formato ANSI (0-255).
  */
-#define FOREGROUND_COLOR_CUSTOM(color) "\033[38;5;" color "m"
+#define FOREGROUND_COLOR_CUSTOM(color) "\033[38;5;"color"m"
 
 #else  // no comptible para win7
 #warning BACKGROUND_COLOR_CUSTOM, BACKGROUND_COLOR_CUSTOM_RGB y FOREGROUND_COLOR_CUSTOM no son compatibles en Windows 7
@@ -687,7 +764,7 @@ typedef enum ConsoleColor
  * @param green Componente de verde (0-255).
  * @param blue Componente de azul (0-255).
  */
-#define FOREGROUND_COLOR_CUSTOM_RGB(red, green, blue) "\033[48;2;" red ";" green ";" blue "m"
+#define FOREGROUND_COLOR_CUSTOM_RGB(red, green, blue) "\033[48;2;"red";"green";"blue"m"
 
 /**
  * @def BACK_FORE_COLOR_CUSTOM
