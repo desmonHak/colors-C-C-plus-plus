@@ -87,7 +87,6 @@ typedef enum ConsoleColor
     COLOR_LIGHTWHITE  ,
 } ConsoleColor;
 
-
 /*
  *  ▒█  ▒█ ▀█▀ ▒█▄ ▒█   ▒█▀▀█ ▒█    █▀▀▄ ▀▀█▀▀ ▒█▀▀▀ ▒█▀▀▀█ ▒█▀▀▄ ▒█▀▄▀█
  *  ▒█▒█▒█ ▒█  ▒█▒█▒█   ▒█▄▄█ ▒█   ▒█▄▄█  ▒█   ▒█▀▀  ▒█  ▒█ ▒█▄▄▀ ▒█▒█▒█
@@ -270,98 +269,32 @@ void setConsoleBackgroundColor( WORD backgroundColor );
  *  ====================================================================
  */
 
-/**
- * @brief Macro para definir el color del texto en terminales ANSI
- *
- * @param color El color de texto a aplicar (en formato ANSI), color entre 0 y 255.
- *
- * @code
- *     printf("%sTexto en rojo\n", ANSI_COLOR_FG("1"));
- * @endcode
- *
- * @see https://gist.github.com/fnky/458719343aabd01cfb17a3a4f7296797#256-colors
- */
-#define ANSI_COLOR_FG( color ) "\033[38;5;" color "m"
+#define SET_BG_COLOR_GREEN       setConsoleBackgroundColor(COLOR_GREEN  )
+#define SET_BG_COLOR_YELLOW      setConsoleBackgroundColor(COLOR_YELLOW )
+#define SET_BG_COLOR_BLUE        setConsoleBackgroundColor(COLOR_BLUE   )
+#define SET_BG_COLOR_RED         setConsoleBackgroundColor(COLOR_RED    )
+#define SET_BG_COLOR_BLACK       setConsoleBackgroundColor(COLOR_BLACK  )
+#define SET_BG_COLOR_MAGENTA     setConsoleBackgroundColor(COLOR_MAGENTA)
+#define SET_BG_COLOR_CYAN        setConsoleBackgroundColor(COLOR_CYAN   )
+#define SET_BG_COLOR_WHITE       setConsoleBackgroundColor(COLOR_WHITE  )
 
+#define SET_FG_GREEN             setConsoleForegroundColor(COLOR_GREEN  )
+#define SET_FG_YELLOW            setConsoleForegroundColor(COLOR_YELLOW )
+#define SET_FG_BLUE              setConsoleForegroundColor(COLOR_BLUE   )
+#define SET_FG_RED               setConsoleForegroundColor(COLOR_RED    )
+#define SET_FG_BLACK             setConsoleForegroundColor(COLOR_BLACK  )
+#define SET_FG_MAGENTA           setConsoleForegroundColor(COLOR_MAGENTA)
+#define SET_FG_CYAN              setConsoleForegroundColor(COLOR_CYAN   )
+#define SET_FG_WHITE             setConsoleForegroundColor(COLOR_WHITE  )
 
-/**
- * @brief Macro para establecer el de fondo en terminales ANSI
- *
- * @param color El color de fondo a aplicar (en formato ANSI), color entre 0 y 255.
- *
- * @code
- *     printf("%sTexto con fondo azul\n", ANSI_COLOR_BG("4"));
- * @endcode
- *
- * @see https://gist.github.com/fnky/458719343aabd01cfb17a3a4f7296797#256-colors
- */
-#define ANSI_COLOR_BG( color ) "\033[48;5;" color "m"
-
-
-/**
- * @brief Macro para establecer el color brillante en terminales ANSI
- *
- * @param color El color brillante de texto a aplicar (en formato ANSI), color entre 0 y 255.
- *
- * @code
- *     printf("%sTexto rojo bold\n", ANSI_COLOR_BOLD("1"));
- * @endcode
- *
- * @see https://gist.github.com/fnky/458719343aabd01cfb17a3a4f7296797#colors--graphics-mode
- */
-#define ANSI_COLOR_BOLD(color) "\033[1m\033[38;5;" color "m"
-
-/**
- * @brief Macro para establecer el color del texto subrayado en terminales ANSI
- *
- * @param color El color de texto a aplicar (en formato ANSI), color entre 0 y 255.
- *
- * @code
- *     printf("%sTexto verde subrayado\n", ANSI_COLOR_UNDERLINE("10"));
- * @endcode
- *
- * @see https://gist.github.com/fnky/458719343aabd01cfb17a3a4f7296797#colors--graphics-mode
- */
-#define ANSI_COLOR_UNDERLINE(color)  "\033[4m\033[38;5;" color "m"
-
-
-/**
- * @brief Macro para restablecer el estilo, color y texto de en terminales ANSI
- *
- * @code
- *     printf("%sTexto rojo %stexto normal\n", ANSI_COLOR_FG("1"), ANSI_RESET_MODES);
- * @endcode
- *
- * @see https://gist.github.com/fnky/458719343aabd01cfb17a3a4f7296797#colors--graphics-mode
- */
-#define ANSI_RESET_MODES "\033[0;0m"
-
-#define SET_BACKGROUND_COLOR_GREEN       setConsoleBackgroundColor(COLOR_GREEN  )
-#define SET_BACKGROUND_COLOR_YELLOW      setConsoleBackgroundColor(COLOR_YELLOW )
-#define SET_BACKGROUND_COLOR_BLUE        setConsoleBackgroundColor(COLOR_BLUE   )
-#define SET_BACKGROUND_COLOR_RED         setConsoleBackgroundColor(COLOR_RED    )
-#define SET_BACKGROUND_COLOR_BLACK       setConsoleBackgroundColor(COLOR_BLACK  )
-#define SET_BACKGROUND_COLOR_MAGENTA     setConsoleBackgroundColor(COLOR_MAGENTA)
-#define SET_BACKGROUND_COLOR_CYAN        setConsoleBackgroundColor(COLOR_CYAN   )
-#define SET_BACKGROUND_COLOR_WHITE       setConsoleBackgroundColor(COLOR_WHITE  )
-
-#define SET_LETTER_GREEN             setConsoleForegroundColor(COLOR_GREEN  )
-#define SET_LETTER_YELLOW            setConsoleForegroundColor(COLOR_YELLOW )
-#define SET_LETTER_BLUE              setConsoleForegroundColor(COLOR_BLUE   )
-#define SET_LETTER_RED               setConsoleForegroundColor(COLOR_RED    )
-#define SET_LETTER_BLACK             setConsoleForegroundColor(COLOR_BLACK  )
-#define SET_LETTER_MAGENTA           setConsoleForegroundColor(COLOR_MAGENTA)
-#define SET_LETTER_CYAN              setConsoleForegroundColor(COLOR_CYAN   )
-#define SET_LETTER_WHITE             setConsoleForegroundColor(COLOR_WHITE  )
-
-#define SET_LETTER_LIGHTBLACK     setConsoleForegroundColor(COLOR_LIGHTBLACK  )
-#define SET_LETTER_LIGHTRED       setConsoleForegroundColor(COLOR_LIGHTRED    )
-#define SET_LETTER_LIGHTGREEN     setConsoleForegroundColor(COLOR_LIGHTGREEN  )
-#define SET_LETTER_LIGHTYELLOW    setConsoleForegroundColor(COLOR_LIGHTYELLOW )
-#define SET_LETTER_LIGHTBLUE      setConsoleForegroundColor(COLOR_LIGHTBLUE   )
-#define SET_LETTER_LIGHTMAGENTA   setConsoleForegroundColor(COLOR_LIGHTMAGENTA)
-#define SET_LETTER_LIGHTCYAN      setConsoleForegroundColor(COLOR_LIGHTCYAN   )
-#define SET_LETTER_LIGHTWHITE     setConsoleForegroundColor(COLOR_LIGHTWHITE  )
+#define SET_FG_LIGHTBLACK     setConsoleForegroundColor(COLOR_LIGHTBLACK  )
+#define SET_FG_LIGHTRED       setConsoleForegroundColor(COLOR_LIGHTRED    )
+#define SET_FG_LIGHTGREEN     setConsoleForegroundColor(COLOR_LIGHTGREEN  )
+#define SET_FG_LIGHTYELLOW    setConsoleForegroundColor(COLOR_LIGHTYELLOW )
+#define SET_FG_LIGHTBLUE      setConsoleForegroundColor(COLOR_LIGHTBLUE   )
+#define SET_FG_LIGHTMAGENTA   setConsoleForegroundColor(COLOR_LIGHTMAGENTA)
+#define SET_FG_LIGHTCYAN      setConsoleForegroundColor(COLOR_LIGHTCYAN   )
+#define SET_FG_LIGHTWHITE     setConsoleForegroundColor(COLOR_LIGHTWHITE  )
 
 void setConsoleForegroundColor( ConsoleColor foregroundColor );
 void setConsoleBackgroundColor( ConsoleColor backgroundColor );
@@ -448,6 +381,188 @@ void static __attribute__((destructor)) _RESET_COLOR__(void)
     resetColorTerminal();
     exit(0);
 }
+
+/**
+ * @brief Función que imprime un mensaje de texto con colores en formato de texto.
+ * 
+ * @param format El formato del texto con los colores.
+ */
+void printf_color(const char *format, ...);
+
+/**
+ * @brief Macro para definir el color del texto en terminales ANSI
+ *
+ * @param color El color de texto a aplicar (en formato ANSI), color entre 0 y 255.
+ *
+ * @code
+ *     printf("%sTexto en rojo\n", ANSI_COLOR_FG("1"));
+ * @endcode
+ *
+ * @see https://gist.github.com/fnky/458719343aabd01cfb17a3a4f7296797#256-colors
+ */
+#define ANSI_COLOR_FG( color ) "\033[38;5;" color "m"
+
+
+/**
+ * @brief Macro para establecer el de fondo en terminales ANSI
+ *
+ * @param color El color de fondo a aplicar (en formato ANSI), color entre 0 y 255.
+ *
+ * @code
+ *     printf("%sTexto con fondo azul\n", ANSI_COLOR_BG("4"));
+ * @endcode
+ *
+ * @see https://gist.github.com/fnky/458719343aabd01cfb17a3a4f7296797#256-colors
+ */
+#define ANSI_COLOR_BG( color ) "\033[48;5;" color "m"
+
+
+/**
+ * @brief Macro para establecer el color brillante en terminales ANSI
+ *
+ * @param color El color brillante de texto a aplicar (en formato ANSI), color entre 0 y 255.
+ *
+ * @code
+ *     printf("%sTexto rojo bold\n", ANSI_COLOR_BOLD("1"));
+ * @endcode
+ *
+ * @see https://gist.github.com/fnky/458719343aabd01cfb17a3a4f7296797#colors--graphics-mode
+ */
+#define ANSI_COLOR_BOLD(color) "\033[1m\033[38;5;" color "m"
+
+/**
+ * @brief Macro para establecer el color del texto subrayado en terminales ANSI
+ *
+ * @param color El color de texto a aplicar (en formato ANSI), color entre 0 y 255.
+ *
+ * @code
+ *     printf("%sTexto verde subrayado\n", ANSI_COLOR_UNDERLINE("10"));
+ * @endcode
+ *
+ * @see https://gist.github.com/fnky/458719343aabd01cfb17a3a4f7296797#colors--graphics-mode
+ */
+#define ANSI_COLOR_UNDERLINE(color)  "\033[4m\033[38;5;" color "m"
+
+
+/**
+ * @brief Macro para restablecer el estilo, color y texto de en terminales ANSI
+ *
+ * @code
+ *     printf("%sTexto rojo %stexto normal\n", ANSI_COLOR_FG("1"), ANSI_RESET_MODES);
+ * @endcode
+ *
+ * @see https://gist.github.com/fnky/458719343aabd01cfb17a3a4f7296797#colors--graphics-mode
+ */
+#define ANSI_RESET_MODES "\033[0;0m"
+
+/** 
+ * @def BG_COLOR_RESET
+ * @brief Restablece el color de fondo al predeterminado.
+ */
+#define BG_COLOR_RESET       resetColorTerminal()
+
+/** 
+ * @def FG_BLACK_ANSI
+ * @brief Define la secuencia ANSI para el color de letra negro.
+ */
+#define FG_BLACK_ANSI   "\033[30m"
+
+/** 
+ * @def FG_RED_ANSI
+ * @brief Define la secuencia ANSI para el color de letra rojo.
+ */
+#define FG_RED_ANSI     "\033[31m"
+
+/** 
+ * @def FG_GREEN_ANSI
+ * @brief Define la secuencia ANSI para el color de letra verde.
+ */
+#define FG_GREEN_ANSI   "\033[32m"
+
+/** 
+ * @def FG_YELLOW_ANSI
+ * @brief Define la secuencia ANSI para el color de letra amarillo.
+ */
+#define FG_YELLOW_ANSI  "\033[33m"
+
+/** 
+ * @def FG_BLUE_ANSI
+ * @brief Define la secuencia ANSI para el color de letra azul.
+ */
+#define FG_BLUE_ANSI    "\033[34m"
+
+/** 
+ * @def FG_MAGENTA_ANSI
+ * @brief Define la secuencia ANSI para el color de letra magenta.
+ */
+#define FG_MAGENTA_ANSI "\033[35m"
+
+/** 
+ * @def FG_CYAN_ANSI
+ * @brief Define la secuencia ANSI para el color de letra cian.
+ */
+#define FG_CYAN_ANSI    "\033[36m"
+
+/** 
+ * @def FG_WHITE_ANSI
+ * @brief Define la secuencia ANSI para el color de letra blanca.
+ */
+#define FG_WHITE_ANSI   "\033[37m"
+
+/** 
+ * @def FG_RESET_ANSI
+ * @brief Restablece el color de letra al predeterminado.
+ */
+#define FG_RESET_ANSI   "\033[0;0m"
+
+/**
+ * @def FG_LIGHTBLACK_ANSI
+ * @brief Color gris claro para la letra (ANSI).
+ */
+#define FG_LIGHTBLACK_ANSI "\033[90m"
+
+/**
+ * @def FG_LIGHTRED_ANSI
+ * @brief Color rojo claro para la letra (ANSI).
+ */
+#define FG_LIGHTRED_ANSI "\033[91m"
+
+/**
+ * @def FG_LIGHTGREEN_ANSI
+ * @brief Color verde claro para la letra (ANSI).
+ */
+#define FG_LIGHTGREEN_ANSI "\033[92m"
+
+/**
+ * @def FG_LIGHTYELLOW_ANSI
+ * @brief Color amarillo claro para la letra (ANSI).
+ */
+#define FG_LIGHTYELLOW_ANSI "\033[93m"
+
+/**
+ * @def FG_LIGHTBLUE_ANSI
+ * @brief Color azul claro para la letra (ANSI).
+ */
+#define FG_LIGHTBLUE_ANSI "\033[94m"
+
+/**
+ * @def FG_LIGHTMAGENTA_ANSI
+ * @brief Color magenta claro para la letra (ANSI).
+ */
+#define FG_LIGHTMAGENTA_ANSI "\033[95m"
+
+/**
+ * @def FG_LIGHTCYAN_ANSI
+ * @brief Color cian claro para la letra (ANSI).
+ */
+#define FG_LIGHTCYAN_ANSI "\033[96m"
+
+/**
+ * @def FG_LIGHTWHITE_ANSI
+ * @brief Color blanco claro para la letra (ANSI).
+ */
+#define FG_LIGHTWHITE_ANSI "\033[97m"
+
 
 #include "colors.c"
 

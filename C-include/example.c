@@ -1,18 +1,17 @@
 #include <stdarg.h>
 #include "colors.h"
 
-void print_color(const char* format, ...)
-{
-    va_list args;
-    va_start(args, format);
-
-    vprintf_color(format, args);
-
-    va_end(args);
-}
-
 int main(void)
 {
-    print_color("#{FG:red} Hola\n");
+    printf(
+        "%sHola %smundo%s!%s\n",
+        FG_GREEN_ANSI,
+        FG_RED_ANSI,
+        ANSI_COLOR_BG("6"),
+        FG_RESET_ANSI
+    );
+
+
+    printf_color("#{FG:green}Hola #{FG:red}mundo#{BG:cyan}!\n");
     return 0;
 }
