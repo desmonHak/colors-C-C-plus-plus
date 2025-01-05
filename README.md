@@ -101,6 +101,9 @@ int main(){
 "reset"
 ```
 
+> [!IMPORTANT]
+> Si se usa `CONSOLE_COLOR_RESET;` es posible que no se vean reflejados los cambios, así que luego de ello es mejor usar `fflush(stdin);`. Con `#{reset}` no se ha presentado el mismo problema si usa un `\n` adelante.
+
 ## EJEMPLOS
 
 ----

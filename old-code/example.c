@@ -2,7 +2,7 @@
 #include <stdio.h>
 
 int main(){
-    
+
     clear_display();
     printf_color(POINTGREEN("hola mundo\n") );
     printf_color(POINTRED("hola mundo\n")   );
@@ -97,7 +97,7 @@ int main(){
     }
     printf_color("\nIntense:\t");
     for (size_t i = 0; i <= ANSI_WHITE; i++){
-        
+
         ANSI_back_color(i + HIGH_INTENSTY_BACKGROUNG);
         printf_color(" %.3d ", i );
     }
@@ -105,7 +105,7 @@ int main(){
     //printf("%d\n",16 + (red * 36) + (green * 5) * 6) + blue);
 
 #define LOOP_TABLE(max, init, end) \
-    for (size_t r = 0; r <= max; r+=36) { \ 
+    for (size_t r = 0; r <= max; r+=36) { \
         for (size_t g = init; g <= end && r+g <= max; g++) { \
             printf_color(BACKGROUND_COLOR_CUSTOM("%d")" %.3d ",r+g, r+g); \
         } \
@@ -123,11 +123,11 @@ int main(){
 
 
     for (size_t r = 0; r < 255; r++) { \
-        if (r % 6 == 0) { 
-            puts(""); 
-            
-        } 
-        printf_color(BACKGROUND_COLOR_CUSTOM("%d")" %.3d ",r, r); 
+        if (r % 6 == 0) {
+            puts("");
+
+        }
+        printf_color(BACKGROUND_COLOR_CUSTOM("%d")" %.3d ",r, r);
         //resetColorTerminal();
     } printf_color("\n\n");
 

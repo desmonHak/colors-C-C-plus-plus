@@ -55,6 +55,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 /**
  * @def ConsoleColor
@@ -96,7 +97,7 @@ typedef enum ConsoleColor
  */
 #define HIGH_INTENSTY              90
 #define REGULAR_COLORS_LETTER      30
-#define HIGH_INTENSTY_BACKGROUNG  100
+#define HIGH_INTENSTY_BACKGROUNG    8
 #define REGULAR_COLORS_BACKGROUND  40
 /** @} */
 
@@ -127,12 +128,8 @@ typedef union RGB_C
 } RGB_C;
 
 
-/*
- *  ▒█  ▒█ ▀█▀ ▒█▄ ▒█   ▒█▀▀█ ▒█    █▀▀▄ ▀▀█▀▀ ▒█▀▀▀ ▒█▀▀▀█ ▒█▀▀▄ ▒█▀▄▀█
- *  ▒█▒█▒█ ▒█  ▒█▒█▒█   ▒█▄▄█ ▒█   ▒█▄▄█  ▒█   ▒█▀▀  ▒█  ▒█ ▒█▄▄▀ ▒█▒█▒█
- *  ▒▀▄▀▄▀ ▄█▄ ▒█  ▀█   ▒█    ▒█▄▄█▒█ ▒█  ▒█   ▒█    ▒█▄▄▄█ ▒█ ▒█ ▒█  ▒█
- *  ====================================================================
- */
+/* WIN PLATFORM */
+
 #ifdef _WIN32
 
 #include <Windows.h>
@@ -307,12 +304,10 @@ void setConsoleForegroundColor( WORD foregroundColor );
 void setConsoleBackgroundColor( WORD backgroundColor );
 
 #else
-/*
- *  ▒█▀▀▀█ ▀▀█▀▀ ▒█ ▒█ ▒█▀▀▀ ▒█▀▀▄   ▒█▀▀█ ▒█    █▀▀▄ ▀▀█▀▀ ▒█▀▀▀ ▒█▀▀▀█ ▒█▀▀▄ ▒█▀▄▀█
- *  ▒█  ▒█  ▒█   ▒█▀▀█ ▒█▀▀▀ ▒█▄▄▀   ▒█▄▄█ ▒█   ▒█▄▄█  ▒█   ▒█▀▀  ▒█  ▒█ ▒█▄▄▀ ▒█▒█▒█
- *  ▒█▄▄▄█  ▒█   ▒█ ▒█ ▒█▄▄▄ ▒█ ▒█   ▒█    ▒█▄▄█▒█ ▒█  ▒█   ▒█    ▒█▄▄▄█ ▒█ ▒█ ▒█  ▒█
- *  ====================================================================
- */
+
+/* OTHER PLATFORMS */
+#include <sys/ioctl.h>
+#include <unistd.h>
 
 /**
  * @defgroup Alias para establecer un color al texto o al fondo de este
@@ -353,15 +348,9 @@ void setConsoleBackgroundColor( ConsoleColor backgroundColor );
 
 #endif
 
-/*
- *
- *  ▒█▀▀█ ▒█▀▀▀ ▒█▄ ▒█ ▒█▀▀▀ ▒█▀▀▄ █▀▀▄ ▒█      ▒█▀▀▄ ▒█▀▀▀█ ▒█▀▀▄ ▒█▀▀▀
- *  ▒█ ▄▄ ▒█▀▀▀ ▒█▒█▒█ ▒█▀▀▀ ▒█▄▄▀▒█▄▄█ ▒█      ▒█    ▒█  ▒█ ▒█ ▒█ ▒█▀▀▀
- *  ▒█▄▄▀ ▒█▄▄▄ ▒█  ▀█ ▒█▄▄▄ ▒█ ▒█▒█ ▒█ ▒█▄▄█   ▒█▄▄▀ ▒█▄▄▄█ ▒█▄▄█ ▒█▄▄▄
- *  ====================================================================
- */
 
-#define LETTER_RESET           resetColorTerminal()
+/* GENERAL CODE */
+
 
 /**
  * @def FOREGROUND_COLOR_CUSTOM_RGB
@@ -426,8 +415,21 @@ static void foreground_color_custom(
 void resetColorTerminal    (void);
 void resetConsoleForeground(void);
 void resetConsoleBackground(void);
-
 /* @} */
+
+void clear_line     ( void );
+void clear_display  ( void );
+void resize_terminal( uint32_t rows, uint32_t cols );
+
+
+/**
+ * @brief Función que obtiene la dirección de memoria para un codificador x86.
+ *
+ * @param addr La dirección a obtener.
+ *
+ * @return La dirección formateada como string.
+ */
+char *get_addr_to_encoder_x86_(uint64_t addr);
 
 
 /**
@@ -671,21 +673,213 @@ void printf_color(const char *format, ...);
 
 
 /**
- * @def BACKGROUND_COLOR_CUSTOM
- * @brief Define un color de fondo personalizado utilizando códigos ANSI.
- * @param color Código del color en formato ANSI (0-255).
+ * @def STYLE_BOLDED
+ * @brief Aplica estilo de texto en negrita.
  */
-#define BACKGROUND_COLOR_CUSTOM(color) "\033[48;5;" color "m"
+#define STYLE_BOLDED "\033[1m"
 
 
 /**
- * @def BACKGROUND_COLOR_CUSTOM_RGB
- * @brief Define un color de fondo personalizado utilizando valores RGB.
- * @param red Componente de rojo (0-255).
- * @param green Componente de verde (0-255).
- * @param blue Componente de azul (0-255).
+ * @def STYLE_DARKENED
+ * @brief Aplica estilo de texto oscurecido.
  */
-#define BACKGROUND_COLOR_CUSTOM_RGB(red, green, blue) "\033[38;2;" red ";" green ";" blue "m"
+#define STYLE_DARKENED "\033[2m"
+
+
+/**
+ * @def STYLE_ITALICS
+ * @brief Aplica estilo de texto en cursiva.
+ */
+#define STYLE_ITALICS "\033[3m"
+
+
+/**
+ * @def STYLE_UNDERLINED
+ * @brief Aplica estilo de texto subrayado.
+ */
+#define STYLE_UNDERLINED "\033[4m"
+
+
+/**
+ * @def STYLE_BLIKING
+ * @brief Aplica estilo de texto parpadeante.
+ */
+#define STYLE_BLIKING "\033[5m"
+
+
+/**
+ * @def STYLE_INVERTED
+ * @brief Invierte los colores de fondo y texto.
+ */
+#define STYLE_INVERTED "\033[7m"
+
+
+/**
+ * @def UP
+ * @brief Mueve el cursor hacia arriba.
+ * @param data Contenido que será renderizado.
+ * @param number Número de líneas a mover hacia arriba.
+ */
+#define UP(data, number) "\033[" number "A" data
+
+
+/**
+ * @def DOWN
+ * @brief Mueve el cursor hacia abajo.
+ * @param data Contenido que será renderizado.
+ * @param number Número de líneas a mover hacia abajo.
+ */
+#define DOWN(data, number) "\033[" number "B" data
+
+
+/**
+ * @def FORWARD
+ * @brief Mueve el cursor hacia la derecha.
+ * @param data Contenido que será renderizado.
+ * @param number Número de espacios a mover hacia la derecha.
+ */
+#define FORWARD(data, number) "\033[" number "C" data
+
+
+/**
+ * @def BACK
+ * @brief Mueve el cursor hacia la izquierda.
+ * @param data Contenido que será renderizado.
+ * @param number Número de espacios a mover hacia la izquierda.
+ */
+#define BACK(data, number) "\033[" number "D" data
+
+
+/**
+ * @def POS
+ * @brief Mueve el cursor a una posición específica.
+ * @param data Contenido que será renderizado.
+ * @param number1 Línea a la que mover el cursor.
+ * @param number2 Columna a la que mover el cursor.
+ */
+#define POS(data, number1, number2) "\033[" number1 ";" number2 "H" data
+
+
+/**
+ * @def SET_TITLE
+ * @brief Cambia el título de la ventana de la terminal.
+ * @param title Nuevo título para la ventana.
+ */
+#define SET_TITLE(title) "\033]2;" title "\007"
+
+
+/**
+ * @def CLEAR_DISPLAY
+ * @brief Limpia completamente la pantalla de la terminal.
+ */
+#define CLEAR_DISPLAY "\033[3J\033[H\033[2J"
+
+
+/**
+ * @def CLEAR_LINE
+ * @brief Limpia la línea actual del cursor.
+ */
+#define CLEAR_LINE "\033[K"
+
+
+/**
+ * @def HIDDEN_SLIDER
+ * @brief Esconde el cursor en la terminal.
+ */
+#define HIDDEN_SLIDER "\033[?25l"
+
+
+/**
+ * @def SHOW_SLIDER
+ * @brief Muestra el cursor en la terminal.
+ */
+#define SHOW_SLIDER "\033[?25h"
+
+
+/**
+ * @def SET_MODE_SLIDER
+ * @brief Cambia el modo del cursor.
+ */
+#define SET_MODE_SLIDER "\033[?12l"
+
+
+/**
+ * @def SET_SIZE_SLIDER
+ * @brief Cambia el tamaño del cursor.
+ * @param size Tamaño deseado para el cursor.
+ */
+#define SET_SIZE_SLIDER(size) "\033[?" size "c"
+
+
+/**
+ * @def POINTGREEN
+ * @brief Formato predefinido para mensajes con texto en verde, con un símbolo indicador en azul.
+ * @param data Contenido del mensaje.
+ */
+#define POINTGREEN(data) "#{FG:green}[#{FG:blue}*#{FG:green}]#{FG:white}" data "#{FG:reset}"
+
+
+/**
+ * @def POINTRED
+ * @brief Formato predefinido para mensajes con texto en púrpura, con un símbolo indicador en azul.
+ * @param data Contenido del mensaje.
+ */
+#define POINTRED(data)   "#{FG:yellow}[#{FG:blue}*#{FG:yellow}]#{FG:purple}" data "#{FG:reset}"
+
+
+/**
+ * @def RGB_CREATE
+ * @brief Crea una estructura RGB_C con valores específicos de rojo, verde y azul.
+ * @param red Valor del componente rojo (0-255).
+ * @param green Valor del componente verde (0-255).
+ * @param blue Valor del componente azul (0-255).
+ */
+#define RGB_CREATE(red, green, blue) (RGB_C) {.r = red, .g = green, .b = blue}
+
+
+/**
+ * @brief Cambia los colores de fondo y primer plano utilizando valores RGB proporcionados como enteros.
+ *
+ * Esta función cambia tanto el color de fondo como el color del texto en la terminal, utilizando
+ * los valores RGB proporcionados como parámetros individuales para el fondo y el primer plano.
+ *
+ * @param redB Componente rojo del color de fondo (0-255).
+ * @param greenB Componente verde del color de fondo (0-255).
+ * @param blueB Componente azul del color de fondo (0-255).
+ * @param redF Componente rojo del color del texto (0-255).
+ * @param greenF Componente verde del color del texto (0-255).
+ * @param blueF Componente azul del color del texto (0-255).
+ */
+static void back_fore_color_custom(
+    uint8_t redB  , uint8_t greenB,
+    uint8_t blueB , uint8_t redF,
+    uint8_t greenF, uint8_t blueF);
+
+
+/**
+ * @brief Función que genera tres valores a partir de una semilla.
+ * Generera tres valores a partir de uno, haciendo uso de 6 desplazamientos
+ *
+ * @param seed La semilla.
+ * @param value1,value2,value3 punteros que almacenarán los valores generado.
+ * @param n1..n6 valores adicionales utilizados en la generacion
+ */
+void generate_three_values(
+    uint32_t seed,
+    uint32_t *value1,
+    uint32_t *value2,
+    uint32_t *value3,
+    uint32_t n1, uint32_t n2, uint32_t n3,
+    uint32_t n4, uint32_t n5, uint32_t n6);
+
+
+/**
+ * @brief Función que mezcla un array de enteros.
+ *
+ * @param array El array a mezclar.
+ * @param size  El tamaño del array.
+ */
+void shuffle_array(int32_t array[], int32_t size);
 
 
 /**
@@ -695,7 +889,7 @@ void printf_color(const char *format, ...);
  */
 #define foreground_color_custom_(...) _Generic((__VA_ARGS__), \
     RGB_C: foreground_color_custom_RGB,                      \
-    default: foreground_color_custom_)(__VA_ARGS__)
+    default: foreground_color_custom)(__VA_ARGS__)
 
 
 /**
@@ -705,7 +899,7 @@ void printf_color(const char *format, ...);
  */
 #define background_color_custom_(...) _Generic((__VA_ARGS__), \
     RGB_C: background_color_custom_RGB,                      \
-    default: background_color_custom_)(__VA_ARGS__)
+    default: background_color_custom)(__VA_ARGS__)
 
 
 /**
@@ -715,9 +909,44 @@ void printf_color(const char *format, ...);
  */
 #define back_fore_color_custom_(...) _Generic((__VA_ARGS__), \
     RGB_C: back_fore_color_custom_RGB,                \
-    default: back_fore_color_custom_)(__VA_ARGS__)
+    default: back_fore_color_custom)(__VA_ARGS__)
+
+
+#ifndef __DISABLE_COLORS_FORE_BACK_GROUND__
+
+/**
+ * @def BACKGROUND_COLOR_CUSTOM
+ * @brief Define un color de fondo personalizado utilizando códigos ANSI.
+ * @param color Código del color en formato ANSI (0-255).
+ */
+#define BACKGROUND_COLOR_CUSTOM(color) "\033[48;5;"color"m"
+
+/**
+ * @def BACKGROUND_COLOR_CUSTOM_RGB
+ * @brief Define un color de fondo personalizado utilizando valores RGB.
+ * @param red Componente de rojo (0-255).
+ * @param green Componente de verde (0-255).
+ * @param blue Componente de azul (0-255).
+ */
+#define BACKGROUND_COLOR_CUSTOM_RGB(red, green, blue) "\033[38;2;"red";"green";"blue"m"
+
+/**
+ * @def FOREGROUND_COLOR_CUSTOM
+ * @brief Define un color de letra personalizado utilizando códigos ANSI.
+ * @param color Código del color en formato ANSI (0-255).
+ */
+#define FOREGROUND_COLOR_CUSTOM(color) "\033[38;5;"color"m"
+
+#else
+/* No compatible con win7 */
+#warning BACKGROUND_COLOR_CUSTOM, BACKGROUND_COLOR_CUSTOM_RGB y FOREGROUND_COLOR_CUSTOM no son compatibles en Windows 7
+#define BACKGROUND_COLOR_CUSTOM_RGB(red, green, blue) red green blue
+#define BACKGROUND_COLOR_CUSTOM(color) color
+#define FOREGROUND_COLOR_CUSTOM(color) color
+#endif
 
 
 #include "colors.c"
+
 
 #endif
