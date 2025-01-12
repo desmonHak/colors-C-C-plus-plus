@@ -51,8 +51,8 @@ Module.symvers
 Mkfile.old
 dkms.conf
 code.sh
-code.bat 
-code.bat 
-code.bat 
+code.bat
+
+.vscode
 
 test/

@@ -110,7 +110,7 @@ void resetColorTerminal()
 #ifdef _MSC_VER
 void _RESET_COLOR__()
 #else
-void static __attribute__((destructor)) _RESET_COLOR__()
+void __attribute__((destructor)) _RESET_COLOR__()
 #endif
 {
     // setConsoleColor(C_WHITE, C_BLACK);
@@ -569,41 +569,41 @@ void up(const char *data, const unsigned char number)
 }
 
 #ifndef __DISABLE_COLORS_FORE_BACK_GROUND__ 
-static void foreground_color_custom_RGB(RGB_C color)
+void foreground_color_custom_RGB(RGB_C color)
 {
     foreground_color_custom_(color.r, color.g, color.b);
 }
-static void foreground_color_custom_(const unsigned char red, const unsigned char green, const unsigned char blue)
+void foreground_color_custom_(const unsigned char red, const unsigned char green, const unsigned char blue)
 {
     printf(FOREGROUND_COLOR_CUSTOM_RGB("%d", "%d", "%d"), red, green, blue);
 }
-static void background_color_custom_RGB(RGB_C color)
+void background_color_custom_RGB(RGB_C color)
 {
     background_color_custom_(color.red, color.green, color.blue);
 }
-static void background_color_custom_(const unsigned char red, const unsigned char green, const unsigned char blue)
+void background_color_custom_(const unsigned char red, const unsigned char green, const unsigned char blue)
 {
     printf(BACKGROUND_COLOR_CUSTOM_RGB("%d", "%d", "%d"), red, green, blue);
 }
 #else
-static void background_color_custom_RGB(RGB_C color)
+void background_color_custom_RGB(RGB_C color)
 {
     return; // no comptible para win7
 }
-static void background_color_custom_(const unsigned char red, const unsigned char green, const unsigned char blue)
+void background_color_custom_(const unsigned char red, const unsigned char green, const unsigned char blue)
 {
     return; // no comptible para win7
 }
-static void foreground_color_custom_RGB(RGB_C color)
+void foreground_color_custom_RGB(RGB_C color)
 {
     return; // no comptible para win7
 }
-static void foreground_color_custom_(const unsigned char red, const unsigned char green, const unsigned char blue)
+void foreground_color_custom_(const unsigned char red, const unsigned char green, const unsigned char blue)
 {
     return; // no comptible para win7
 }
 #endif
-static void back_fore_color_custom_RGB(RGB_C colorBackGround, RGB_C colorForeGround)
+void back_fore_color_custom_RGB(RGB_C colorBackGround, RGB_C colorForeGround)
 {
     back_fore_color_custom_(
         colorBackGround.r,
@@ -613,7 +613,7 @@ static void back_fore_color_custom_RGB(RGB_C colorBackGround, RGB_C colorForeGro
         colorForeGround.g,
         colorForeGround.b);
 }
-static void back_fore_color_custom_(unsigned char redB, unsigned char greenB,
+void back_fore_color_custom_(unsigned char redB, unsigned char greenB,
                                     unsigned char blueB, unsigned char redF,
                                     unsigned char greenF, unsigned char blueF)
 {

@@ -277,28 +277,15 @@ typedef union RGB_C
 #define SET_FG_LIGHTWHITE    setConsoleForegroundColor(FOREGROUND_WHITE   | FOREGROUND_INTENSITY)
 /* @} */
 
-/* ACTIVATE ANSI COLORS IN WINDOWS */
+
+/* PROTOTIPOS */
 
 #ifdef _MSC_VER
 /* Con MSVC se tiene que activar manualmente */
-void _ACTIVATE_COLORS_ANSI_WIN__(void)
+void _ACTIVATE_COLORS_ANSI_WIN__(void);
 #else
-void __attribute__((constructor)) _ACTIVATE_COLORS_ANSI_WIN__(void)
+void __attribute__((constructor)) _ACTIVATE_COLORS_ANSI_WIN__(void);
 #endif
-{
-    HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE);
-    DWORD  mode   = 0;
-
-    if ( GetConsoleMode(handle, &mode) ) {
-        if ( !(mode & ENABLE_VIRTUAL_TERMINAL_PROCESSING) ) {
-            mode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
-            SetConsoleMode(handle, mode);
-        }
-    }
-}
-
-
-/* PROTOTIPOS */
 
 void setConsoleForegroundColor( WORD foregroundColor );
 void setConsoleBackgroundColor( WORD backgroundColor );
@@ -403,7 +390,7 @@ void resetColorTerminal(void);
  */
 void vprintf_color(const char *format, va_list args);
 
-static void foreground_color_custom(
+void foreground_color_custom(
     const uint8_t red  ,
     const uint8_t green,
     const uint8_t blue);
@@ -442,7 +429,7 @@ char *get_addr_to_encoder_x86_(uint64_t addr);
  * @param green Componente verde del color (0-255).
  * @param blue  Componente azul  del color (0-255).
  */
-static void background_color_custom(const uint8_t red, const uint8_t green, const uint8_t blue);
+void background_color_custom(const uint8_t red, const uint8_t green, const uint8_t blue);
 
 
 /**
@@ -452,15 +439,10 @@ static void background_color_custom(const uint8_t red, const uint8_t green, cons
  * Si se usa MSVC entonces se tiene que activar al final manualmente
 */
 #ifdef _MSC_VER
-void static _RESET_COLOR__(void)
+void _RESET_COLOR__(void);
 #else
-void static __attribute__((destructor)) _RESET_COLOR__(void)
+void __attribute__((destructor)) _RESET_COLOR__(void);
 #endif
-{
-    resetColorTerminal();
-    exit(0);
-}
-
 
 /**
  * @brief Imprimite el numero en binario
@@ -850,7 +832,7 @@ void printf_color(const char *format, ...);
  * @param greenF Componente verde del color del texto (0-255).
  * @param blueF Componente azul del color del texto (0-255).
  */
-static void back_fore_color_custom(
+void back_fore_color_custom(
     uint8_t redB  , uint8_t greenB,
     uint8_t blueB , uint8_t redF,
     uint8_t greenF, uint8_t blueF);
@@ -881,6 +863,11 @@ void generate_three_values(
  */
 void shuffle_array(int32_t array[], int32_t size);
 
+
+void foreground_color_custom_RGB(RGB_C color);
+void foreground_color_custom(const unsigned char red, const unsigned char green, const unsigned char blue);
+void background_color_custom_RGB(RGB_C color);
+void background_color_custom(const unsigned char red, const unsigned char green, const unsigned char blue);
 
 /**
  * @def foreground_color_custom
@@ -945,8 +932,9 @@ void shuffle_array(int32_t array[], int32_t size);
 #define FOREGROUND_COLOR_CUSTOM(color) color
 #endif
 
-
-#include "colors.c"
-
-
+// dar la opcion desde la linea de comandos a incluir el archivo .c
+// usando la flag -DINCLUDE_COLORS_C
+#ifdef INCLUDE_COLORS_C
+#include "./src/colors.c"
+#endif
 #endif

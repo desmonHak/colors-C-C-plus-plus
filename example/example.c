@@ -126,12 +126,12 @@ int main(void){
     CONSOLE_COLOR_RESET;
     puts("\n");
 
-    uint32_t fg_r, fg_g, fg_b,
-             bg_r, bg_g, bg_b;
+    uint32_t    fg_r, fg_g, fg_b,
+                bg_r, bg_g, bg_b;
 
     int32_t values[] = {
             12, 19,  5,
-             9,  3, 16
+            9,  3, 16
         };
 
     int32_t values_length = sizeof(values) / sizeof(values[0]);
@@ -143,7 +143,9 @@ int main(void){
             &fg_r, &fg_g, &fg_b,
             values[0], values[1], values[2], values[3], values[4], values[5]);
 
-        shuffle_array( values, values_length );
+        // se puede usar este metodo, pero no se puede controlar de la mejor manera los valores
+        // que genere el metodo
+        //shuffle_array( values, values_length );
 
         generate_three_values(
             str[i] % 64,
@@ -159,7 +161,7 @@ int main(void){
     printf_color("#{i32%d}\n", 0xf0f0f0f0);
 
     /* 0xf0f0f0f0: 0b11110000111100001111000011110000 */
-    printf_color("%d: #{i32:%d}\n", 0xf0f0f0f0, 0xf0f0f0f0);
+    printf_color("0x%x: #{i32:%d}\n", 0xf0f0f0f0, 0xf0f0f0f0);
 
     #if defined(_WIN32) && defined(_MSC_VER)
         _RESET_COLOR__();

@@ -3,6 +3,36 @@
 
 #include "colors.h"
 
+/* ACTIVATE ANSI COLORS IN WINDOWS */
+
+#ifdef _MSC_VER
+/* Con MSVC se tiene que activar manualmente */
+void _ACTIVATE_COLORS_ANSI_WIN__(void)
+#else
+void __attribute__((constructor)) _ACTIVATE_COLORS_ANSI_WIN__(void)
+#endif
+{
+    HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE);
+    DWORD  mode   = 0;
+
+    if ( GetConsoleMode(handle, &mode) ) {
+        if ( !(mode & ENABLE_VIRTUAL_TERMINAL_PROCESSING) ) {
+            mode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
+            SetConsoleMode(handle, mode);
+        }
+    }
+}
+
+#ifdef _MSC_VER
+void _RESET_COLOR__(void)
+#else
+void __attribute__((destructor)) _RESET_COLOR__(void)
+#endif
+{
+    resetColorTerminal();
+    exit(0);
+}
+
 uint32_t jenkins_hash(
     uint32_t value,
     uint32_t n1, uint32_t n2, uint32_t n3,
@@ -385,38 +415,39 @@ void setConsoleBackgroundColor(ConsoleColor backgroundColor) {
 
 #ifndef __DISABLE_COLORS_FORE_BACK_GROUND__
 
-static void foreground_color_custom_RGB(RGB_C color) {
+void foreground_color_custom_RGB(RGB_C color) {
     foreground_color_custom_(color.r, color.g, color.b);
 }
 
 
-static void foreground_color_custom(const unsigned char red, const unsigned char green, const unsigned char blue) {
+void foreground_color_custom(const unsigned char red, const unsigned char green, const unsigned char blue) {
     printf(FOREGROUND_COLOR_CUSTOM_RGB("%d", "%d", "%d"), red, green, blue);
 }
 
 
-static void background_color_custom_RGB(RGB_C color) {
+void background_color_custom_RGB(RGB_C color) {
     background_color_custom_(color.red, color.green, color.blue);
 }
 
 
-static void background_color_custom(const unsigned char red, const unsigned char green, const unsigned char blue) {
+void background_color_custom(const unsigned char red, const unsigned char green, const unsigned char blue) {
     printf(BACKGROUND_COLOR_CUSTOM_RGB("%d", "%d", "%d"), red, green, blue);
 }
 
 
 #else
 /* No compatible con Win7 */
-static void background_color_custom_(const unsstatic void back_fore_color_custom_(unsigned char redB, unsigned char greenB,
+void background_color_custom_(const unsigned char red, const unsigned char green, const unsigned char blue) { return; }
+static void back_fore_color_custom_(unsigned char redB, unsigned char greenB,
                                     unsigned char blueB, unsigned char redF,
                                     unsigned char greenF, unsigned char blueF)
 {
     foreground_color_custom_(redF, greenF, blueF);
     background_color_custom_(redB, greenB, blueB);
-}igned char red, const unsigned char green, const unsigned char blue) { return; }
-static void foreground_color_custom_(const unsigned char red, const unsigned char green, const unsigned char blue) { return; }
-static void background_color_custom_RGB(RGB_C color) { return; }
-static void foreground_color_custom_RGB(RGB_C covoid generate_three_values(
+}
+void foreground_color_custom_(const unsigned char red, const unsigned char green, const unsigned char blue) { return; }
+void background_color_custom_RGB(RGB_C color) { return; }
+void foreground_color_custom_RGB(RGB_C covoid generate_three_values(
     unsigned int x,
     unsigned int *value1,
     unsigned int *value2,
@@ -438,7 +469,7 @@ static void foreground_color_custom_RGB(RGB_C covoid generate_three_values(
 }lor) { return; }
 #endif
 
-static void back_fore_color_custom(
+void back_fore_color_custom(
     uint8_t redB  , uint8_t greenB,
     uint8_t blueB , uint8_t redF  ,
     uint8_t greenF, uint8_t blueF )
@@ -475,9 +506,9 @@ void shuffle_array(int32_t array[], int32_t size)
     for (int32_t i = size - 1; i > 0; --i)
     {
         int32_t j = rand() % (i + 1);
-        /* uint32_t temp = array[i];
-           array[i] = array[j];
-           array[j] = temp; */
+        /*  uint32_t temp = array[i];
+            array[i] = array[j];
+            array[j] = temp; */
 
         array[i] ^= array[j];
         array[j] ^= array[i];
