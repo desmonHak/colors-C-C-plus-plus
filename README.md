@@ -179,6 +179,7 @@ int main(){
 #define SET_FG_LIGHTWHITE   ...
 ```
 
+
 ## COLORES PARA EL FONDO
 
 ```C
