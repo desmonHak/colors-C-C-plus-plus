@@ -716,14 +716,14 @@ typedef enum ConsoleColor
  * @brief Formato predefinido para mensajes con texto en verde, con un símbolo indicador en azul.
  * @param data Contenido del mensaje.
  */
-#define POINTGREEN(data) "#{FG:green}[#{FG:blue}*#{FG:green}]#{FG:white}" data "#{FG:reset}"
+#define POINTGREEN(data) "#{FG:green}[#{FG:blue}*#{FG:green}]#{FG:white}" data "#{reset}"
 
 /**
  * @def POINTRED
  * @brief Formato predefinido para mensajes con texto en púrpura, con un símbolo indicador en azul.
  * @param data Contenido del mensaje.
  */
-#define POINTRED(data)   "#{FG:yellow}[#{FG:blue}*#{FG:yellow}]#{FG:purple}" data "#{FG:reset}"
+#define POINTRED(data)   "#{FG:yellow}[#{FG:blue}*#{FG:yellow}]#{FG:purple}" data "#{reset}"
 
 #ifndef __DISABLE_COLORS_FORE_BACK_GROUND__ 
 

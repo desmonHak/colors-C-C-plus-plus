@@ -50,9 +50,9 @@ int main(){
     ANSI_RESET_MODES;
     puts("Texto normal");
 
-    printf_color("#{BG:green}#{FG:red}letra en rojo con fondo verde: %d, %c, {BG:reset}\n", 1, 'c');
+    printf_color("#{BG:green}#{FG:red}letra en rojo con fondo verde: %d, %c, {reset}\n", 1, 'c');
 
-    printf_color("#{BG:blue}#{FG:green}letra en verde con fondo azul: %d, %f#{BG:reset}\n", 2, 1.2f);
+    printf_color("#{BG:blue}#{FG:green}letra en verde con fondo azul: %d, %f#{reset}\n", 2, 1.2f);
 
     return 0;
 }
