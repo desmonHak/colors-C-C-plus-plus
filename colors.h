@@ -14,6 +14,7 @@
  * el software sin restricciones bajo los términos de la licencia Apache 2.0 con modificaciones.
  */
 
+#pragma comment(lib, "libcolors.a")
 
 /*
  *	Licencia Apache, Version 2.0 con Modificacion
@@ -431,13 +432,7 @@ void print_binary(sizes_num byte, uint8_t size_word);
  *
  * @param format El formato del texto con los colores.
  */
-static inline void printf_color(const char *format, ...)
-{
-    va_list args;
-    va_start(args, format);
-    vprintf_color(format, args);
-    va_end(args);
-}
+void printf_color(const char *format, ...);
 
 
 

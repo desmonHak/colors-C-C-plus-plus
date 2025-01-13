@@ -87,7 +87,13 @@ void print_binary(sizes_num num, uint8_t size_word) {
         break;
     }
 }
-
+void printf_color(const char *format, ...)
+{
+    va_list args;
+    va_start(args, format);
+    vprintf_color(format, args);
+    va_end(args);
+}
 void vprintf_color(const char* format, va_list args)
 {
 #if defined(MUTEX_NAME) && defined(_WIN32)
