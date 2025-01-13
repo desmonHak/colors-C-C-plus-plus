@@ -836,7 +836,7 @@ void generate_three_values(
  * @brief Define un color de letra personalizado utilizando códigos ANSI.
  * @param color Código del color en formato ANSI (0-255).
  */
-#define FOREGROUND_COLOR_CUSTOM(color) "\033[38;5;"color"m"
+#define FOREGROUND_COLOR_CUSTOM(color) "\033[38;5;" color "m"
 
 #else
 /* No compatible con win7 */
@@ -953,6 +953,8 @@ void shuffle_array(int32_t array[], int32_t size);
     static inline void background_color_custom_RGB(RGB_C color) {  }
 #endif
 
+char *get_addr_to_encoder_x86_(uint64_t addr);
+void print_table_hex(char *string_init, char *string_text_for_printing, size_t size_string_text_for_printing);
 
 // dar la opcion desde la linea de comandos a incluir el archivo .c
 // usando la flag -DINCLUDE_COLORS_C
