@@ -88,18 +88,6 @@ void print_binary(sizes_num num, uint8_t size_word) {
     }
 }
 
-
-void printf_color(const char *format, ...)
-{
-    va_list args;
-    va_start(args, format);
-
-    vprintf_color(format, args);
-
-    va_end(args);
-}
-
-
 void vprintf_color(const char* format, va_list args)
 {
 #if defined(MUTEX_NAME) && defined(_WIN32)
@@ -413,71 +401,6 @@ void setConsoleBackgroundColor(ConsoleColor backgroundColor) {
 #endif
 
 
-#ifndef __DISABLE_COLORS_FORE_BACK_GROUND__
-
-void foreground_color_custom_RGB(RGB_C color) {
-    foreground_color_custom_(color.r, color.g, color.b);
-}
-
-
-void foreground_color_custom(const unsigned char red, const unsigned char green, const unsigned char blue) {
-    printf(FOREGROUND_COLOR_CUSTOM_RGB("%d", "%d", "%d"), red, green, blue);
-}
-
-
-void background_color_custom_RGB(RGB_C color) {
-    background_color_custom_(color.red, color.green, color.blue);
-}
-
-
-void background_color_custom(const unsigned char red, const unsigned char green, const unsigned char blue) {
-    printf(BACKGROUND_COLOR_CUSTOM_RGB("%d", "%d", "%d"), red, green, blue);
-}
-
-
-#else
-/* No compatible con Win7 */
-void background_color_custom_(const unsigned char red, const unsigned char green, const unsigned char blue) { return; }
-static void back_fore_color_custom_(unsigned char redB, unsigned char greenB,
-                                    unsigned char blueB, unsigned char redF,
-                                    unsigned char greenF, unsigned char blueF)
-{
-    foreground_color_custom_(redF, greenF, blueF);
-    background_color_custom_(redB, greenB, blueB);
-}
-void foreground_color_custom_(const unsigned char red, const unsigned char green, const unsigned char blue) { return; }
-void background_color_custom_RGB(RGB_C color) { return; }
-void foreground_color_custom_RGB(RGB_C covoid generate_three_values(
-    unsigned int x,
-    unsigned int *value1,
-    unsigned int *value2,
-    unsigned int *value3,
-    unsigned int n1, unsigned int n2, unsigned int n3,
-    unsigned int n4, unsigned int n5, unsigned int n6)
-{
-    // si mayor que 255 entonces error
-    if (x > 0xff)
-    {
-        puts("El numero debe estar en el rango de 0 a 255.\n");
-        return;
-    }
-
-    // Aplicar la función de dispersión hash a los valores iniciales
-    *value1 = jenkins_hash(x, n1, n2, n3, n4, n5, n6);
-    *value2 = jenkins_hash(*value1, n1, n2, n3, n4, n5, n6);
-    *value3 = jenkins_hash(*value2, n1, n2, n3, n4, n5, n6);
-}lor) { return; }
-#endif
-
-void back_fore_color_custom(
-    uint8_t redB  , uint8_t greenB,
-    uint8_t blueB , uint8_t redF  ,
-    uint8_t greenF, uint8_t blueF )
-{
-    foreground_color_custom(redF, greenF, blueF);
-    background_color_custom(redB, greenB, blueB);
-}
-
 void generate_three_values(
     uint32_t seed,
     uint32_t *value1,
@@ -497,7 +420,6 @@ void generate_three_values(
     *value2 = jenkins_hash( *value1, n1, n2, n3, n4, n5, n6 );
     *value3 = jenkins_hash( *value2, n1, n2, n3, n4, n5, n6 );
 }
-
 
 void shuffle_array(int32_t array[], int32_t size)
 {

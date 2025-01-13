@@ -390,10 +390,6 @@ void resetColorTerminal(void);
  */
 void vprintf_color(const char *format, va_list args);
 
-void foreground_color_custom(
-    const uint8_t red  ,
-    const uint8_t green,
-    const uint8_t blue);
 
 /**
  * @defgroup Funciones para restablecer el color del texto y del fondo a los predeterminados por el terminal
@@ -419,17 +415,7 @@ void resize_terminal( uint32_t rows, uint32_t cols );
 char *get_addr_to_encoder_x86_(uint64_t addr);
 
 
-/**
- * @brief Cambia el color de fondo utilizando valores RGB proporcionados como enteros.
- *
- * Esta función cambia el color de fondo en la terminal a un color especificado por los valores RGB
- * proporcionados como parámetros individuales.
- *
- * @param red   Componente rojo  del color (0-255).
- * @param green Componente verde del color (0-255).
- * @param blue  Componente azul  del color (0-255).
- */
-void background_color_custom(const uint8_t red, const uint8_t green, const uint8_t blue);
+
 
 
 /**
@@ -458,7 +444,14 @@ void print_binary(sizes_num byte, uint8_t size_word);
  *
  * @param format El formato del texto con los colores.
  */
-void printf_color(const char *format, ...);
+static inline void printf_color(const char *format, ...)
+{
+    va_list args;
+    va_start(args, format);
+    vprintf_color(format, args);
+    va_end(args);
+}
+
 
 
 /**
@@ -819,23 +812,7 @@ void printf_color(const char *format, ...);
 #define RGB_CREATE(red, green, blue) (RGB_C) {.r = red, .g = green, .b = blue}
 
 
-/**
- * @brief Cambia los colores de fondo y primer plano utilizando valores RGB proporcionados como enteros.
- *
- * Esta función cambia tanto el color de fondo como el color del texto en la terminal, utilizando
- * los valores RGB proporcionados como parámetros individuales para el fondo y el primer plano.
- *
- * @param redB Componente rojo del color de fondo (0-255).
- * @param greenB Componente verde del color de fondo (0-255).
- * @param blueB Componente azul del color de fondo (0-255).
- * @param redF Componente rojo del color del texto (0-255).
- * @param greenF Componente verde del color del texto (0-255).
- * @param blueF Componente azul del color del texto (0-255).
- */
-void back_fore_color_custom(
-    uint8_t redB  , uint8_t greenB,
-    uint8_t blueB , uint8_t redF,
-    uint8_t greenF, uint8_t blueF);
+
 
 
 /**
@@ -854,6 +831,60 @@ void generate_three_values(
     uint32_t n1, uint32_t n2, uint32_t n3,
     uint32_t n4, uint32_t n5, uint32_t n6);
 
+#ifndef __DISABLE_COLORS_FORE_BACK_GROUND__
+
+/**
+ * @def BACKGROUND_COLOR_CUSTOM
+ * @brief Define un color de fondo personalizado utilizando códigos ANSI.
+ * @param color Código del color en formato ANSI (0-255).
+ */
+#define BACKGROUND_COLOR_CUSTOM(color) "\033[48;5;"color"m"
+
+/**
+ * @def BACKGROUND_COLOR_CUSTOM_RGB
+ * @brief Define un color de fondo personalizado utilizando valores RGB.
+ * @param red Componente de rojo (0-255).
+ * @param green Componente de verde (0-255).
+ * @param blue Componente de azul (0-255).
+ */
+#define BACKGROUND_COLOR_CUSTOM_RGB(red, green, blue) "\033[38;2;" red ";" green ";" blue "m"
+
+/**
+ * @def FOREGROUND_COLOR_CUSTOM
+ * @brief Define un color de letra personalizado utilizando códigos ANSI.
+ * @param color Código del color en formato ANSI (0-255).
+ */
+#define FOREGROUND_COLOR_CUSTOM(color) "\033[38;5;"color"m"
+
+#else
+/* No compatible con win7 */
+#warning BACKGROUND_COLOR_CUSTOM, BACKGROUND_COLOR_CUSTOM_RGB y FOREGROUND_COLOR_CUSTOM no son compatibles en Windows 7
+#define BACKGROUND_COLOR_CUSTOM_RGB(red, green, blue) red green blue
+#define BACKGROUND_COLOR_CUSTOM(color) color
+#define FOREGROUND_COLOR_CUSTOM(color) color
+#endif
+
+
+
+/**
+ * @brief Cambia el color de fondo utilizando valores RGB proporcionados como enteros.
+ *
+ * Esta función cambia el color de fondo en la terminal a un color especificado por los valores RGB
+ * proporcionados como parámetros individuales.
+ *
+ * @param red   Componente rojo  del color (0-255).
+ * @param green Componente verde del color (0-255).
+ * @param blue  Componente azul  del color (0-255).
+ */
+
+#ifndef __DISABLE_COLORS_FORE_BACK_GROUND__
+    static inline void background_color_custom(const unsigned char red, const unsigned char green, const unsigned char blue) {
+        printf(BACKGROUND_COLOR_CUSTOM_RGB("%d", "%d", "%d"), red, green, blue);
+    }
+#else
+    void background_color_custom(const unsigned char red, const unsigned char green, const unsigned char blue) {}
+#endif
+
 
 /**
  * @brief Función que mezcla un array de enteros.
@@ -863,11 +894,18 @@ void generate_three_values(
  */
 void shuffle_array(int32_t array[], int32_t size);
 
-
-void foreground_color_custom_RGB(RGB_C color);
-void foreground_color_custom(const unsigned char red, const unsigned char green, const unsigned char blue);
-void background_color_custom_RGB(RGB_C color);
-void background_color_custom(const unsigned char red, const unsigned char green, const unsigned char blue);
+#ifndef __DISABLE_COLORS_FORE_BACK_GROUND__
+    static inline void foreground_color_custom(const unsigned char red, const unsigned char green, const unsigned char blue) {
+        printf(FOREGROUND_COLOR_CUSTOM_RGB("%d", "%d", "%d"), red, green, blue);
+    }
+#else
+    static inline void foreground_color_custom(const unsigned char red, const unsigned char green, const unsigned char blue) { }
+#endif
+#ifndef __DISABLE_COLORS_FORE_BACK_GROUND__
+    static inline void foreground_color_custom_RGB(RGB_C color) { foreground_color_custom(color.r, color.g, color.b); }
+#else
+    static inline void foreground_color_custom_RGB(RGB_C color) {}
+#endif
 
 /**
  * @def foreground_color_custom
@@ -879,6 +917,32 @@ void background_color_custom(const unsigned char red, const unsigned char green,
     default: foreground_color_custom)(__VA_ARGS__)
 
 
+/**
+ * @brief Cambia los colores de fondo y primer plano utilizando valores RGB proporcionados como enteros.
+ *
+ * Esta función cambia tanto el color de fondo como el color del texto en la terminal, utilizando
+ * los valores RGB proporcionados como parámetros individuales para el fondo y el primer plano.
+ *
+ * @param redB Componente rojo del color de fondo (0-255).
+ * @param greenB Componente verde del color de fondo (0-255).
+ * @param blueB Componente azul del color de fondo (0-255).
+ * @param redF Componente rojo del color del texto (0-255).
+ * @param greenF Componente verde del color del texto (0-255).
+ * @param blueF Componente azul del color del texto (0-255).
+ */
+#ifndef __DISABLE_COLORS_FORE_BACK_GROUND__
+    static inline  void back_fore_color_custom(unsigned char redB, unsigned char greenB,
+                                        unsigned char blueB, unsigned char redF,
+                                        unsigned char greenF, unsigned char blueF)
+    {
+        foreground_color_custom(redF, greenF, blueF);
+        background_color_custom(redB, greenB, blueB);
+    }
+#else
+    static inline  void back_fore_color_custom(unsigned char redB, unsigned char greenB,
+                                        unsigned char blueB, unsigned char redF,
+                                        unsigned char greenF, unsigned char blueF) { }
+#endif
 /**
  * @def background_color_custom
  * @brief Define un color de fondo utilizando argumentos genéricos (puede ser RGB_C o código ANSI).
@@ -899,38 +963,14 @@ void background_color_custom(const unsigned char red, const unsigned char green,
     default: back_fore_color_custom)(__VA_ARGS__)
 
 
+
+
 #ifndef __DISABLE_COLORS_FORE_BACK_GROUND__
-
-/**
- * @def BACKGROUND_COLOR_CUSTOM
- * @brief Define un color de fondo personalizado utilizando códigos ANSI.
- * @param color Código del color en formato ANSI (0-255).
- */
-#define BACKGROUND_COLOR_CUSTOM(color) "\033[48;5;"color"m"
-
-/**
- * @def BACKGROUND_COLOR_CUSTOM_RGB
- * @brief Define un color de fondo personalizado utilizando valores RGB.
- * @param red Componente de rojo (0-255).
- * @param green Componente de verde (0-255).
- * @param blue Componente de azul (0-255).
- */
-#define BACKGROUND_COLOR_CUSTOM_RGB(red, green, blue) "\033[38;2;"red";"green";"blue"m"
-
-/**
- * @def FOREGROUND_COLOR_CUSTOM
- * @brief Define un color de letra personalizado utilizando códigos ANSI.
- * @param color Código del color en formato ANSI (0-255).
- */
-#define FOREGROUND_COLOR_CUSTOM(color) "\033[38;5;"color"m"
-
+    static inline void background_color_custom_RGB(RGB_C color) { background_color_custom(color.red, color.green, color.blue);}
 #else
-/* No compatible con win7 */
-#warning BACKGROUND_COLOR_CUSTOM, BACKGROUND_COLOR_CUSTOM_RGB y FOREGROUND_COLOR_CUSTOM no son compatibles en Windows 7
-#define BACKGROUND_COLOR_CUSTOM_RGB(red, green, blue) red green blue
-#define BACKGROUND_COLOR_CUSTOM(color) color
-#define FOREGROUND_COLOR_CUSTOM(color) color
+    static inline void background_color_custom_RGB(RGB_C color) {  }
 #endif
+
 
 // dar la opcion desde la linea de comandos a incluir el archivo .c
 // usando la flag -DINCLUDE_COLORS_C
