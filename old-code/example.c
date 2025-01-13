@@ -54,41 +54,41 @@ int main(){
     printf_color(STYLE_INVERTED   "colores invertidos\n"  );
 
     BACKGROUND_COLOR_BLACK;
-    printf_color(    "fondo negro#{BG:reset}\n"        );
+    printf_color(    "fondo negro#{reset}\n"        );
     BACKGROUND_COLOR_RED;
-    printf_color(      "fondo rojo#{BG:reset}\n"         );
+    printf_color(      "fondo rojo#{reset}\n"         );
     BACKGROUND_COLOR_GREEN;
-    printf_color(    "fondo verde#{BG:reset}\n"        );
+    printf_color(    "fondo verde#{reset}\n"        );
     BACKGROUND_COLOR_YELLOW;
-    printf_color(   "fondo amarillo#{BG:reset}\n"     );
+    printf_color(   "fondo amarillo#{reset}\n"     );
     BACKGROUND_COLOR_BLUE;
-    printf_color(     "fondo azul#{BG:reset}\n"         );
+    printf_color(     "fondo azul#{reset}\n"         );
     BACKGROUND_COLOR_MAGENTA;
-    printf_color(  "fondo magenta#{BG:reset}\n"      );
+    printf_color(  "fondo magenta#{reset}\n"      );
     BACKGROUND_COLOR_CYAN;
-    printf_color(     "fondo cyan#{BG:reset}\n"         );
+    printf_color(     "fondo cyan#{reset}\n"         );
     BACKGROUND_COLOR_WHITE;
-    printf_color(    "fondo blanco#{BG:reset}\n"       );
+    printf_color(    "fondo blanco#{reset}\n"       );
     BACKGROUND_COLOR_RESET;
-    printf_color(    "fondo por defecto#{BG:reset}\n"  );
+    printf_color(    "fondo por defecto#{reset}\n"  );
 
     background_color_custom(RGB_CREATE(255, 0, 255));
     foreground_color_custom(0, 255, 255);
-    printf_color("color custom#{FG:reset}\n");
+    printf_color("color custom#{reset}\n");
     BACKGROUND_COLOR_RESET;
 
-    printf_color("#{BG:green}#{FG:red}Hola: %d, %c#{BG:reset}\n", 1, 'c');    // Print "Hola: 1" in red
-    printf_color("#{BG:blue}#{FG:green}Adios: %d, %f#{BG:reset}\n", 2, 1.2f);  // Print "Adios: 2" with blue background
+    printf_color("#{BG:green}#{FG:red}Hola: %d, %c#{reset}\n", 1, 'c');    // Print "Hola: 1" in red
+    printf_color("#{BG:blue}#{FG:green}Adios: %d, %f#{reset}\n", 2, 1.2f);  // Print "Adios: 2" with blue background
 
     RGB_C my_px = RGB_CREATE(20, 30, 40);
-    printf_color("r:%d, g:%d, b:%d#{FG:reset}\n", my_px.red, my_px.green, my_px.blue);
+    printf_color("r:%d, g:%d, b:%d#{reset}\n", my_px.red, my_px.green, my_px.blue);
     foreground_color_custom(my_px);
     background_color_custom(RGB_CREATE(225, 30, 40));
 
-    printf_color("hola#{FG:reset}\n");
+    printf_color("hola#{reset}\n");
 
     back_fore_color_custom(40, 30, 225, 70, 120, 20);
-    printf_color("adios#{FG:reset}\n");
+    printf_color("adios#{reset}\n");
 
     printf_color("\n\nEstandar:\t");
     for (size_t i = 0; i <= ANSI_WHITE; i++){
@@ -140,7 +140,7 @@ int main(){
         generate_three_values(my_str[i], &Avalue1, &Avalue2, &Avalue3, values[0],values[1],values[2],values[3],values[4],values[5]);
         shuffle_array(values, _size);
         generate_three_values(my_str[i] % 64, &Bvalue1, &Bvalue2, &Bvalue3, values[0],values[1],values[2],values[3],values[4],values[5]);
-        printf_color("#{FG:%d;%d;%d}#{BG:%d;%d;%d} %c #{BG:reset}", Avalue1, Avalue2, Avalue3, Bvalue1, Bvalue2, Bvalue3, my_str[i]);
+        printf_color("#{FG:%d;%d;%d}#{BG:%d;%d;%d} %c #{reset}", Avalue1, Avalue2, Avalue3, Bvalue1, Bvalue2, Bvalue3, my_str[i]);
     }
     puts("");
     printf_color("#{i32%d}\n", 0b11110000111100001111000011110000);

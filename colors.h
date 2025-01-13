@@ -406,19 +406,6 @@ void resize_terminal( uint32_t rows, uint32_t cols );
 
 
 /**
- * @brief Función que obtiene la dirección de memoria para un codificador x86.
- *
- * @param addr La dirección a obtener.
- *
- * @return La dirección formateada como string.
- */
-char *get_addr_to_encoder_x86_(uint64_t addr);
-
-
-
-
-
-/**
  * @brief Restablece el color al por defecto tanto del texto como del fondo de este mismo
  *
  * La funcion se activa automaticamente al finalizar el programa
@@ -791,7 +778,7 @@ static inline void printf_color(const char *format, ...)
  * @brief Formato predefinido para mensajes con texto en verde, con un símbolo indicador en azul.
  * @param data Contenido del mensaje.
  */
-#define POINTGREEN(data) "#{FG:green}[#{FG:blue}*#{FG:green}]#{FG:white}" data "#{FG:reset}"
+#define POINTGREEN(data) "#{FG:green}[#{FG:blue}*#{FG:green}]#{FG:white}" data "#{reset}"
 
 
 /**
@@ -799,7 +786,7 @@ static inline void printf_color(const char *format, ...)
  * @brief Formato predefinido para mensajes con texto en púrpura, con un símbolo indicador en azul.
  * @param data Contenido del mensaje.
  */
-#define POINTRED(data)   "#{FG:yellow}[#{FG:blue}*#{FG:yellow}]#{FG:purple}" data "#{FG:reset}"
+#define POINTRED(data)   "#{FG:yellow}[#{FG:blue}*#{FG:yellow}]#{FG:purple}" data "#{reset}"
 
 
 /**

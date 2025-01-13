@@ -282,13 +282,13 @@ void vprintf_color(const char *format, va_list args)
                     // Cambiar a color rojo
                     LETTER_RED;
                 }
-                else if (strncmp(color_code, "FG:reset", 8) == 0)
+                else if (strncmp(color_code, "reset", 8) == 0)
                 {
                     // Restablecer color de primer plano
                     resetConsoleForegroundColor();
                     
                 }
-                else if (strncmp(color_code, "BG:reset", 8) == 0)
+                else if (strncmp(color_code, "reset", 8) == 0)
                 {
                     // Restablecer color de fondo
                     resetConsoleBackgroundColor();
@@ -779,11 +779,11 @@ void print_table_hex(char *string_init, char *string_text_for_printing, size_t s
     #ifndef __DISABLE_COLORS_FORE_BACK_GROUND__ 
         unsigned int random_color = jenkins_hash(string_text_for_printing[0], level_space, 0, 1, 2, 3, 4);
         // imprimir primera fila. (empezamos desde 0x23 para tener unos colores agradables)
-        for (uint16_t r = 0x23; r < 0x33; r++) printf_color("|"FOREGROUND_COLOR_CUSTOM("%d")"%02x#{FG:reset}", r >> 2, ((uint8_t)(r-0x33)) - 0xf0 ); 
-        printf_color("|\n%s"FOREGROUND_COLOR_CUSTOM("%d")"%s #{FG:reset}", string_init, ((((uint8_t)random_color >> 2)) & 0b1110111) | 0b00001001, buffer_Position_memory);
+        for (uint16_t r = 0x23; r < 0x33; r++) printf_color("|"FOREGROUND_COLOR_CUSTOM("%d")"%02x#{reset}", r >> 2, ((uint8_t)(r-0x33)) - 0xf0 ); 
+        printf_color("|\n%s"FOREGROUND_COLOR_CUSTOM("%d")"%s #{reset}", string_init, ((((uint8_t)random_color >> 2)) & 0b1110111) | 0b00001001, buffer_Position_memory);
     #else
-        for (uint16_t r = 0x23; r < 0x33; r++) printf_color("|%02x#{FG:reset}", r >> 2); 
-        printf_color("|\n%s%s #{FG:reset}", string_init, buffer_Position_memory);
+        for (uint16_t r = 0x23; r < 0x33; r++) printf_color("|%02x#{reset}", r >> 2); 
+        printf_color("|\n%s%s #{reset}", string_init, buffer_Position_memory);
     #endif
     free(buffer_Position_memory);
     for (uint32_t i = 0; i < size_string_text_for_printing; i++)
@@ -802,7 +802,7 @@ void print_table_hex(char *string_init, char *string_text_for_printing, size_t s
             // mediante la operacion ((((uint8_t)valor >> 2)) & 0b1110111) | 0b00001001
             // de puede obtener colores claros
             
-                printf_color("|"FOREGROUND_COLOR_CUSTOM("%d")"%.2X#{BG:reset}", 
+                printf_color("|"FOREGROUND_COLOR_CUSTOM("%d")"%.2X#{reset}", 
                     ((((uint8_t)string_text_for_printing[i] >> 2)) & 0b1110111) | 0b00001001, 
                     (uint8_t)string_text_for_printing[i]);
         #else
@@ -815,9 +815,9 @@ void print_table_hex(char *string_init, char *string_text_for_printing, size_t s
             buffer_Position_memory = get_addr_to_encoder_x86_(i+1);
             #ifndef __DISABLE_COLORS_FORE_BACK_GROUND__ 
                 random_color = jenkins_hash(string_text_for_printing[i], Avalue1, Avalue2, Avalue3, 2, 3, 4);
-                printf_color("|\n%s"FOREGROUND_COLOR_CUSTOM("%d")"%s #{FG:reset}", string_init, ((((uint8_t)random_color >> 2)) & 0b1111111) | 0b00001001, buffer_Position_memory, i+1);
+                printf_color("|\n%s"FOREGROUND_COLOR_CUSTOM("%d")"%s #{reset}", string_init, ((((uint8_t)random_color >> 2)) & 0b1111111) | 0b00001001, buffer_Position_memory, i+1);
             #else
-                printf_color("|\n%s%s #{FG:reset}", string_init, buffer_Position_memory, i+1);
+                printf_color("|\n%s%s #{reset}", string_init, buffer_Position_memory, i+1);
             #endif
             free(buffer_Position_memory);
         }
