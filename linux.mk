@@ -2,6 +2,6 @@ TARGET 		 = libcolors
 RM 			 = rm
 RMFLAGS 	 =  -f -v
 EXTENSION 	 = elf
-DEBUG_LINUX = -fsanitize=address
+DEBUG_LINUX = 
 
 include general.mk
