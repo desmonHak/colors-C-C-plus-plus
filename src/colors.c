@@ -174,121 +174,137 @@ void vprintf_color(const char* format, va_list args)
             uint8_t red, green, blue;
             sizes_num num;
 
-            if (strncmp(color_code, "reset", 8) == 0) {
-                resetConsoleForeground();
+            if (strncmp(color_code, "reset}", 9) == 0) {
+                CONSOLE_COLOR_RESET;
 
-            } else if (strncmp(color_code, "FG:red", 6) == 0){
-                SET_FG_RED;
+            }
 
-            } else if (strncmp(color_code, "FG:lred", 8) == 0){
-                SET_FG_LIGHTRED;
+            else if (color_code[0] == 'F') {
+                if (strncmp(color_code, "FG:red}", 7) == 0){
+                    SET_FG_RED;
 
-            } else if (strncmp(color_code, "FG:lblack", 8) == 0){
-                SET_FG_LIGHTBLACK;
+                } else if (strncmp(color_code, "FG:lred}", 9) == 0){
+                    SET_FG_LIGHTRED;
 
-            } else if (strncmp(color_code, "FG:lgreen", 8) == 0){
-                SET_FG_LIGHTGREEN;
+                } else if (strncmp(color_code, "FG:lblack}", 9) == 0){
+                    SET_FG_LIGHTBLACK;
 
-            } else if (strncmp(color_code, "FG:lyellow", 8) == 0){
-                SET_FG_LIGHTYELLOW;
+                } else if (strncmp(color_code, "FG:lgreen}", 9) == 0){
+                    SET_FG_LIGHTGREEN;
 
-            } else if (strncmp(color_code, "FG:lblue", 8) == 0){
-                SET_FG_LIGHTBLUE;
+                } else if (strncmp(color_code, "FG:lyellow}", 9) == 0){
+                    SET_FG_LIGHTYELLOW;
 
-            } else if (strncmp(color_code, "FG:lpurple", 8) == 0){
-                SET_FG_LIGHTMAGENTA;
+                } else if (strncmp(color_code, "FG:lblue}", 9) == 0){
+                    SET_FG_LIGHTBLUE;
 
-            } else if (strncmp(color_code, "FG:lcyan", 8) == 0){
-                SET_FG_LIGHTCYAN;
+                } else if (strncmp(color_code, "FG:lpurple}", 9) == 0){
+                    SET_FG_LIGHTMAGENTA;
 
-            } else if (strncmp(color_code, "FG:lwhite", 8) == 0){
-                SET_FG_LIGHTWHITE;
+                } else if (strncmp(color_code, "FG:lcyan}", 9) == 0){
+                    SET_FG_LIGHTCYAN;
 
-            } else if (strncmp(color_code, "FG:green", 8) == 0){
-                SET_FG_GREEN;
+                } else if (strncmp(color_code, "FG:lwhite}", 9) == 0){
+                    SET_FG_LIGHTWHITE;
 
-            } else if (strncmp(color_code, "FG:blue", 7) == 0){
-                SET_FG_BLUE;
+                } else if (strncmp(color_code, "FG:green}", 9) == 0){
+                    SET_FG_GREEN;
 
-            } else if (strncmp(color_code, "FG:black", 8) == 0){
-                SET_FG_BLACK;
+                } else if (strncmp(color_code, "FG:blue}", 8) == 0){
+                    SET_FG_BLUE;
 
-            } else if (strncmp(color_code, "FG:yellow", 9) == 0){
-                SET_FG_YELLOW;
+                } else if (strncmp(color_code, "FG:black}", 9) == 0){
+                    SET_FG_BLACK;
 
-            } else if (strncmp(color_code, "FG:purple", 9) == 0){
-                SET_FG_MAGENTA;
+                } else if (strncmp(color_code, "FG:yellow}", 10) == 0){
+                    SET_FG_YELLOW;
 
-            } else if (strncmp(color_code, "FG:cyan", 7) == 0){
-                SET_FG_CYAN;
+                } else if (strncmp(color_code, "FG:purple}", 10) == 0){
+                    SET_FG_MAGENTA;
 
-            } else if (strncmp(color_code, "FG:white", 8) == 0){
-                SET_FG_WHITE;
+                } else if (strncmp(color_code, "FG:cyan}", 8) == 0){
+                    SET_FG_CYAN;
 
-            } else if (strncmp(color_code, "BG:black", 8) == 0){
-                SET_BG_COLOR_BLACK;
+                } else if (strncmp(color_code, "FG:white}", 9) == 0){
+                    SET_FG_WHITE;
 
-            } else if (strncmp(color_code, "BG:red", 6) == 0){
-                SET_BG_COLOR_RED;
-
-            } else if (strncmp(color_code, "BG:green", 8) == 0){
-                SET_BG_COLOR_GREEN;
-
-            } else if (strncmp(color_code, "BG:yellow", 9) == 0){
-                SET_BG_COLOR_YELLOW;
-
-            } else if (strncmp(color_code, "BG:purple", 9) == 0){
-                SET_BG_COLOR_MAGENTA;
-
-            } else if (strncmp(color_code, "BG:cyan", 7) == 0){
-                SET_BG_COLOR_CYAN;
-
-            } else if (strncmp(color_code, "BG:white", 8) == 0){
-                SET_BG_COLOR_WHITE;
-
-            } else if (strncmp(color_code, "BG:blue", 7) == 0) {
-                SET_BG_COLOR_BLUE;
-
-            } else if (strncmp(color_code, "FG:", 3) == 0) {
-
-                uint8_t red, green, blue;
-                if (sscanf(color_code, "FG:%hhu;%hhu;%hhu", &red, &green, &blue) == 3)
+                } else if (sscanf(color_code, "FG:%hhu;%hhu;%hhu}", &red, &green, &blue) == 3) {
                     foreground_color_custom(red, green, blue);
 
-            } else if (strncmp(color_code, "BG:", 3) == 0) {
+                } else invalid_code = 1;
+            }
 
-                uint8_t red, green, blue;
-                if (sscanf(color_code, "BG:%hhu;%hhu;%hhu", &red, &green, &blue) == 3)
-                    background_color_custom(red, green, blue);
+            else if (color_code[0] == 'B') {
+                if (strncmp(color_code, "BG:black}", 9) == 0){
+                    SET_BG_COLOR_BLACK;
 
-            } else if (strncmp(color_code, "i64:", 4) == 0) {
+                } else if (strncmp(color_code, "BG:red}", 7) == 0){
+                    SET_BG_COLOR_RED;
 
-                sizes_num num;
-                if (sscanf(color_code, "i64:%" PRIu64, &num.i64))
-                    print_binary(num, 64);
+                } else if (strncmp(color_code, "BG:green}", 9) == 0){
+                    SET_BG_COLOR_GREEN;
 
-            } else if (strncmp(color_code, "i32:", 4) == 0) {
+                } else if (strncmp(color_code, "BG:yellow}", 10) == 0){
+                    SET_BG_COLOR_YELLOW;
 
-                sizes_num num;
-                if (sscanf(color_code, "i32:%" SCNu32, &num.i32))
-                    print_binary(num, 32);
+                } else if (strncmp(color_code, "BG:purple}", 10) == 0){
+                    SET_BG_COLOR_MAGENTA;
 
-            } else if (strncmp(color_code, "i16:", 4) == 0) {
+                } else if (strncmp(color_code, "BG:cyan}", 8) == 0){
+                    SET_BG_COLOR_CYAN;
 
-                sizes_num num;
-                if (sscanf(color_code, "i16:%hu", &num.i16))
-                    print_binary(num, 16);
+                } else if (strncmp(color_code, "BG:white}", 9) == 0){
+                    SET_BG_COLOR_WHITE;
 
-            } else if (strncmp(color_code, "i8:", 3) == 0) {
+                } else if (strncmp(color_code, "BG:blue}", 8) == 0) {
+                    SET_BG_COLOR_BLUE;
 
-                sizes_num num;
-                if (sscanf(color_code, "i8:%hhu", &num.i8))
-                    print_binary(num, 8);
-                else
-                    print_binary((sizes_num) { .i8 = 0 }, 8);
+                } else if (sscanf(color_code, "BG:%hhu;%hhu;%hhu}", &red, &green, &blue) == 3) {
+                        background_color_custom(red, green, blue);
+                } else invalid_code = 1;
+            }
 
-            } else {
-                printf("%s: identificador invalido\n", color_code);
+            else if (color_code[0] == 'i') {
+                if (sscanf(color_code, "i64:%" PRIu64 "}", &num.i64)) {
+
+                        print_binary(num, 64);
+
+                } else if (sscanf(color_code, "i32:%" SCNu32 "}", &num.i32)) {
+                        print_binary(num, 32);
+
+                } else if (sscanf(color_code, "i16:%hu}", &num.i16)) {
+                        print_binary(num, 16);
+
+                } else if (sscanf(color_code, "i8:%hhu}", &num.i8)) {
+                        print_binary(num, 8);
+
+                } else invalid_code = 1;
+
+            } else if (color_code[0] == 'S'){
+                if (strncmp(color_code, "ST:bold}", 8) == 0) {
+                    printf(STYLE_BOLDED);
+
+                } else if (strncmp(color_code, "ST:darkened}", 12) == 0) {
+                    printf(STYLE_DARKENED);
+
+                } else if (strncmp(color_code, "ST:italics}", 11) == 0) {
+                    printf(STYLE_ITALICS);
+
+                } else if (strncmp(color_code, "ST:underline}", 13) == 0) {
+                    printf(STYLE_UNDERLINED);
+
+                } else if (strncmp(color_code, "ST:blink}", 10) == 0) {
+                    printf(STYLE_BLIKING);
+
+                } else if (strncmp(color_code, "ST:invert}", 11) == 0) {
+                    printf(STYLE_INVERTED);
+
+                } else invalid_code = 1;
+            }
+
+            if ( invalid_code ) {
+                color_code[color_code_idx-1] = '\0';
+                printf("\n%s: identificador invalido\n", color_code);
             }
         }
 
@@ -306,6 +322,7 @@ void vprintf_color(const char* format, va_list args)
     CloseHandle(hMutex);
 #endif
 }
+
 
 
 #ifdef _WIN32
