@@ -9,7 +9,7 @@ PATH_EXAMPLES	  = example
 
 INCLUDE_FLAGS = -I.
 GLOBAL_CFLAGS = -std=c$(VESRION_C) $(INCLUDE_FLAGS) -masm=intel \
-				-D_ExceptionHandler -fdiagnostics-color=always
+				-D_ExceptionHandler -fdiagnostics-color=always $(DEBUG_LINUX)
 
 CFLAGS 		  =  $(GLOBAL_CFLAGS) -O3 -Wno-unused-parameter \
 				-Wno-implicit-fallthrough -Wno-type-limits  \
