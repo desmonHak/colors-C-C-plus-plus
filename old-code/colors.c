@@ -235,6 +235,8 @@ void printf_color(const char *format, ...)
 
 void vprintf_color(const char *format, va_list args)
 {
+    if (format == NULL) return;
+
     #if defined(MUTEX_NAME) && defined(_WIN32)
     // agregando mutex para multiproceso y multihilo en windows
     HANDLE hMutex = OpenMutex(MUTEX_ALL_ACCESS, FALSE, MUTEX_NAME);
@@ -260,8 +262,13 @@ void vprintf_color(const char *format, va_list args)
     va_copy(args_copy, args);
     size_t size = (vsnprintf(NULL, 0, format, args_copy) + 1) * sizeof(char);
     va_end(args_copy);
+
     char *formatted_buffer = (char *)malloc(size);
-    vsprintf(formatted_buffer, format, args);
+    if (formatted_buffer == NULL) {
+        return; // Fallo al asignar memoria
+    }
+
+    vsnprintf(formatted_buffer, size, format, args); // Formatear el mensaje
 
     const char *p = formatted_buffer;
     bool in_color_code = false;

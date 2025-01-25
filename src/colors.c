@@ -5,22 +5,24 @@
 
 /* ACTIVATE ANSI COLORS IN WINDOWS */
 
-#ifdef _MSC_VER
+#ifdef _MSC_VER 
 /* Con MSVC se tiene que activar manualmente */
 void _ACTIVATE_COLORS_ANSI_WIN__(void)
 #else
 void __attribute__((constructor)) _ACTIVATE_COLORS_ANSI_WIN__(void)
 #endif
 {
-    HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE);
-    DWORD  mode   = 0;
+    #ifdef _WIN32
+        HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE);
+        DWORD  mode   = 0;
 
-    if ( GetConsoleMode(handle, &mode) ) {
-        if ( !(mode & ENABLE_VIRTUAL_TERMINAL_PROCESSING) ) {
-            mode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
-            SetConsoleMode(handle, mode);
+        if ( GetConsoleMode(handle, &mode) ) {
+            if ( !(mode & ENABLE_VIRTUAL_TERMINAL_PROCESSING) ) {
+                mode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
+                SetConsoleMode(handle, mode);
+            }
         }
-    }
+    #endif
 }
 
 #ifdef _MSC_VER
