@@ -56,3 +56,4 @@ code.bat
 .vscode
 
 test/
+cmake-build*
