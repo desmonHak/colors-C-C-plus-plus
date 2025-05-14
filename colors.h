@@ -46,7 +46,9 @@
  * el software sin restricciones bajo los términos de la licencia Apache 2.0 con modificaciones.
  */
 
-#pragma comment(lib, "libcolors.a")
+#ifdef _MSC_VER
+#   pragma comment(lib, "libcolors.a")
+#endif
 
 /*
  *	Licencia Apache, Version 2.0 con Modificacion

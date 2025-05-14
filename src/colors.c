@@ -538,10 +538,10 @@ char *get_addr_to_encoder_x86_(uint64_t addr) {
         */
         size_t size;
 
-        size = (snprintf(NULL, 0, "%p", (size_t)addr) + 1) * sizeof(char);
+        size = (snprintf(NULL, 0, "%p", (void*)addr) + 1) * sizeof(char);
         char * buffer_Position_memory = (char *)malloc(size);
         if (buffer_Position_memory == NULL) return NULL;
-        sprintf(buffer_Position_memory, "%p", (size_t)addr);
+        sprintf(buffer_Position_memory, "%p", (void*)addr);
         return buffer_Position_memory;
     }
 
