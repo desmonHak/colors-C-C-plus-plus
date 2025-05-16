@@ -157,7 +157,7 @@ void vprintf_color(const char* format, va_list args)
     va_copy(args_copy, args);
 
     size_t length_formated = (vsnprintf(NULL, 0, format, args_copy) + 1) * sizeof(char);
-    char  *buffer_formated = (char*)malloc(length_formated);
+    char  *buffer_formated = (char*)calloc(length_formated, sizeof(char));
 
     va_end(args_copy);
 
