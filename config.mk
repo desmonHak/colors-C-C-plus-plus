@@ -1,7 +1,7 @@
 CC 			  = gcc
 ARR			  = ar
 
-VESRION_C     = 11
+VESRION_C     =11
 
 PATH_SRC 	      = src
 PATH_INCLUDE      = include

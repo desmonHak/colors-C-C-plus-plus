@@ -520,100 +520,89 @@ void resize_terminal( uint32_t rows, uint32_t cols ) {
     #endif
 }
 
+#include <inttypes.h> // para PRIuPTR y similares
+#include <stdint.h>
+
+
 char *get_addr_to_encoder_x86_(uint64_t addr) {
-        /*
-        *  
-        * get_addr_to_encoder_x86(uint64_t addr, encoder_x86 encoder_val):
-        * Esta funcion devuelve un string con la direccion de memoria formateada en 16, 32 o 64bits
-        * 
-        * Se espera recibir addr el cual es la direccion de memoria a formatear,
-        * se espera recibir encoder_val, el cual indica si formatear la direcion a 16, 32 o 64bits.
-        *      Posibles valores para encoder_x86 encoder_val:
-        *          - ENCODER_IN_16bits = 0 : para 16bits
-        *          - ENCODER_IN_32bits = 1 : para 32bits
-        *          - ENCODER_IN_64bits = 2 : para 64bits
-        * 
-        * En caso de que malloc devuelva error, la funcion devuelve NULL
-        *  
-        */
         size_t size;
 
-        size = (snprintf(NULL, 0, "%p", (void*)addr) + 1) * sizeof(char);
+        size = (snprintf(nullptr, 0, F_PTRNULL, (size_t)addr) + 1) * sizeof(char);
         char * buffer_Position_memory = (char *)malloc(size);
-        if (buffer_Position_memory == NULL) return NULL;
-        sprintf(buffer_Position_memory, "%p", (void*)addr);
+        if (buffer_Position_memory == NULL) return nullptr;
+        sprintf(buffer_Position_memory, F_PTRNULL, (size_t)addr);
         return buffer_Position_memory;
     }
 
 void print_table_hex(char *string_init, char *string_text_for_printing, size_t size_string_text_for_printing) {
     /*
-     *  
+     *
      * print_table_hex(char *string_init, char *string_text_for_printing, size_t size_string_text_for_printing):
      * Esta funcion imprime un "string_text_for_printing" en forma de tabla hexadecimal de tamaño de X * 0xf(16 en decimal).
-     * Donde X es size_string_text_for_printing / 16. 
-     * 
+     * Donde X es size_string_text_for_printing / 16.
+     *
      * Se espera recibir un string_init, el cual es un string que se imprimira al inicio de cada fila.
      * Se espera recibir un string_text_for_printing el cual sea la cadena o secuencia de bytes a imprimir en formao hexadecimal
      * Se espera recibir un size_string_text_for_printing el cual sea el tamaño del string  o secuencia de bytes a imprimir.
-     * 
+     *
      * En caso de que string_init no sea un puntero valido o NULL se usara una cadena vacia por defecto.
      * En caso de que string_text_for_printing no sea un puntero valido o NULL, la funcion no imprimira nada.
      * En caso de que size_string_text_for_printing sea 0 no se imprimira nada.
-     *  
+     *
      */
     char my_string_default[] = " ";
     if ((string_text_for_printing == NULL) || (size_string_text_for_printing == 0)) return; // error
     if (string_init == NULL) string_init = my_string_default; // no se ingreso un valor de incio que usar para imprimir cada fila
 
-    
+
 
     size_t size = 0;
     char *buffer_Position_memory = get_addr_to_encoder_x86_(0);
     uint32_t level_space = strlen(buffer_Position_memory);
 
-    
+
     printf_color("\n %s ", string_init);
     for (uint32_t i = 0; i < level_space; i++) putchar(' ');
-    #ifndef __DISABLE_COLORS_FORE_BACK_GROUND__ 
+    #ifndef __DISABLE_COLORS_FORE_BACK_GROUND__
         unsigned int random_color = jenkins_hash(string_text_for_printing[0], level_space, 0, 1, 2, 3, 4);
         // imprimir primera fila. (empezamos desde 0x23 para tener unos colores agradables)
-        for (uint16_t r = 0x23; r < 0x33; r++) printf_color("|"FOREGROUND_COLOR_CUSTOM("%d")"%02x#{reset}", r >> 2, ((uint8_t)(r-0x33)) - 0xf0 ); 
+        for (uint16_t r = 0x23; r < 0x33; r++) printf_color("|"FOREGROUND_COLOR_CUSTOM("%d")"%02x#{reset}", r >> 2, ((uint8_t)(r-0x33)) - 0xf0 );
         printf_color("|\n %s"FOREGROUND_COLOR_CUSTOM("%d")"%s #{reset}", string_init, ((((uint8_t)random_color >> 2)) & 0b1110111) | 0b00001001, buffer_Position_memory);
     #else
-        for (uint16_t r = 0x23; r < 0x33; r++) printf_color("|%02x#{reset}", r >> 2); 
+        for (uint16_t r = 0x23; r < 0x33; r++) printf_color("|%02x#{reset}", r >> 2);
         printf_color("|\n %s%s #{reset}", string_init, buffer_Position_memory);
     #endif
     free(buffer_Position_memory);
-    buffer_Position_memory = NULL;
+    buffer_Position_memory = nullptr;
     for (uint32_t i = 0; i < size_string_text_for_printing; i++)
     {
         #ifndef __DISABLE_COLORS_FORE_BACK_GROUND__
             // imprimir el resto de filas
-            unsigned int Avalue1, Avalue2, Avalue3, seed, values[] = {
-                (unsigned int)size_string_text_for_printing, 
+            unsigned int values[] = {
+                (unsigned int)size_string_text_for_printing,
                 size, level_space,  0xa0, 0xe1, string_text_for_printing[i]
             };
             // generar 3 valores apartir de una semilla de entrada y 6 valores(pueden ser constantes o variables)
-            seed = (unsigned int)(string_text_for_printing[i]);
-            Avalue1 = jenkins_hash(seed,    values[0], values[1], values[2], values[3], values[4], values[5]);
-            Avalue2 = jenkins_hash(Avalue1, values[0], values[1], values[2], values[3], values[4], values[5]);
-            Avalue3 = jenkins_hash(Avalue2, values[0], values[1], values[2], values[3], values[4], values[5]);
+            unsigned int seed = (unsigned int) (string_text_for_printing[i]);
+            unsigned int n1 = jenkins_hash(seed, values[0], values[1], values[2], values[3], values[4], values[5]);
+            unsigned int n2 = jenkins_hash(n1, values[0], values[1], values[2], values[3], values[4], values[5]);
+            unsigned int n3 = jenkins_hash(n2, values[0], values[1], values[2], values[3], values[4], values[5]);
             // mediante la operacion ((((uint8_t)valor >> 2)) & 0b1110111) | 0b00001001
             // de puede obtener colores claros
-            
-                printf_color("|"FOREGROUND_COLOR_CUSTOM("%d")"%.2X#{reset}", 
-                    ((((uint8_t)string_text_for_printing[i] >> 2)) & 0b1110111) | 0b00001001, 
+
+                printf_color("|"FOREGROUND_COLOR_CUSTOM("%d")"%.2X#{reset}",
+                    ((((uint8_t)string_text_for_printing[i] >> 2)) & 0b1110111) | 0b00001001,
                     (uint8_t)string_text_for_printing[i]);
         #else
-            printf_color("|%.2X", 
+            printf_color("|%.2X",
                 (uint8_t)string_text_for_printing[i]);
         #endif
         // imrpimir en X * 16
         if ((i+1) % ((256*4)/8 / 8) == 0){
             // imprimir la siguiente filas, despues de imprimir 16 bytes
             buffer_Position_memory = get_addr_to_encoder_x86_(i+1);
-            #ifndef __DISABLE_COLORS_FORE_BACK_GROUND__ 
-                random_color = jenkins_hash(string_text_for_printing[i], Avalue1, Avalue2, Avalue3, 2, 3, 4);
+            #ifndef __DISABLE_COLORS_FORE_BACK_GROUND__
+                random_color = jenkins_hash(string_text_for_printing[i], n1, n2, n3, 2, 3, 4);
                 printf_color("|\n %s"FOREGROUND_COLOR_CUSTOM("%d")"%s #{reset}", string_init, ((((uint8_t)random_color >> 2)) & 0b1111111) | 0b00001001, buffer_Position_memory, i+1);
             #else
                 printf_color("|\n %s%s #{reset}", string_init, buffer_Position_memory, i+1);

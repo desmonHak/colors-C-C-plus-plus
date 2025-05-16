@@ -92,6 +92,20 @@
 #include <string.h>
 #include <time.h>
 
+#ifndef nullptr
+#define nullptr NULL
+#endif
+
+#if UINTPTR_MAX == 0xFFFF
+#define F_PTRNULL "0x%04" PRIxPTR
+#elif UINTPTR_MAX == 0xFFFFFFFF
+#define F_PTRNULL "0x%08" PRIxPTR
+#elif UINTPTR_MAX == 0xFFFFFFFFFFFFFFFF
+#define F_PTRNULL "0x%016" PRIxPTR
+#else
+#error "Arquitectura desconocida"
+#endif
+
 /**
  * @def ConsoleColor
  * @brief Codigo de colores estandar
