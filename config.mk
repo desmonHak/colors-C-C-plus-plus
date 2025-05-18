@@ -11,6 +11,11 @@ INCLUDE_FLAGS = -I.
 GLOBAL_CFLAGS = -std=c$(VESRION_C) $(INCLUDE_FLAGS) -masm=intel \
 				-D_ExceptionHandler -fdiagnostics-color=always $(DEBUG_LINUX)
 
+ifeq ($(OS_NAME),windows)
+else
+	GLOBAL_CFLAGS += -fPIC
+endif
+
 CFLAGS 		  =  $(GLOBAL_CFLAGS) -O3 -Wno-unused-parameter \
 				-Wno-implicit-fallthrough -Wno-type-limits  \
 				-Wno-unused-variable -Wno-pointer-sign
