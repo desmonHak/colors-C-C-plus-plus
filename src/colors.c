@@ -121,15 +121,49 @@ void print_binary(sizes_num num, uint8_t size_word) {
         break;
     }
 }
+
+
+
+// Función que imprime el texto alineado dentro de un ancho dado
+void print_aligned(const char *text, size_t width, TextAlign align) {
+    size_t len = strlen(text);
+    if (len >= width) {
+        // Si el texto es igual o más largo que el ancho, imprimir tal cual (o truncar si quieres)
+        printf("%.*s", (int)width, text);
+        return;
+    }
+
+    size_t padding_left = 0;
+    size_t padding_right = 0;
+
+    switch (align) {
+        case ALIGN_LEFT:
+            padding_right = width - len;
+            break;
+
+        case ALIGN_CENTER:
+            padding_left = (width - len) / 2;
+            padding_right = width - len - padding_left;
+            break;
+
+        case ALIGN_RIGHT:
+            padding_left = width - len;
+            break;
+    }
+
+    for (size_t i = 0; i < padding_left; i++) putchar(' ');
+    printf("%s", text);
+    for (size_t i = 0; i < padding_right; i++) putchar(' ');
+}
+
 void printf_color(const char *format, ...)
 {
-    va_list args;
+    va_list args = {0};
     va_start(args, format);
     vprintf_color(format, args);
     va_end(args);
 }
-void vprintf_color(const char* format, va_list args)
-{
+void vprintf_color(const char* format, va_list args) {
 #if defined(MUTEX_NAME) && defined(_WIN32)
     /* agregando mutex para multiproceso y multihilo en windows */
     HANDLE hMutex = OpenMutex(MUTEX_ALL_ACCESS, FALSE, MUTEX_NAME);
@@ -153,7 +187,7 @@ void vprintf_color(const char* format, va_list args)
     printf(") ");
 #endif
 
-    va_list args_copy;
+    va_list args_copy = {0};
     va_copy(args_copy, args);
 
     size_t length_formated = (vsnprintf(NULL, 0, format, args_copy) + 1) * sizeof(char);
@@ -165,7 +199,7 @@ void vprintf_color(const char* format, va_list args)
 
     if (length_formated < 5)
     {
-        for (uint8_t i =0 ; i < (uint8_t)length_formated; i++) {
+        for (uint8_t i = 0 ; i < (uint8_t)length_formated; i++) {
             putchar(buffer_formated[i]);
         }
 
@@ -184,162 +218,278 @@ void vprintf_color(const char* format, va_list args)
         if (*c == '#' && *(c+1) && *(c+1) == '{') {
 
             c += 2;
-            for (uint8_t i = 0; i < 30 && *c ; c++, i++) {
+            for (uint8_t i = 0; i < 29 && *c ; c++) {  // ← 29 para reservar lugar a '\0'
                 if (*c == ' ')
                     continue;
 
-                color_code[color_code_idx] = *c;
-                color_code_idx++;
-
-                if ( *c == '}' ) {
+                if (*c == '}') {
+                    color_code[color_code_idx++] = *c;
+                    color_code[color_code_idx] = '\0';
                     possible_color_code = 1;
                     break;
                 }
-            }
 
+                color_code[color_code_idx++] = *c;
+            }
             color_code[color_code_idx] = '\0';
+
 
         } else {
             putchar(*c);
         }
-
+    #define SIZEOF_STRING(str) (sizeof(str) - 1)
         if ( possible_color_code ) {
             uint8_t invalid_code = 0;
             uint8_t red, green, blue;
             sizes_num num;
 
-            if (strncmp(color_code, "reset}", 9) == 0) {
+            if (strncmp(color_code, "reset}", SIZEOF_STRING("reset}")) == 0) {
                 CONSOLE_COLOR_RESET;
 
             }
 
             else if (color_code[0] == 'F') {
-                if (strncmp(color_code, "FG:red}", 7) == 0){
+                if (strncmp(color_code, "FG:red}", SIZEOF_STRING("FG:red}")) == 0){
                     SET_FG_RED;
 
-                } else if (strncmp(color_code, "FG:lred}", 9) == 0){
+                } else if (strncmp(color_code, "FG:lred}", SIZEOF_STRING("FG:lred}")) == 0){
                     SET_FG_LIGHTRED;
 
-                } else if (strncmp(color_code, "FG:lblack}", 9) == 0){
+                } else if (strncmp(color_code, "FG:lblack}", SIZEOF_STRING("FG:lblack}")) == 0){
                     SET_FG_LIGHTBLACK;
 
-                } else if (strncmp(color_code, "FG:lgreen}", 9) == 0){
+                } else if (strncmp(color_code, "FG:lgreen}", SIZEOF_STRING("FG:lgreen}")) == 0){
                     SET_FG_LIGHTGREEN;
 
-                } else if (strncmp(color_code, "FG:lyellow}", 9) == 0){
+                } else if (strncmp(color_code, "FG:lyellow}", SIZEOF_STRING("FG:lyellow}")) == 0){
                     SET_FG_LIGHTYELLOW;
 
-                } else if (strncmp(color_code, "FG:lblue}", 9) == 0){
+                } else if (strncmp(color_code, "FG:lblue}", SIZEOF_STRING("FG:lblue}")) == 0){
                     SET_FG_LIGHTBLUE;
 
-                } else if (strncmp(color_code, "FG:lpurple}", 9) == 0){
+                } else if (strncmp(color_code, "FG:lpurple}", SIZEOF_STRING("FG:lpurple}")) == 0){
                     SET_FG_LIGHTMAGENTA;
 
-                } else if (strncmp(color_code, "FG:lcyan}", 9) == 0){
+                } else if (strncmp(color_code, "FG:lcyan}", SIZEOF_STRING("FG:lcyan}")) == 0){
                     SET_FG_LIGHTCYAN;
 
-                } else if (strncmp(color_code, "FG:lwhite}", 9) == 0){
+                } else if (strncmp(color_code, "FG:lwhite}", SIZEOF_STRING("FG:lwhite}")) == 0){
                     SET_FG_LIGHTWHITE;
 
-                } else if (strncmp(color_code, "FG:green}", 9) == 0){
+                } else if (strncmp(color_code, "FG:green}", SIZEOF_STRING("FG:green}")) == 0){
                     SET_FG_GREEN;
 
-                } else if (strncmp(color_code, "FG:blue}", 8) == 0){
+                } else if (strncmp(color_code, "FG:blue}", SIZEOF_STRING("FG:blue}")) == 0){
                     SET_FG_BLUE;
 
-                } else if (strncmp(color_code, "FG:black}", 9) == 0){
+                } else if (strncmp(color_code, "FG:black}", SIZEOF_STRING("FG:black}")) == 0){
                     SET_FG_BLACK;
 
-                } else if (strncmp(color_code, "FG:yellow}", 10) == 0){
+                } else if (strncmp(color_code, "FG:yellow}", SIZEOF_STRING("FG:yellow}")) == 0){
                     SET_FG_YELLOW;
 
-                } else if (strncmp(color_code, "FG:purple}", 10) == 0){
+                } else if (strncmp(color_code, "FG:purple}", SIZEOF_STRING("FG:purple}")) == 0){
                     SET_FG_MAGENTA;
 
-                } else if (strncmp(color_code, "FG:cyan}", 8) == 0){
+                } else if (strncmp(color_code, "FG:cyan}", SIZEOF_STRING("FG:cyan}")) == 0){
                     SET_FG_CYAN;
 
-                } else if (strncmp(color_code, "FG:white}", 9) == 0){
+                } else if (strncmp(color_code, "FG:white}", SIZEOF_STRING("FG:white}")) == 0){
                     SET_FG_WHITE;
 
-                } else if (sscanf(color_code, "FG:%hhu;%hhu;%hhu}", &red, &green, &blue) == 3) {
-                    foreground_color_custom(red, green, blue);
+                } else if (strncmp(color_code, "FG:", 3) == 0) {
+                    const char *p = color_code + 3;
+                    char *endptr;
 
-                } else invalid_code = 1;
+                    red   = (uint8_t)strtoul(p, &endptr, 10);
+                    if (*endptr != ';') { invalid_code = 1; }
+                    else {
+                        p = endptr + 1;
+                        green = (uint8_t)strtoul(p, &endptr, 10);
+                        if (*endptr != ';') { invalid_code = 1; }
+                        else {
+                            p = endptr + 1;
+                            blue = (uint8_t)strtoul(p, &endptr, 10);
+                            if (*endptr != '}') { invalid_code = 1; }
+                            else {
+                                foreground_color_custom(red, green, blue);
+                            }
+                        }
+                    }
+                }
+                else invalid_code = 1;
             }
 
             else if (color_code[0] == 'B') {
-                if (strncmp(color_code, "BG:black}", 9) == 0){
+                if (strncmp(color_code, "BG:black}", SIZEOF_STRING("BG:black}")) == 0){
                     SET_BG_COLOR_BLACK;
 
-                } else if (strncmp(color_code, "BG:red}", 7) == 0){
+                } else if (strncmp(color_code, "BG:red}", SIZEOF_STRING("BG:red}")) == 0){
                     SET_BG_COLOR_RED;
 
-                } else if (strncmp(color_code, "BG:green}", 9) == 0){
+                } else if (strncmp(color_code, "BG:green}", SIZEOF_STRING("BG:green}")) == 0){
                     SET_BG_COLOR_GREEN;
 
-                } else if (strncmp(color_code, "BG:yellow}", 10) == 0){
+                } else if (strncmp(color_code, "BG:yellow}", SIZEOF_STRING("BG:yellow}")) == 0){
                     SET_BG_COLOR_YELLOW;
 
-                } else if (strncmp(color_code, "BG:purple}", 10) == 0){
+                } else if (strncmp(color_code, "BG:purple}", SIZEOF_STRING("BG:purple}")) == 0){
                     SET_BG_COLOR_MAGENTA;
 
-                } else if (strncmp(color_code, "BG:cyan}", 8) == 0){
+                } else if (strncmp(color_code, "BG:cyan}", SIZEOF_STRING("BG:cyan}")) == 0){
                     SET_BG_COLOR_CYAN;
 
-                } else if (strncmp(color_code, "BG:white}", 9) == 0){
+                } else if (strncmp(color_code, "BG:white}", SIZEOF_STRING("BG:white}")) == 0){
                     SET_BG_COLOR_WHITE;
 
-                } else if (strncmp(color_code, "BG:blue}", 8) == 0) {
+                } else if (strncmp(color_code, "BG:blue}", SIZEOF_STRING("BG:blue}")) == 0) {
                     SET_BG_COLOR_BLUE;
 
-                } else if (sscanf(color_code, "BG:%hhu;%hhu;%hhu}", &red, &green, &blue) == 3) {
-                        background_color_custom(red, green, blue);
+                } else if (strncmp(color_code, "BG:", SIZEOF_STRING("BG:")) == 0) {
+                    const char *p = color_code + 3;
+                    char *endptr;
+
+                    red   = (uint8_t)strtoul(p, &endptr, 10);
+                    if (*endptr != ';') { invalid_code = 1; }
+                    else {
+                        p = endptr + 1;
+                        green = (uint8_t)strtoul(p, &endptr, 10);
+                        if (*endptr != ';') { invalid_code = 1; }
+                        else {
+                            p = endptr + 1;
+                            blue = (uint8_t)strtoul(p, &endptr, 10);
+                            if (*endptr != '}') { invalid_code = 1; }
+                            else {
+                                background_color_custom(red, green, blue);
+                            }
+                        }
+                    }
                 } else invalid_code = 1;
             }
 
             else if (color_code[0] == 'i') {
-                if (sscanf(color_code, "i64:%" PRIu64 "}", &num.i64)) {
+                const char *p = color_code + 1;  // saltar 'i'
+                char *endptr = NULL;
 
+                if (strncmp(p, "64:", SIZEOF_STRING("64:")) == 0) {
+                    num.i64 = strtoull(p + 3, &endptr, 10);
+                    if (endptr && *endptr == '}')
                         print_binary(num, 64);
+                    else
+                        invalid_code = 1;
 
-                } else if (sscanf(color_code, "i32:%" SCNu32 "}", &num.i32)) {
+                } else if (strncmp(p, "32:", SIZEOF_STRING("32:")) == 0) {
+                    num.i32 = strtoul(p + 3, &endptr, 10);
+                    if (endptr && *endptr == '}')
                         print_binary(num, 32);
+                    else
+                        invalid_code = 1;
 
-                } else if (sscanf(color_code, "i16:%hu}", &num.i16)) {
+                } else if (strncmp(p, "16:", SIZEOF_STRING("16:")) == 0) {
+                    const unsigned long val = strtoul(p + 3, &endptr, 10);
+                    if (endptr && *endptr == '}' && val <= 0xFFFF) {
+                        num.i16 = (uint16_t)val;
                         print_binary(num, 16);
+                    } else {
+                        invalid_code = 1;
+                    }
 
-                } else if (sscanf(color_code, "i8:%hhu}", &num.i8)) {
+                } else if (strncmp(p, "8:", SIZEOF_STRING("8:")) == 0) {
+                    const unsigned long val = strtoul(p + 2, &endptr, 10);
+                    if (endptr && *endptr == '}' && val <= 0xFF) {
+                        num.i8 = (uint8_t)val;
                         print_binary(num, 8);
+                    } else {
+                        invalid_code = 1;
+                    }
 
-                } else invalid_code = 1;
-
+                } else {
+                    invalid_code = 1;
+                }
             } else if (color_code[0] == 'S'){
-                if (strncmp(color_code, "ST:bold}", 8) == 0) {
+                if (strncmp(color_code, "ST:bold}", SIZEOF_STRING("ST:bold}")) == 0) {
                     printf(STYLE_BOLDED);
 
-                } else if (strncmp(color_code, "ST:darkened}", 12) == 0) {
+                } else if (strncmp(color_code, "ST:darkened}", SIZEOF_STRING("ST:darkened}")) == 0) {
                     printf(STYLE_DARKENED);
 
-                } else if (strncmp(color_code, "ST:italics}", 11) == 0) {
+                } else if (strncmp(color_code, "ST:italics}", SIZEOF_STRING("ST:italics}")) == 0) {
                     printf(STYLE_ITALICS);
 
-                } else if (strncmp(color_code, "ST:underline}", 13) == 0) {
+                } else if (strncmp(color_code, "ST:underline}", SIZEOF_STRING("ST:underline}")) == 0) {
                     printf(STYLE_UNDERLINED);
 
-                } else if (strncmp(color_code, "ST:blink}", 10) == 0) {
+                } else if (strncmp(color_code, "ST:blink}", SIZEOF_STRING("ST:blink}")) == 0) {
                     printf(STYLE_BLIKING);
 
-                } else if (strncmp(color_code, "ST:invert}", 11) == 0) {
+                } else if (strncmp(color_code, "ST:invert}", SIZEOF_STRING("ST:invert}")) == 0) {
                     printf(STYLE_INVERTED);
 
                 } else invalid_code = 1;
+            } else if (strncmp(color_code, "ALIGN:", 6) == 0) {
+                const char *p = color_code + 6;
+                char *endptr = NULL;
+                unsigned long width = strtoul(p, &endptr, 10);
+                if (endptr == NULL || *endptr != ':') {
+                    invalid_code = 1;
+                } else {
+                    p = endptr + 1;
+                    char align_char = *p++;
+                    TextAlign align = ALIGN_LEFT;
+                    if (align_char == 'L' || align_char == 'l') align = ALIGN_LEFT;
+                    else if (align_char == 'C' || align_char == 'c') align = ALIGN_CENTER;
+                    else if (align_char == 'R' || align_char == 'r') align = ALIGN_RIGHT;
+                    else invalid_code = 1;
+
+                    if (!invalid_code) {
+                        // El texto está justo después del marcador de alineado (en c)
+                        // Si el texto comienza con '}', sáltarlo
+                        const char *text_start = c;
+                        if (*text_start == '}') text_start++;
+
+                        // Buscar el siguiente salto de línea o marcador especial
+                        const char *text_end1 = strchr(text_start, '\n');
+                        const char *text_end2 = strstr(text_start, "#{");
+                        const char *text_end = NULL;
+                        if (text_end1 && text_end2)
+                            text_end = (text_end1 < text_end2) ? text_end1 : text_end2;
+                        else if (text_end1)
+                            text_end = text_end1;
+                        else if (text_end2)
+                            text_end = text_end2;
+                        else
+                            text_end = text_start + strlen(text_start);
+
+                        size_t text_len = text_end - text_start;
+                        char *text = (char*)calloc(text_len + 1, sizeof(char));
+                        strncpy(text, text_start, text_len);
+                        text[text_len] = '\0';
+
+                        print_aligned(text, width, align);
+                        free(text);
+
+                        // Avanzar c hasta el final del texto alineado
+                        c = text_end - 1; // -1 porque el bucle principal hará c++
+                    }
+                }
             }
 
-            if ( invalid_code ) {
-                color_code[color_code_idx-1] = '\0';
+
+
+            if (invalid_code) {
+                if (color_code_idx > 0) {
+                    color_code[color_code_idx - 1] = '\0';  // ← solo si hay algo antes
+                } else {
+                    strcpy(color_code, "desconocido");
+                }
                 printf("\n%s: identificador invalido\n", color_code);
             }
+
+            if (possible_color_code && color_code[color_code_idx - 1] != '}') {
+                invalid_code = 1;
+            }
+
+
         }
 
         c++;

@@ -49,6 +49,29 @@ int main(void){
     printf_color( "#{BG:cyan   }Fondo cyan    #{reset}\n" );
     printf_color( "#{BG:white  }Fondo blanco  #{reset}\n" );
 
+    print_aligned("aaaa", 20, ALIGN_CENTER);printf("\n");
+    print_aligned("aaaa", 20, ALIGN_RIGHT);printf("\n");
+    print_aligned("aaaa", 20, ALIGN_LEFT);printf("\n");
+
+    printf_color("#{ALIGN:30:L}Hola mundo\n");
+    printf_color("#{ALIGN:30:R}Hola mundo\n");
+
+    int arr[3][3] = {
+        {1,2,3},
+        {4,5,6},
+        {7,8,9}
+    };
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            printf_color("|#{ALIGN:20:C}%d", arr[i][j]);
+        }
+        printf("|\n");
+    }
+
+
+
+
+
     CONSOLE_COLOR_RESET;
     printf_color( "fondo por defecto\n");
 

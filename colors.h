@@ -1004,6 +1004,15 @@ void shuffle_array(int32_t array[], int32_t size);
 char *get_addr_to_encoder_x86_(uint64_t addr);
 void print_table_hex(char *string_init, char *string_text_for_printing, size_t size_string_text_for_printing);
 
+// Enum para tipo de alineación
+typedef enum {
+    ALIGN_LEFT,
+    ALIGN_CENTER,
+    ALIGN_RIGHT
+} TextAlign;
+
+void print_aligned(const char *text, size_t width, TextAlign align);
+
 // dar la opcion desde la linea de comandos a incluir el archivo .c
 // usando la flag -DINCLUDE_COLORS_C
 #ifdef INCLUDE_COLORS_C
