@@ -48,7 +48,7 @@
  */
 #ifndef __COLORS_H__
 #define __COLORS_H__ "Desmon.hak.anon"
-#define __version 2.0
+#define VERSION_C "3.0"
 
 #include <stdio.h>
 #include <stdbool.h>
