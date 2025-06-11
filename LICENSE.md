@@ -1,4 +1,4 @@
-Licencia Apache, Versión 2.0 con Modificación
+Licencia Siumba v1.0 basada en Apache 2.0
 
 Copyright 2023 Desmon (David)
 
