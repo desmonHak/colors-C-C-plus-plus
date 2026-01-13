@@ -5,10 +5,14 @@ on:
   pull_request:
 
 jobs:
+
   deploy:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
+
+    - name: Create .nojekyll for subdirectory
+      run: mkdir -p book/html && touch book/html/.nojekyll
     
     - name: Setup mdBook
       uses: peaceiris/actions-mdbook@v1
@@ -23,6 +27,6 @@ jobs:
       with:
         personal_token: ${{ secrets.DEPLOY_TOKEN  }}
         publish_dir: ./book/html
-        destination_dir: colors
-        external_repository: desmonHak/desmonHak.github.io  # ¡Esta línea clave!
+        #destination_dir: colors
+        #external_repository: desmonHak/desmonHak.github.io 
 
