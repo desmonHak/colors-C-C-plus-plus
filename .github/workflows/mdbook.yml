@@ -18,10 +18,11 @@ jobs:
     - name: Build book
       run: mdbook build -d book/html ./book
     
-    - name: Deploy to GitHub Pages
+    - name: Deploy to desmonHak.github.io
       uses: peaceiris/actions-gh-pages@v4
-      if: github.ref == 'refs/heads/main'
       with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
+        github_token: ${{ secrets.DEPLOY_TOKEN }}
         publish_dir: ./book/html
-        destination_dir: colors  # Para que quede en desmonHak.github.io/colors
+        destination_dir: colors
+        repository_name: desmonHak/desmonHak.github.io  # ¡Esta línea clave!
+
