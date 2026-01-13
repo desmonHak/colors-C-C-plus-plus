@@ -21,7 +21,7 @@ jobs:
     - name: Deploy to desmonHak.github.io
       uses: peaceiris/actions-gh-pages@v4
       with:
-        github_token: ${{ secrets.DEPLOY_TOKEN }}
+        github_token: ${{ secrets.DEPLOY_TOKEN  }}
         publish_dir: ./book/html
         destination_dir: colors
         repository_name: desmonHak/desmonHak.github.io  # ¡Esta línea clave!
