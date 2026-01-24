@@ -1,0 +1,32 @@
+name: Deploy mdBook to GitHub Pages
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Create .nojekyll for subdirectory
+      run: mkdir -p book/html && touch book/html/.nojekyll
+    
+    - name: Setup mdBook
+      uses: peaceiris/actions-mdbook@v1
+      with:
+        mdbook-version: '0.4.40'
+    
+    - name: Build book
+      run: mdbook build -d book/html ./book
+    
+    - name: Deploy to desmonHak.github.io
+      uses: peaceiris/actions-gh-pages@v4
+      with:
+        personal_token: ${{ secrets.DEPLOY_TOKEN  }}
+        publish_dir: ./book/html
+        #destination_dir: colors
+        #external_repository: desmonHak/desmonHak.github.io 
+
